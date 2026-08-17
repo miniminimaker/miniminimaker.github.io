@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="h-full">
+<head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎮Kyrio Cifer's Stream Games</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = { 
+            darkMode: 'media', 
+            theme: { 
+                extend: { 
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: {
+                        vbg: '#F0EBE3',
+                        vcard: '#FAF9F6',
+                        vborder: '#E1DCD2',
+                        vtext: '#4F4538',
+                        vmuted: '#8C8273',
+                        vaccent: '#B45309',
+                    }
+                } 
+            } 
+        }
+    </script>
+    
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #F0EBE3; color: #4F4538; overflow-x: hidden; }
+        .glass-panel { background-color: #F9F8F4; backdrop-filter: none; }
+        .table-fixed-layout { table-layout: fixed; width: 100%; border-collapse: collapse; }
+        .cell-wrap-text { 
+            word-break: break-word; 
+            overflow-wrap: break-word; 
+            white-space: normal; 
+            line-height: 1.6;
+            vertical-align: middle;
+        }
+        .data-text { font-size: 12px; font-weight: 400; color: #4F4538; font-style: normal; }
+        .table-header-text { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: #8C8273; }
+
+        @media (prefers-color-scheme: dark) {
+            .dark-mode-bg { background-color: #1C1917 !important; }
+            .dark-mode-card { background-color: #27272A !important; }
+            .dark-mode-text { color: #E7E5E4 !important; }
+            .dark-mode-muted { color: #A1A1AA !important; }
+            .dark-mode-border { border-color: #3F3F46 !important; }
+            .glass-panel { background-color: #1C1917 !important; }
+        }
+
+        .custom-scrollbar::-webkit-scrollbar { height: 4px; width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #E1DCD2; border-radius: 10px; }
+        @media (prefers-color-scheme: dark) {
+            .custom-scrollbar::-webkit-scrollbar-thumb { background: #3F3F46; }
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen dark:dark-mode-bg transition-colors duration-300">
+
+    <header class="border-b border-vborder/50 dark:dark-mode-border glass-panel sticky top-0 z-30 px-6 py-[18px] flex flex-wrap gap-4 items-center justify-between shadow-sm/5">
+        <div class="flex items-center space-x-4">
+          <div class="w-11 h-11 rounded-xl bg-[#F8F5EF] border border-[#E5DED3] flex items-center justify-center overflow-hidden">
+    <img
+        src="logo.png"
+        alt="Logo"
+        class="w-9 h-9 object-contain"
+    >
+</div>
+            <div class="flex flex-col">
+                <h1 class="text-[18px] sm:text-[20px] font-bold vtext dark:dark-mode-text leading-[1.25] flex items-center">
+                    <span class="mr-2 whitespace-nowrap">🎮</span>
+                    <span>Kyrio Cifer's Stream Games Archive</span>
+                </h1>
+                <p class="text-[12px] font-normal vmuted dark:dark-mode-muted mt-[4px] leading-[1.4]">
+                    ‒‒‒‒‒‒‒‒‒ Made with ♡ by <a href="https://x.com/miniminimaker" target="_blank" class="text-vaccent hover:opacity-80 transition-opacity">miniminimaker</a>
+                </p>
+            </div>
+        </div>
+        
+        <div class="flex items-center gap-2">
+            <button id="btn-retry" onclick="window.fetchGameData()" class="hidden px-3 py-1.5 rounded-md bg-vborder/40 hover:bg-vborder/80 dark:bg-white/5 dark:hover:bg-white/10 text-xs font-medium vtext dark:dark-mode-text transition-colors items-center gap-1.5">
+                <i class="fa-solid fa-rotate-right"></i> Retry
+            </button>
+        </div>
+    </header>
+
+    <main class="flex-1 max-w-[1400px] w-full mx-auto p-6 md:p-12 flex flex-col gap-12">
+
+        <section class="flex flex-col gap-4">
+            <div class="space-y-0.5">
+                <p class="text-[17px] font-medium vtext dark:dark-mode-text leading-[1.55]">
+                    A list of games Kyrio Cifer has played on stream across different eras.
+                </p>
+                <p class="text-[15px] font-normal vtext dark:dark-mode-text leading-[1.6]">
+                    收錄Kyrio Cifer不同時期直播中遊玩過的遊戲。
+                </p>
+            </div>
+
+            <div class="space-y-0.5">
+                <p class="text-[12px] font-normal vmuted dark:dark-mode-muted leading-[1.5]">
+                    This is an unofficial website for reference only.
+                </p>
+                <p class="text-[12px] font-normal vmuted dark:dark-mode-muted leading-[1.5]">
+                    本網站為非官方網站，僅供參考。
+                </p>
+            </div>
+
+            <div class="space-y-0.5">
+                <p class="text-[12px] font-normal vmuted dark:dark-mode-muted leading-[1.5]">
+                    Please let me know if you spot any errors or incorrect information.
+                </p>
+                <p class="text-[12px] font-normal vmuted dark:dark-mode-muted leading-[1.5]">
+                    如發現資料錯誤或需要更正，歡迎聯繫通知。
+                </p>
+            </div>
+        </section>
+
+        <div class="flex flex-col gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
+                <div class="relative group md:col-span-12">
+                    <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-vmuted opacity-40 group-focus-within:text-vaccent transition-colors"></i>
+                    <input type="text" id="input-search" placeholder="Search game title, collab, or persona..." 
+                        class="w-full bg-vcard dark:dark-mode-card border border-vborder dark:dark-mode-border rounded-xl pl-11 pr-4 py-3.5 text-sm focus:outline-none focus:ring-1 focus:ring-vaccent/30 focus:border-vaccent/40 transition-all placeholder-vmuted/50 vtext dark:dark-mode-text shadow-sm/30">
+                </div>
+            </div>
+
+            <div class="flex flex-wrap items-center justify-between gap-3 text-xs vmuted dark:dark-mode-muted px-1">
+                <div id="stats-text" class="font-medium">Connecting...</div>
+                <div id="last-updated-text">Syncing database...</div>
+            </div>
+
+            <div class="flex flex-col gap-1.5 -mt-1">
+                <div class="flex items-center gap-1.5 overflow-x-auto custom-scrollbar pb-2" id="alphabet-nav">
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-vcard dark:dark-mode-card border border-vborder/70 dark:dark-mode-border rounded-xl shadow-sm overflow-hidden mb-8">
+            <div class="overflow-x-auto custom-scrollbar">
+                <table class="table-fixed-layout text-left min-w-[950px]">
+                    <thead id="table-head">
+                        <tr class="h-[72px] bg-vbg/40 dark:bg-black/20 border-b border-vborder/50 dark:dark-mode-border">
+    <th class="px-4 table-header-text w-[35%] text-center">Game</th>
+    <th class="px-4 table-header-text w-[32%] text-center">遊戲</th>
+    <th class="px-4 table-header-text w-[10%] text-center">Collab｜連動</th>
+    <th class="px-3 table-header-text w-[8%] text-center">Kyrio Cifer 2.0</th>
+    <th class="px-3 table-header-text w-[8%] text-center">Hex Haywire</th>
+    <th class="px-3 table-header-text w-[7%] text-center">Kyrio Cifer 1.0</th>
+</tr>
+                    </thead>
+                    <tbody id="table-body">
+                        <tr id="state-row">
+                            <td colspan="6" class="py-24 text-center">
+                                <div class="flex flex-col items-center justify-center gap-3">
+                                    <i class="fa-solid fa-circle-notch fa-spin text-2xl text-vaccent"></i>
+                                    <span class="text-sm font-medium vtext dark:dark-mode-text">Loading game database...｜正在讀取遊戲資料...</span>
+                                    <span class="text-xs vmuted dark:dark-mode-muted">Fetching from Cloud Excel (ALL Worksheet)</span>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+   <footer class="py-10 px-6 border-t border-vborder/50 dark:dark-mode-border text-center mt-auto">
+    <p class="text-[12px] font-normal vmuted dark:dark-mode-muted mt-[4px] leading-[1.4]">
+        &copy; 2026
+        <a href="https://x.com/miniminimaker"
+           target="_blank"
+           rel="noopener noreferrer"
+           class="text-vaccent hover:opacity-80 transition-opacity">
+            miniminimaker
+        </a>
+    </p>
+</footer>
+
+    <script>
+        const DATA_SOURCE_URL = 'https://script.google.com/macros/s/AKfycbxwepKBsMI-6MBvWGmfSM8k6WFzlsfYCUHrs6PueS90xCIOTFfrmWuPdqJsIstUZGu8_Q/exec';
+
+        const AppState = {
+            normalizedGames: [], 
+            filteredGames: [],   
+            personaCounts: new Map(), 
+            dynamicEras: [], 
+            filters: { search: '', letter: 'ALL', persona: 'ALL' }
+        };
+
+        const DOM = {
+            tbody: document.getElementById('table-body'),
+            tableHead: document.getElementById('table-head'),
+            search: document.getElementById('input-search'),
+            alphabetNav: document.getElementById('alphabet-nav'),
+            statsText: document.getElementById('stats-text'),
+            updatedText: document.getElementById('last-updated-text'),
+            btnRetry: document.getElementById('btn-retry')
+        };
+
+        window.onload = () => {
+            setupEventListeners();
+            fetchGameData();
+        };
+
+        function setupEventListeners() {
+            if (DOM.search) {
+                DOM.search.addEventListener('input', (e) => { 
+                    AppState.filters.search = e.target.value.toLowerCase().trim(); 
+                    applyFilters(); 
+                });
+            }
+        }
+
+        async function fetchGameData() {
+            setUIState('loading', 'Loading game database...｜正在讀取遊戲資料...');
+            
+            if (!DATA_SOURCE_URL) {
+                setTimeout(() => setUIState('error', 'DATA_SOURCE_URL is not configured.<br>請設定指向 🎮 直播遊戲 (ALL 分頁) 的資料來源 API。'), 800);
+                return;
+            }
+
+            try {
+                const response = await fetch(DATA_SOURCE_URL);
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                
+                const json = await response.json();
+                const rawData = json.data || [];
+                
+                if (rawData.length === 0) {
+                    setUIState('empty', 'No games found in the database.｜資料庫無紀錄。');
+                    return;
+                }
+
+                normalizeGameData(rawData);
+                updateTableHeader();
+                buildAlphabetNav();
+                applyFilters(); 
+                
+                if (DOM.updatedText) {
+                    if (json.lastSynced) {
+                        const date = new Date(json.lastSynced).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+                        DOM.updatedText.innerText = `▸ Last Updated: ${date}`;
+                    } else {
+                        DOM.updatedText.innerText = `▸ Last Updated: Just now`;
+                    }
+                }
+
+            } catch (error) {
+                console.error("Fetch failed:", error);
+                setUIState('error', 'Unable to load game data.｜目前無法讀取遊戲資料。<br>請檢查 API 或網路連線。');
+            }
+        }
+
+        function normalizeGameData(rawData) {
+            AppState.personaCounts.clear();
+            AppState.normalizedGames = [];
+            AppState.dynamicEras = [];
+            let totalRowCount = 0;
+
+            const is2DArray = Array.isArray(rawData) && Array.isArray(rawData[0]);
+            if (!is2DArray) {
+                setUIState('error', '資料格式錯誤。請確認 Google Apps Script 回傳為 2D 陣列。');
+                return;
+            }
+
+            const subHeaders = rawData[1] || [];
+            for (let i = 4; i < subHeaders.length; i++) {
+                const eraName = String(subHeaders[i]).trim();
+                if (eraName) {
+                    AppState.dynamicEras.push({ index: i, name: eraName });
+                }
+            }
+
+            for (let i = 2; i < rawData.length; i++) {
+                const row = rawData[i];
+                const gameEN = String(row[1] || '').trim();
+                const gameZH = String(row[2] || '').trim();
+                const collab = String(row[3] || '').trim();
+
+                if (!gameEN && !gameZH) continue;
+
+                let firstChar = gameEN ? gameEN.charAt(0).toUpperCase() : '#';
+                if (!/[A-Z]/.test(firstChar)) firstChar = '#';
+
+                const eraMarks = {};
+                AppState.dynamicEras.forEach(era => {
+                    const cellValue = String(row[era.index] || '').trim().toUpperCase();
+                    const isChecked = ['TRUE', 'V', 'O', '1', 'YES', 'Y'].includes(cellValue) || cellValue.includes('✔') || cellValue.includes('☑');
+                    eraMarks[era.name] = isChecked;
+                });
+
+                AppState.normalizedGames.push({
+                    id: `game-${i}`,
+                    name: formatEmpty(gameEN),
+                    chineseName: formatEmpty(gameZH),
+                    collab: formatEmpty(collab),
+                    eraMarks: eraMarks,
+                    firstLetter: firstChar,
+                    rawString: `${gameEN} ${gameZH} ${collab}`.toLowerCase()
+                });
+                totalRowCount++;
+            }
+
+            AppState.personaCounts.set('ALL', totalRowCount);
+        }
+
+        function updateTableHeader() {
+            if (DOM.tableHead && AppState.dynamicEras.length >= 3) {
+                DOM.tableHead.innerHTML = `
+                    <tr class="h-[72px] bg-vbg/40 dark:bg-black/20 border-b border-vborder/50 dark:dark-mode-border">
+                        <th class="py-5 px-4 table-header-text w-[35%] text-center">Game</th>
+                        <th class="py-5 px-4 table-header-text w-[32%] text-center">遊戲</th>
+                        <th class="py-5 px-4 table-header-text w-[10%] text-center">Collab｜連動</th>
+                        <th class="py-5 px-3 table-header-text w-[8%] text-center">${AppState.dynamicEras[0].name}</th>
+                        <th class="py-5 px-3 table-header-text w-[8%] text-center">${AppState.dynamicEras[1].name}</th>
+                        <th class="py-5 px-3 table-header-text w-[7%] text-center">${AppState.dynamicEras[2].name}</th>
+                    </tr>
+                `;
+            }
+        }
+
+        function buildAlphabetNav() {
+            if (!DOM.alphabetNav) return;
+            const letters = ['ALL', '#', ...Array.from({length: 26}, (_, i) => String.fromCharCode(65 + i))];
+            DOM.alphabetNav.innerHTML = '';
+            const fragment = document.createDocumentFragment();
+
+            letters.forEach(letter => {
+                const btn = document.createElement('button');
+                btn.textContent = letter;
+                btn.className = `px-2.5 py-1.5 rounded-md text-xs font-bold transition-colors shrink-0 border border-transparent 
+                                ${AppState.filters.letter === letter ? 'bg-vtext dark:bg-white text-vbg dark:text-black shadow-sm' : 'text-vmuted hover:bg-vborder/40 dark:hover:bg-white/10 hover:text-vtext dark:hover:text-white'}`;
+                btn.onclick = () => { AppState.filters.letter = letter; buildAlphabetNav(); applyFilters(); };
+                fragment.appendChild(btn);
+            });
+            DOM.alphabetNav.appendChild(fragment);
+        }
+
+        function applyFilters() {
+            const { search, letter } = AppState.filters;
+
+            AppState.filteredGames = AppState.normalizedGames.filter(game => {
+                if (search && !game.rawString.includes(search)) return false;
+                if (letter !== 'ALL' && game.firstLetter !== letter) return false;
+                return true;
+            });
+
+            AppState.filteredGames.sort((a, b) => a.name.localeCompare(b.name, 'en', { sensitivity: 'base', numeric: true }));
+            renderTable();
+        }
+
+        function renderTable() {
+            if (!DOM.tbody) return;
+            DOM.tbody.innerHTML = '';
+            const total = AppState.normalizedGames.length;
+            const currentCount = AppState.filteredGames.length;
+            
+            if (DOM.statsText) {
+                if (AppState.filters.search === '' && AppState.filters.letter === 'ALL') {
+                    DOM.statsText.innerHTML = `▸ Total <span class="font-bold text-vaccent dark:text-orange-400">${total}</span> Records in Archive`;
+                } else {
+                    DOM.statsText.innerHTML = `▸ Total <span class="font-bold text-vaccent dark:text-orange-400">${total}</span> Records in Archive (Found <span class="font-bold text-vaccent dark:text-orange-400">${currentCount}</span>)`;
+                }
+            }
+
+            if (currentCount === 0) {
+                setUIState('empty', 'No games found.｜未找到相符遊戲。');
+                return;
+            }
+
+            const fragment = document.createDocumentFragment();
+
+            AppState.filteredGames.forEach(game => {
+                const tr = document.createElement('tr');
+                tr.className = 'hover:bg-vcard/60 dark:hover:bg-[#2C2C30] transition-colors border-b border-vborder/30 dark:border-[#3F3F46] group';
+                
+                const collabHtml = game.collab !== '—'
+                    ? `<div class="flex items-center gap-2"><i class="fa-solid fa-user-group text-[10px] text-vmuted/60"></i><span class="opacity-90">${game.collab}</span></div>`
+                    : `<span class="text-vmuted/40">—</span>`;
+
+                let personaCellsHtml = '';
+                if (AppState.dynamicEras.length >= 3) {
+                    AppState.dynamicEras.forEach(era => {
+                        const isChecked = game.eraMarks && game.eraMarks[era.name];
+                        const eraColors = {
+                            '2022': '#7FC252',
+                            '2022 ~ 2024.08': '#3F90DA',
+                            '2024.10 ~ Now': '#BB1900'
+                        };
+
+                        const markHtml = isChecked
+                            ? `<i class="fa-solid fa-check font-bold text-sm" style="color: ${eraColors[era.name] || '#B45309'};"></i>`
+                            : `<span class="text-vmuted/20">—</span>`;
+                        personaCellsHtml += `<td class="py-4 px-3 text-center data-text">${markHtml}</td>`;
+                    });
+                } else {
+                    personaCellsHtml = `<td colspan="3" class="py-4 px-3 text-center text-vmuted/40">—</td>`;
+                }
+
+                tr.innerHTML = `
+                    <td class="py-4 px-4 data-text cell-wrap-text dark:dark-mode-text text-center">${game.name}</td>
+                    <td class="py-4 px-4 data-text cell-wrap-text dark:dark-mode-text text-center">${game.chineseName !== '—' ? `<span class="opacity-90">${game.chineseName}</span>` : `<span class="text-vmuted/40">—</span>`}</td>
+                    <td class="py-4 px-4 data-text cell-wrap-text dark:dark-mode-text ">${collabHtml}</td>
+                    ${personaCellsHtml}
+                `;
+                fragment.appendChild(tr);
+            });
+
+            DOM.tbody.appendChild(fragment);
+        }
+
+        function formatEmpty(val) {
+            const v = String(val).trim();
+            if (!v || v === '-' || v.toLowerCase() === 'n/a' || v === '無' || v === 'false') return '—';
+            return v;
+        }
+
+        function setUIState(state, message = '') {
+            if (!DOM.tbody) return;
+            DOM.tbody.innerHTML = '';
+            if (DOM.btnRetry) DOM.btnRetry.classList.add('hidden');
+            
+            let icon = '';
+            if (state === 'loading') {
+                icon = '<i class="fa-solid fa-circle-notch fa-spin text-vaccent text-2xl"></i>';
+                if (DOM.statsText) DOM.statsText.innerHTML = `Connecting...`;
+            } else if (state === 'error') {
+                icon = '<i class="fa-solid fa-triangle-exclamation text-rose-600 dark:text-rose-400 text-3xl"></i>';
+                if (DOM.btnRetry) DOM.btnRetry.classList.remove('hidden');
+                if (DOM.statsText) DOM.statsText.innerHTML = `Data connection error`;
+            } else if (state === 'empty') {
+                icon = '<i class="fa-solid fa-box-open text-vmuted/50 text-3xl"></i>';
+            } else if (state === 'success') {
+                return;
+            }
+
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td colspan="6" class="py-24 text-center">
+                    <div class="flex flex-col items-center justify-center gap-4 max-w-md mx-auto">
+                        ${icon}
+                        <div class="text-[14px] leading-relaxed font-medium vtext dark:dark-mode-text">${message}</div>
+                    </div>
+                </td>
+            `;
+            DOM.tbody.appendChild(tr);
+        }
+    </script>
+</body>
+</html>
