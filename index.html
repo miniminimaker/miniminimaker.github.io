@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KY Stream Archive</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            color: #222;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 60px 30px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #777;
+            margin-bottom: 50px;
+        }
+
+        .projects {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+        }
+
+        .card {
+            display: block;
+            padding: 30px;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            text-decoration: none;
+            color: inherit;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .icon {
+            font-size: 40px;
+            margin-bottom: 15px;
+        }
+
+        .card h2 {
+            margin: 0 0 10px;
+        }
+
+        .card p {
+            margin: 0;
+            color: #777;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+
+<body>
+
+    <main class="container">
+
+        <h1>KY Stream Archive</h1>
+
+        <p class="subtitle">
+            A collection of KY's stream projects
+        </p>
+
+        <section class="projects">
+
+            <!-- Stream Music Playlist -->
+            <a
+                class="card"
+                href="/streammusicplaylist/"
+            >
+                <div class="icon">🎵</div>
+
+                <h2>Stream Music Playlist</h2>
+
+                <p>
+                    Music played during KY's streams.
+                </p>
+            </a>
+
+
+            <!-- Stream Games -->
+            <a
+                class="card"
+                href="/streamgames/"
+            >
+                <div class="icon">🎮</div>
+
+                <h2>Stream Games</h2>
+
+                <p>
+                    Games played during KY's streams.
+                </p>
+            </a>
+
+        </section>
+
+    </main>
+
+</body>
+</html>
