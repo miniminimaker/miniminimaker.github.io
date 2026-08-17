@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎵Kyrio Cifer's Stream Music Playlist</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = { 
+            darkMode: 'media', 
+            theme: { 
+                extend: { 
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: {
+                        vbg: '#F0EBE3',
+                        vcard: '#FAF9F6',
+                        vborder: '#E1DCD2',
+                        vtext: '#4F4538',
+                        vmuted: '#8C8273',
+                        vaccent: '#B45309',
+                        vspotify: '#065F46',
+                        vapple: '#9F1239',
+                    }
+                } 
+            } 
+        }
+    </script>
+    
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #F0EBE3; color: #4F4538; overflow-x: hidden; }
+        .glass-panel { background-color: #F9F8F4; backdrop-filter: none; }
+        .table-fixed-layout { table-layout: fixed; width: 100%; border-collapse: collapse; }
+        .cell-wrap-text { 
+            word-break: break-word; 
+            overflow-wrap: break-word; 
+            white-space: normal; 
+            line-height: 1.6;
+            vertical-align: top;
+        }
+        .song-data-text { font-size: 12px; font-weight: 400; color: #4F4538; font-style: normal; }
+        .table-header-text { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: #8C8273; }
+
+        @media (prefers-color-scheme: dark) {
+            .dark-mode-bg { background-color: #1C1917 !important; }
+            .dark-mode-card { background-color: #27272A !important; }
+            .dark-mode-text { color: #E7E5E4 !important; }
+            .dark-mode-muted { color: #A1A1AA !important; }
+            .dark-mode-border { border-color: #3F3F46 !important; }
+            .glass-panel { background-color: #1C1917 !important; }
+        }
+
+        .custom-scrollbar::-webkit-scrollbar { height: 4px; width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #E1DCD2; border-radius: 10px; }
+        @media (prefers-color-scheme: dark) {
+            .custom-scrollbar::-webkit-scrollbar-thumb { background: #3F3F46; }
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen dark:dark-mode-bg transition-colors duration-300">
+
+    <header class="border-b border-vborder/50 dark:dark-mode-border glass-panel sticky top-0 z-30 px-6 py-[18px] flex flex-wrap gap-4 items-center justify-between shadow-sm/5">
+        <div class="flex items-center space-x-4">
+           <div class="w-11 h-11 rounded-xl bg-[#F8F5EF] border border-[#E5DED3] flex items-center justify-center overflow-hidden">
+    <img
+        src="logo.png"
+        alt="Logo"
+        class="w-9 h-9 object-contain"
+    >
+</div>
+            <div class="flex flex-col">
+                <h1 class="text-[18px] sm:text-[20px] font-bold vtext dark:dark-mode-text leading-[1.25] flex items-center">
+                    <span class="mr-2 whitespace-nowrap text-[20px]">🎵</span>
+                    <span>Kyrio Cifer's Stream Music Playlist</span>
+                </h1>
+                <p class="text-[12px] font-normal vmuted dark:dark-mode-muted mt-[4px] leading-[1.4]">
+                    ‒‒‒‒‒‒‒‒‒ Made with ♡ by <a href="https://x.com/miniminimaker" target="_blank" class="text-vaccent hover:opacity-80 transition-opacity">miniminimaker</a>
+                </p>
+            </div>
+        </div>
+        
+        <div class="flex items-center gap-2">
+            <button id="btn-retry" onclick="window.fetchSongsFromBackend()" class="hidden px-3 py-1.5 rounded-md bg-vborder/40 hover:bg-vborder/80 dark:bg-white/5 dark:hover:bg-white/10 text-xs font-medium vtext dark:dark-mode-text transition-colors items-center gap-1.5">
+                <i class="fa-solid fa-rotate-right"></i> Retry
+            </button>
+        </div>
+    </header>
+
+    <main class="flex-1 max-w-[1400px] w-full mx-auto p-6 md:p-12 flex flex-col gap-12">
+        <section class="flex flex-col gap-4">
+            <div class="space-y-0.5">
+                <p class="text-[17px] font-medium vtext dark:dark-mode-text leading-[1.55]">
+                    Songs played during Kyrio Cifer's streams, with search and streaming links.
+                </p>
+                <p class="text-[15px] font-normal vtext dark:dark-mode-text leading-[1.6]">
+                    收錄Kyrio Cifer直播中播放曲目，支援搜尋、瀏覽與串流平台跳轉。
+                </p>
+            </div>
+
+            <div class="space-y-0.5">
+                <p class="text-[12px] font-normal vmuted dark:dark-mode-muted leading-[1.5]">
+                    This is an unofficial website for reference only.
+                </p>
+                <p class="text-[12px] font-normal vmuted dark:dark-mode-muted leading-[1.5]">
+                    本網站為非官方網站，僅供參考。
+                </p>
+            </div>
+
+            <div class="space-y-0.5">
+                <p class="text-[12px] font-normal vmuted dark:dark-mode-muted leading-[1.5]">
+                    Please let me know if you spot any errors or incorrect information.
+                </p>
+                <p class="text-[12px] font-normal vmuted dark:dark-mode-muted leading-[1.5]">
+                    如發現資料錯誤或需要更正，歡迎聯繫通知。
+                </p>
+            </div>
+        </section>
+
+        <div class="flex flex-col gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
+                <div class="relative group md:col-span-12">
+                    <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-vmuted opacity-40 group-focus-within:text-vaccent transition-colors"></i>
+                    <input type="text" id="search-input" oninput="window.filterSongs()" 
+                        placeholder="Search by artist, song, or album..." 
+                        class="w-full bg-vcard dark:dark-mode-card border border-vborder dark:dark-mode-border rounded-xl pl-11 pr-4 py-3.5 text-sm focus:outline-none focus:ring-1 focus:ring-vaccent/30 focus:border-vaccent/40 transition-all placeholder-vmuted/50 vtext dark:dark-mode-text shadow-sm/30">
+                </div>
+            </div>
+
+            <div class="flex flex-wrap items-center justify-between gap-3 text-xs vmuted dark:dark-mode-muted px-1">
+                <div id="total-songs-count" class="font-medium"></div>
+                <div id="last-sync-time"></div>
+            </div>
+
+            <div class="flex flex-col gap-1.5 -mt-1">
+                <div class="flex items-center gap-1.5 overflow-x-auto custom-scrollbar pb-2" id="alphabet-nav">
+                    <!-- Dynamically populated -->
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-vcard dark:dark-mode-card border border-vborder/70 dark:dark-mode-border rounded-xl shadow-sm overflow-hidden mb-8">
+            <div class="overflow-x-auto custom-scrollbar">
+                <table class="table-fixed-layout text-left min-w-[950px]">
+                    <thead id="table-head">
+                        <tr class="h-[72px] bg-vbg/40 dark:bg-black/20 border-b border-vborder/50 dark:dark-mode-border">
+    <th class="px-4 table-header-text w-[25%] text-center">Artist｜歌手</th>
+    <th class="px-4 table-header-text w-[30%] text-center">Song｜歌曲</th>
+    <th class="px-4 table-header-text w-[25%] text-center">Release｜收錄</th>
+    <th class="px-4 table-header-text w-[20%] text-center">Links｜媒體連結</th>
+</tr>
+                    </thead>
+                    <tbody id="song-table-body">
+                        <tr id="state-row">
+                            <td colspan="4" class="py-24 text-center">
+                                <div class="flex flex-col items-center justify-center gap-3">
+                                    <i class="fa-solid fa-circle-notch fa-spin text-2xl text-vaccent"></i>
+                                    <span class="text-sm font-medium vtext dark:dark-mode-text">Loading data, please wait…｜讀取資料請稍後...</span>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <footer class="py-10 px-6 border-t border-vborder/50 dark:dark-mode-border text-center mt-auto">
+    <p class="text-[12px] font-normal vmuted dark:dark-mode-muted mt-[4px] leading-[1.4]">
+        &copy; 2026
+        <a href="https://x.com/miniminimaker"
+           target="_blank"
+           rel="noopener noreferrer"
+           class="text-vaccent hover:opacity-80 transition-opacity">
+            miniminimaker
+        </a>
+    </p>
+</footer>
+
+    <script>
+        const GAS_URL = 'https://script.google.com/macros/s/AKfycbyhDzoohlpeOuXeLaB2wzoKMxgJ8XbyFqBdkXIN1YpsC1HSmD1MHexeHWYzWwrRTsQbew/exec';
+        
+        window.currentLetterFilter = 'ALL';
+        window.songsData = [];
+
+        window.onload = function() {
+            window.fetchSongsFromBackend();
+        };
+
+        window.fetchSongsFromBackend = async function() {
+            const tbody = document.getElementById('song-table-body');
+            const totalCountEl = document.getElementById('total-songs-count');
+            const syncTimeEl = document.getElementById('last-sync-time');
+            const btnRetry = document.getElementById('btn-retry');
+            
+            if (btnRetry) btnRetry.classList.add('hidden');
+            if (totalCountEl) totalCountEl.innerHTML = 'Connecting...';
+            if (syncTimeEl) syncTimeEl.innerHTML = 'Syncing database...';
+            
+            if (tbody) {
+                tbody.innerHTML = `
+                    <tr id="state-row">
+                        <td colspan="4" class="py-24 text-center">
+                            <div class="flex flex-col items-center justify-center gap-3">
+                                <i class="fa-solid fa-circle-notch fa-spin text-2xl text-vaccent"></i>
+                                <span class="text-sm font-medium vtext dark:dark-mode-text">Loading data, please wait…｜讀取資料請稍後...</span>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }
+
+            try {
+                const res = await fetch(GAS_URL + '?action=getSongs');
+                const result = await res.json();
+                
+                if (result.success) {
+                    const rawSongs = result.songs || [];
+                    
+                    const normalizedSongs = rawSongs.map(song => {
+                        const artistName = (song.artist || '').trim();
+                        let firstChar = artistName ? artistName.charAt(0).toUpperCase() : '#';
+                        if (!/[A-Z]/.test(firstChar)) firstChar = '#';
+                        return { ...song, firstLetter: firstChar };
+                    });
+
+                    window.songsData = window.sortSongs(normalizedSongs);
+                    
+                    if (syncTimeEl && result.lastSynced) {
+                        const date = new Date(result.lastSynced).toLocaleString('en-US', { 
+                            month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' 
+                        });
+                        syncTimeEl.innerText = `▸ Last Updated: ${date}`;
+                    } else if (syncTimeEl) {
+                        syncTimeEl.innerText = `▸ Last Updated: Just now`;
+                    }
+                    
+                    window.buildAlphabetNav();
+                    window.filterSongs();
+                } else {
+                    throw new Error("Failed to fetch from API.");
+                }
+            } catch (err) {
+                console.error('Fetch error:', err);
+                if (syncTimeEl) syncTimeEl.innerHTML = 'Data connection error';
+                if (btnRetry) btnRetry.classList.remove('hidden');
+                
+                if (tbody) {
+                    tbody.innerHTML = `
+                        <tr id="state-row">
+                            <td colspan="4" class="py-24 text-center">
+                                <div class="flex flex-col items-center justify-center gap-4 max-w-md mx-auto">
+                                    <i class="fa-solid fa-triangle-exclamation text-rose-600 dark:text-rose-400 text-3xl"></i>
+                                    <div class="text-[14px] leading-relaxed font-medium vtext dark:dark-mode-text">資料讀取失敗，請稍後重新整理頁面。</div>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                }
+            }
+        };
+    </script>
+    
+    <script>
+        window.buildAlphabetNav = function() {
+            const navEl = document.getElementById('alphabet-nav');
+            if (!navEl) return;
+            const letters = ['ALL', '#', ...Array.from({length: 26}, (_, i) => String.fromCharCode(65 + i))];
+            navEl.innerHTML = '';
+            const fragment = document.createDocumentFragment();
+
+            letters.forEach(letter => {
+                const btn = document.createElement('button');
+                btn.textContent = letter;
+                btn.className = `px-2.5 py-1.5 rounded-md text-xs font-bold transition-colors shrink-0 border border-transparent 
+                                ${window.currentLetterFilter === letter ? 'bg-vtext dark:bg-white text-vbg dark:text-black shadow-sm' : 'text-vmuted hover:bg-vborder/40 dark:hover:bg-white/10 hover:text-vtext dark:hover:text-white'}`;
+                btn.onclick = () => { 
+                    window.currentLetterFilter = letter; 
+                    window.buildAlphabetNav(); 
+                    window.filterSongs(); 
+                };
+                fragment.appendChild(btn);
+            });
+            navEl.appendChild(fragment);
+        };
+
+        window.sortSongs = function(data) {
+            return [...data].sort((a, b) => {
+                const artistA = (a.artist || '').trim().toLowerCase();
+                const artistB = (b.artist || '').trim().toLowerCase();
+                const artistComp = artistA.localeCompare(artistB, 'zh-TW', { sensitivity: 'base' });
+                
+                if (artistComp !== 0) return artistComp;
+                
+                const titleA = (a.title || '').trim().toLowerCase();
+                const titleB = (b.title || '').trim().toLowerCase();
+                return titleA.localeCompare(titleB, 'zh-TW', { sensitivity: 'base' });
+            });
+        };
+
+        window.getFilteredSongs = function() {
+            const searchInput = document.getElementById('search-input');
+            const query = searchInput ? searchInput.value.trim().toLowerCase() : '';
+            const filterLetter = window.currentLetterFilter;
+            
+            const filtered = window.songsData.filter(song => {
+                if (filterLetter !== 'ALL' && song.firstLetter !== filterLetter) return false;
+                
+                if (query) {
+                    return (song.title || '').toLowerCase().includes(query) ||
+                           (song.artist || '').toLowerCase().includes(query) ||
+                           (song.album || '').toLowerCase().includes(query);
+                }
+                
+                return true;
+            });
+            
+            return window.sortSongs(filtered);
+        };
+
+        window.filterSongs = function() {
+            window.renderSongs(window.getFilteredSongs());
+        };
+
+        window.renderSongs = function(data) {
+            const tbody = document.getElementById('song-table-body');
+            if (!tbody) return;
+            
+            tbody.innerHTML = '';
+            const totalCountEl = document.getElementById('total-songs-count');
+            const total = window.songsData.length;
+            const currentCount = data.length;
+
+            if (totalCountEl) {
+                if (currentCount === total) {
+                    totalCountEl.innerHTML = `▸ Total <span class="font-bold text-vaccent dark:text-orange-400">${total}</span> Songs in Playlist`;
+                } else {
+                    totalCountEl.innerHTML = `▸ Total <span class="font-bold text-vaccent dark:text-orange-400">${total}</span> Songs in Playlist (Found <span class="font-bold text-vaccent dark:text-orange-400">${currentCount}</span>)`;
+                }
+            }
+
+            if (currentCount === 0) {
+                tbody.innerHTML = `
+                    <tr id="state-row">
+                        <td colspan="4" class="py-24 text-center">
+                            <div class="flex flex-col items-center justify-center gap-4 max-w-md mx-auto">
+                                <i class="fa-solid fa-box-open text-vmuted/50 text-3xl"></i>
+                                <div class="text-[14px] leading-relaxed font-medium vtext dark:dark-mode-text">No songs found.｜未找到相符歌曲</div>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            const fragment = document.createDocumentFragment();
+
+            data.forEach(song => {
+                const tr = document.createElement('tr');
+                tr.className = `hover:bg-vcard/60 dark:hover:bg-[#2C2C30] transition-colors border-b border-vborder/30 dark:border-[#3F3F46] group`;
+                
+                const spotifyBtn = song.spotifyUrl ? 
+                    `<a href="${song.spotifyUrl}" target="_blank" class="px-2.5 py-1.5 rounded-md bg-emerald-50 dark:bg-emerald-950/30 text-vspotify dark:text-emerald-400 text-[11px] font-semibold hover:bg-emerald-100 dark:hover:bg-emerald-900/50 transition-colors inline-flex items-center space-x-1.5 border border-emerald-100/50 dark:border-emerald-800/30"><i class="fa-brands fa-spotify"></i><span>Spotify</span></a>` :
+                    `<span class="text-[11px] text-vmuted/40">—</span>`;
+
+                const appleBtn = song.appleUrl ? 
+                    `<a href="${song.appleUrl}" target="_blank" class="px-2.5 py-1.5 rounded-md bg-rose-50 dark:bg-rose-950/30 text-vapple dark:text-rose-400 text-[11px] font-semibold hover:bg-rose-100 dark:hover:bg-rose-900/50 transition-colors inline-flex items-center space-x-1.5 border border-rose-100/50 dark:border-rose-800/30"><i class="fa-brands fa-apple"></i><span>Apple</span></a>` :
+                    `<span class="text-[11px] text-vmuted/40">—</span>`;
+
+                tr.innerHTML = `
+                    <td class="py-5 px-4 song-data-text cell-wrap-text dark:dark-mode-text text-center">${song.artist}</td>
+                    <td class="py-5 px-4 song-data-text cell-wrap-text dark:dark-mode-text text-center">${song.title}</td>
+                    <td class="py-5 px-4 song-data-text cell-wrap-text dark:dark-mode-text text-center">${song.album || '—'}</td>
+                    <td class="py-5 px-4 text-center">
+                        <div class="inline-flex flex-wrap justify-center gap-2">
+                            ${spotifyBtn}
+                            ${appleBtn}
+                        </div>
+                    </td>
+                `;
+                fragment.appendChild(tr);
+            });
+
+            tbody.appendChild(fragment);
+        };
+    </script>
+</body>
+</html>
