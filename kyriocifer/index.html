@@ -3,13 +3,366 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KY Archive - miniminimaker</title>
+
+    <title>Kyrio Cifer - miniminimaker</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f5f1eb;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ===== Header ===== */
+
+        header {
+            background: #ffffff;
+            border-bottom: 1px solid #e5e0d8;
+            padding: 18px 24px;
+        }
+
+        .header-inner {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .logo {
+            width: 48px;
+            height: 48px;
+            object-fit: contain;
+            border-radius: 12px;
+        }
+
+        .title-area h1 {
+            margin: 0;
+            font-size: 24px;
+            color: #333;
+        }
+
+        .title-area p {
+            margin: 5px 0 0;
+            font-size: 14px;
+            color: #777;
+        }
+
+        /* ===== Main ===== */
+
+        main {
+            width: 100%;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 55px 24px 70px;
+            flex: 1;
+        }
+
+        .intro {
+            text-align: center;
+            margin-bottom: 42px;
+        }
+
+        .intro h2 {
+            margin: 0 0 10px;
+            font-size: 30px;
+            color: #333;
+        }
+
+        .intro p {
+            margin: 0;
+            color: #777;
+            font-size: 15px;
+            line-height: 1.7;
+        }
+
+        /* ===== Cards ===== */
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+        }
+
+        .card {
+            display: block;
+            text-decoration: none;
+            color: inherit;
+            background: #ffffff;
+            border: 1px solid #e1ddd6;
+            border-radius: 18px;
+            padding: 35px 30px;
+            text-align: center;
+            transition: transform 0.2s ease,
+                        box-shadow 0.2s ease,
+                        border-color 0.2s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+            border-color: #c9c2b8;
+        }
+
+        .card-icon {
+            font-size: 42px;
+            margin-bottom: 15px;
+        }
+
+        .card h3 {
+            margin: 0;
+            font-size: 22px;
+            color: #333;
+        }
+
+        .card .chinese {
+            margin-top: 5px;
+            font-size: 15px;
+            color: #777;
+        }
+
+        .card-description {
+            margin: 16px 0 0;
+            font-size: 14px;
+            line-height: 1.7;
+            color: #888;
+        }
+
+        /* ===== Back Button ===== */
+
+        .back {
+            display: block;
+            width: fit-content;
+            margin: 42px auto 0;
+            padding: 10px 20px;
+            border: 1px solid #d8d2ca;
+            border-radius: 20px;
+            background: #ffffff;
+            color: #555;
+            text-decoration: none;
+            font-size: 14px;
+            transition: background 0.2s ease;
+        }
+
+        .back:hover {
+            background: #eeeae4;
+        }
+
+        /* ===== Footer ===== */
+
+        footer {
+            background: #eee9e1;
+            text-align: center;
+            padding: 28px 20px;
+            color: #777;
+            font-size: 13px;
+        }
+
+        footer p {
+            margin: 5px 0;
+        }
+
+        footer a {
+            color: #777;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* ===== Mobile ===== */
+
+        @media (max-width: 650px) {
+
+            header {
+                padding: 15px 18px;
+            }
+
+            .logo {
+                width: 42px;
+                height: 42px;
+            }
+
+            .title-area h1 {
+                font-size: 20px;
+            }
+
+            main {
+                padding: 40px 18px 55px;
+            }
+
+            .intro h2 {
+                font-size: 26px;
+            }
+
+            .cards {
+                grid-template-columns: 1fr;
+            }
+
+            .card {
+                padding: 30px 24px;
+            }
+        }
+    </style>
 </head>
+
 <body>
 
-    <h1>KY Archive</h1>
+    <!-- ===== Header ===== -->
 
-    <p>Coming soon.</p>
+    <header>
+        <div class="header-inner">
+
+            <img
+                src="../kylogo.png"
+                alt="Kyrio Cifer Logo"
+                class="logo"
+            >
+
+            <div class="title-area">
+                <h1>Kyrio Cifer</h1>
+                <p>KY Archive · KY 收藏</p>
+            </div>
+
+        </div>
+    </header>
+
+
+    <!-- ===== Main Content ===== -->
+
+    <main>
+
+        <section class="intro">
+
+            <h2>Kyrio Cifer</h2>
+
+            <p>
+                A little archive for KY's streams, games, music and more.
+                <br>
+                收集 KY 的直播、遊戲、音樂，以及未來更多內容。
+            </p>
+
+        </section>
+
+
+        <!-- ===== Category Cards ===== -->
+
+        <section class="cards">
+
+            <!-- Music -->
+
+            <a href="music/" class="card">
+
+                <div class="card-icon">🎵</div>
+
+                <h3>Music</h3>
+
+                <div class="chinese">
+                    音樂
+                </div>
+
+                <p class="card-description">
+                    Stream music playlists and songs.
+                    <br>
+                    KY 的音樂播放清單與歌曲收藏。
+                </p>
+
+            </a>
+
+
+            <!-- Games -->
+
+            <a href="games/" class="card">
+
+                <div class="card-icon">🎮</div>
+
+                <h3>Games</h3>
+
+                <div class="chinese">
+                    遊戲
+                </div>
+
+                <p class="card-description">
+                    Games, streams and related content.
+                    <br>
+                    KY 的遊戲、直播與相關內容。
+                </p>
+
+            </a>
+
+
+            <!--
+            未來新增分類時，可以直接複製一張 card。
+
+            例如：
+
+            <a href="asmr/" class="card">
+
+                <div class="card-icon">🎧</div>
+
+                <h3>ASMR</h3>
+
+                <div class="chinese">
+                    ASMR
+                </div>
+
+                <p class="card-description">
+                    ASMR archive.
+                    <br>
+                    ASMR 收藏。
+                </p>
+
+            </a>
+            -->
+
+        </section>
+
+
+        <!-- ===== Back to Main Page ===== -->
+
+        <a href="../" class="back">
+            ← Back to Main Page · 回到主頁
+        </a>
+
+    </main>
+
+
+    <!-- ===== Footer ===== -->
+
+    <footer>
+
+        <p>
+            Made with ♡ by
+            <a
+                href="https://x.com/miniminimaker"
+                target="_blank"
+                rel="noopener noreferrer"
+            >
+                miniminimaker
+            </a>
+        </p>
+
+        <p>
+            © 2026
+            <a
+                href="https://x.com/miniminimaker"
+                target="_blank"
+                rel="noopener noreferrer"
+            >
+                miniminimaker
+            </a>
+        </p>
+
+    </footer>
 
 </body>
 </html>
