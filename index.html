@@ -18,379 +18,488 @@
 
 
     <!-- =========================
-         Styles (Japanese Minimalist Editorial Magazine)
+         Styles
     ========================== -->
 
     <style>
 
         /* =========================
-           Reset & Base Setup
-        ========================== -->
+           Basic Reset
+        ========================== */
 
         * {
             box-sizing: border-box;
         }
 
+
         html {
             scroll-behavior: smooth;
         }
 
+
         body {
             margin: 0;
             min-height: 100vh;
+
             font-family:
                 -apple-system,
                 BlinkMacSystemFont,
                 "Segoe UI",
-                "Helvetica Neue",
                 Arial,
                 sans-serif;
-            background: #f7f6f2; /* 暖白／米白背景 */
-            color: #2b2b2b; /* 黑灰色主文字 */
+
+            background: #f5f3ef;
+
+            color: #333;
+
             display: flex;
             flex-direction: column;
-            -webkit-font-smoothing: antialiased;
         }
 
 
         /* =========================
-           Container Layout
-        ========================== -->
+           Main Container
+        ========================== */
 
         .container {
+
             width: 100%;
-            max-width: 1080px;
+
+            max-width: 1000px;
+
             margin: 0 auto;
-            padding: 80px 40px 60px;
+
+            padding:
+                60px 30px 30px;
+
             flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
         }
 
 
         /* =========================
-           Header Section
-        ========================== -->
+           Header
+        ========================== */
 
         header {
+
             text-align: center;
-            margin-bottom: 75px;
-            position: relative;
-        }
 
-        /* 極細的裝飾分隔線 */
-        header::after {
-            content: "";
-            display: block;
-            width: 36px;
-            height: 1px;
-            background: #d8d3cc;
-            margin: 36px auto 0;
-        }
-
-        .logo {
-            width: 64px;
-            height: 64px;
-            object-fit: contain;
-            display: block;
-            margin: 0 auto 20px;
-            opacity: 0.9;
-        }
-
-        h1 {
-            margin: 0 0 10px;
-            font-size: 27px;
-            font-weight: 500;
-            letter-spacing: 1.5px;
-            color: #2b2b2b;
-        }
-
-        .subtitle {
-            margin: 0;
-            color: #78736c;
-            font-size: 13.5px;
-            font-weight: 300;
-            line-height: 1.9;
-            letter-spacing: 0.6px;
-        }
-
-
-        /* =========================
-           Magazine / Editorial Grid Layout
-        ========================== -->
-
-        .categories {
-            display: grid;
-            /* 非對稱 Grid：左側稍大 (1.15fr)，呈現主視覺 About Me 質感 */
-            grid-template-columns: 1.15fr 0.85fr;
-            gap: 32px;
-            width: 100%;
-            align-items: stretch;
             margin-bottom: 60px;
         }
 
-        .card {
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            background: #ffffff;
-            border: 1px solid #e3ded6;
-            border-radius: 4px;
-            text-decoration: none;
-            color: inherit;
-            padding: 50px 40px;
-            position: relative;
-            overflow: hidden;
-            transition:
-                transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
-                border-color 0.35s ease,
-                box-shadow 0.35s ease;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.01);
-        }
 
-        /* About Me 卡片設計調整 */
-        .card-about {
-            background: #ffffff;
-        }
+        .logo {
 
-        /* Kyrio Cifer 收藏卡片微調色階，帶點紙張感 */
-        .card-kyrio {
-            background: #faf8f5;
-        }
+            width: 90px;
+            height: 90px;
 
-        .card:hover {
-            transform: translateY(-4px);
-            border-color: #b0a79d;
-            box-shadow: 0 12px 32px rgba(43, 43, 43, 0.04);
-        }
-
-        .card:focus-visible {
-            outline: 2px solid #827970;
-            outline-offset: 4px;
-        }
-
-
-        /* =========================
-           Card Visual Elements
-        ========================== -->
-
-        .card-image-wrapper {
-            width: 100%;
-            display: flex;
-            justify-content: flex-start;
-            margin-bottom: 40px;
-        }
-
-        .card-icon {
-            width: 120px;
-            height: 120px;
             object-fit: contain;
+
             display: block;
-            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+
+            margin:
+                0 auto 22px;
         }
 
-        .card-kyrio .card-icon {
-            width: 105px;
-            height: 105px;
-        }
 
-        .card:hover .card-icon {
-            transform: scale(1.03);
-        }
+        h1 {
 
-        .card-content {
-            display: flex;
-            flex-direction: column;
-        }
+            margin:
+                0 0 10px;
 
-        .card h2 {
-            margin: 0 0 14px;
-            font-size: 21px;
-            font-weight: 500;
-            letter-spacing: 0.8px;
-            line-height: 1.35;
-            color: #2b2b2b;
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
+            font-size: 36px;
 
-        .chinese-title {
-            font-size: 13px;
-            font-weight: 400;
-            color: #8c867e;
-            letter-spacing: 1px;
-        }
+            font-weight: 700;
 
-        .card p {
-            margin: 0;
-            color: #6c675f;
-            font-size: 13.5px;
-            font-weight: 300;
-            line-height: 1.85;
             letter-spacing: 0.3px;
         }
 
 
+        .subtitle {
+
+            margin: 0;
+
+            color: #777;
+
+            font-size: 15px;
+
+            line-height: 1.8;
+        }
+
+
         /* =========================
-           Footer Section
-        ========================== -->
+           Main Categories
+        ========================== */
+
+        .categories {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, 1fr);
+
+            gap: 30px;
+
+            width: 100%;
+        }
+
+
+        /* =========================
+           Category Card
+        ========================== */
+
+        .card {
+
+            display: flex;
+
+            flex-direction: column;
+
+            align-items: center;
+
+            justify-content: center;
+
+            min-height: 320px;
+
+            padding:
+                45px 35px;
+
+            background: #ffffff;
+
+            border:
+                1px solid #dedbd5;
+
+            border-radius: 22px;
+
+            text-decoration: none;
+
+            color: inherit;
+
+            text-align: center;
+
+            box-shadow:
+                0 4px 14px
+                rgba(0, 0, 0, 0.04);
+
+            transition:
+                transform 0.25s ease,
+                box-shadow 0.25s ease,
+                border-color 0.25s ease;
+        }
+
+
+        .card:hover {
+
+            transform:
+                translateY(-7px);
+
+            box-shadow:
+                0 14px 35px
+                rgba(0, 0, 0, 0.10);
+
+            border-color:
+                #cfcac2;
+        }
+
+
+        .card:focus-visible {
+
+            outline:
+                3px solid #9b8fd1;
+
+            outline-offset: 5px;
+        }
+
+
+        /* =========================
+           Card Images
+        ========================== */
+
+        .card-icon {
+
+            width: 120px;
+            height: 120px;
+
+            object-fit: contain;
+
+            display: block;
+
+            margin-bottom: 25px;
+
+            transition:
+                transform 0.25s ease;
+        }
+
+
+        .card:hover .card-icon {
+
+            transform:
+                scale(1.05);
+        }
+
+
+        /* =========================
+           Card Titles
+        ========================== */
+
+        .card h2 {
+
+            margin:
+                0 0 10px;
+
+            font-size: 25px;
+
+            font-weight: 700;
+
+            letter-spacing: 0.2px;
+
+            line-height: 1.4;
+        }
+
+
+        /* Chinese Subtitle */
+
+        .chinese-title {
+
+            font-size: 16px;
+
+            font-weight: 500;
+
+            color: #888;
+        }
+
+
+        /* =========================
+           Card Description
+        ========================== */
+
+        .card p {
+
+            margin: 0;
+
+            color: #777;
+
+            font-size: 14px;
+
+            line-height: 1.8;
+        }
+
+
+        /* =========================
+           Footer
+        ========================== */
 
         footer {
-            margin-top: 60px;
-            padding-top: 24px;
+
+            margin-top: 70px;
+
+            padding:
+                30px 20px 35px;
+
             text-align: center;
-            color: #8c867e;
-            font-size: 12px;
-            font-weight: 300;
-            letter-spacing: 0.6px;
-            border-top: 1px solid #ebe6df;
+
+            color: #888;
+
+            font-size: 13px;
+
+            line-height: 2;
         }
+
 
         footer a {
-            color: #5c5750;
+
+            color: #777;
+
             text-decoration: none;
-            transition: color 0.2s ease;
-            border-bottom: 1px solid transparent;
+
+            transition:
+                color 0.2s ease;
         }
+
 
         footer a:hover {
-            color: #2b2b2b;
-            border-bottom-color: #2b2b2b;
+
+            color: #555;
+
+            text-decoration: underline;
         }
 
+
         footer a:focus-visible {
-            outline: 2px solid #8c8378;
-            outline-offset: 2px;
+
+            outline:
+                2px solid #9b8fd1;
+
+            outline-offset: 3px;
         }
 
 
         /* =========================
-           Responsive Design (Mobile & Tablet)
-        ========================== -->
+           Mobile
+        ========================== */
 
-        @media (max-width: 768px) {
+        @media (max-width: 700px) {
+
+
             .container {
-                padding: 45px 22px 30px;
+
+                padding:
+                    45px 20px 20px;
             }
+
 
             header {
-                margin-bottom: 48px;
-            }
 
-            header::after {
-                margin: 26px auto 0;
-                width: 28px;
-            }
-
-            .logo {
-                width: 54px;
-                height: 54px;
-                margin-bottom: 16px;
-            }
-
-            h1 {
-                font-size: 23px;
-            }
-
-            .subtitle {
-                font-size: 12.5px;
-            }
-
-            .categories {
-                grid-template-columns: 1fr;
-                gap: 20px;
                 margin-bottom: 40px;
             }
 
-            .card {
-                padding: 38px 28px;
+
+            .logo {
+
+                width: 75px;
+                height: 75px;
+
+                margin-bottom: 18px;
             }
 
-            .card-image-wrapper {
-                margin-bottom: 28px;
+
+            h1 {
+
+                font-size: 30px;
             }
+
+
+            .subtitle {
+
+                font-size: 14px;
+            }
+
+
+            .categories {
+
+                grid-template-columns:
+                    1fr;
+
+                gap: 20px;
+            }
+
+
+            .card {
+
+                min-height: 280px;
+
+                padding:
+                    40px 25px;
+
+                border-radius: 20px;
+            }
+
 
             .card-icon {
-                width: 95px;
-                height: 95px;
+
+                width: 105px;
+                height: 105px;
+
+                margin-bottom: 20px;
             }
 
-            .card-kyrio .card-icon {
-                width: 85px;
-                height: 85px;
-            }
 
             .card h2 {
-                font-size: 19px;
+
+                font-size: 23px;
             }
+
 
             .chinese-title {
-                font-size: 12px;
+
+                font-size: 15px;
             }
 
-            .card p {
-                font-size: 13px;
-            }
 
             footer {
-                margin-top: 40px;
+
+                margin-top: 45px;
             }
+
         }
 
 
         /* =========================
-           Reduced Motion Support
-        ========================== -->
+           Reduced Motion
+        ========================== */
 
         @media (prefers-reduced-motion: reduce) {
+
             html {
+
                 scroll-behavior: auto;
             }
+
+
             *,
             *::before,
             *::after {
-                transition: none !important;
-                animation: none !important;
+
+                transition:
+                    none !important;
+
+                animation:
+                    none !important;
             }
+
         }
 
     </style>
 
 </head>
 
+
 <body>
 
+
     <!-- =========================
-         Main Container
+         Main Content
     ========================== -->
 
     <main class="container">
+
 
         <!-- =========================
              Header
         ========================== -->
 
         <header>
+
+
+            <!-- Main Website Logo -->
+
             <img
                 src="minilogo.png"
                 alt="miniminimaker logo"
                 class="logo"
             >
+
+
             <h1>
-                MINIMINI
+                miniminimaker
             </h1>
+
+
             <p class="subtitle">
+
                 My personal space &amp; KY archive
                 <br>
+
                 我的個人空間與 KY 收藏
+
             </p>
+
+
         </header>
 
 
+
         <!-- =========================
-             Categories (Editorial Grid)
+             Main Categories
         ========================== -->
 
         <section
@@ -398,64 +507,116 @@
             aria-label="Main categories"
         >
 
-            <!-- About Me Card -->
+
+            <!-- =====================
+                 About Me
+            ====================== -->
+
             <a
                 href="/about/"
-                class="card card-about"
+                class="card"
                 aria-label="About Me 關於我"
             >
-                <div class="card-image-wrapper">
-                    <img
-                        src="minipfp.png"
-                        alt="About Me"
-                        class="card-icon"
-                    >
-                </div>
-                <div class="card-content">
-                    <h2>
-                        About Me
-                        <span class="chinese-title">關於我</span>
-                    </h2>
-                    <p>
-                        About me, commissions,
-                        <br>
-                        and my creative work.
-                        <br>
-                        關於我、委託與創作。
-                    </p>
-                </div>
+
+
+                <!-- About Me Image -->
+
+                <img
+                    src="minipfp.png"
+                    alt="About Me"
+                    class="card-icon"
+                >
+
+
+                <!-- Title -->
+
+                <h2>
+
+                    About Me
+
+                    <br>
+
+                    <span class="chinese-title">
+                        關於我
+                    </span>
+
+                </h2>
+
+
+                <!-- Description -->
+
+                <p>
+
+                    About me, commissions,
+                    <br>
+
+                    and my creative work.
+                    <br>
+
+                    關於我、委託與創作。
+
+                </p>
+
+
             </a>
 
 
-            <!-- Kyrio Cifer Card -->
+
+            <!-- =====================
+                 Kyrio Cifer
+            ====================== -->
+
             <a
                 href="/kyriocifer/"
-                class="card card-kyrio"
+                class="card"
                 aria-label="Kyrio Cifer KY 收藏"
             >
-                <div class="card-image-wrapper">
-                    <img
-                        src="kylogo.png"
-                        alt="Kyrio Cifer"
-                        class="card-icon"
-                    >
-                </div>
-                <div class="card-content">
-                    <h2>
-                        Kyrio Cifer
-                        <span class="chinese-title">KY 收藏</span>
-                    </h2>
-                    <p>
-                        A collection of KY's
-                        <br>
-                        stream projects and archives.
-                        <br>
-                        KY 的直播相關企劃與收藏。
-                    </p>
-                </div>
+
+
+                <!-- KY Image -->
+
+                <img
+                    src="kylogo.png"
+                    alt="Kyrio Cifer"
+                    class="card-icon"
+                >
+
+
+                <!-- Title -->
+
+                <h2>
+
+                    Kyrio Cifer
+
+                    <br>
+
+                    <span class="chinese-title">
+                        KY 收藏
+                    </span>
+
+                </h2>
+
+
+                <!-- Description -->
+
+                <p>
+
+                    A collection of KY's
+                    <br>
+
+                    stream projects and archives.
+                    <br>
+
+                    KY 的直播相關企劃與收藏。
+
+                </p>
+
+
             </a>
 
+
         </section>
+
 
 
         <!-- =========================
@@ -463,8 +624,31 @@
         ========================== -->
 
         <footer>
+
+
+            <!-- Made With -->
+
             <div>
-                &copy; 2026
+
+                Made with ♡ by
+
+                <a
+                    href="https://x.com/miniminimaker"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    MINIMINI
+                </a>
+
+            </div>
+
+
+            <!-- Copyright -->
+
+            <div>
+
+                © 2026
+
                 <a
                     href="https://x.com/miniminimaker"
                     target="_blank"
@@ -472,10 +656,15 @@
                 >
                     miniminimaker
                 </a>
+
             </div>
+
+
         </footer>
 
+
     </main>
+
 
 </body>
 
