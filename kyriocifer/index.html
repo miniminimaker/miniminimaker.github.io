@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Kyrio Cifer - miniminimaker</title>
+    <title>Kyrio Cifer Hub - miniminimaker</title>
 
     <style>
         * {
@@ -14,66 +14,67 @@
         body {
             margin: 0;
             min-height: 100vh;
-            font-family: Arial, Helvetica, sans-serif;
-            background: #f5f1eb;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+            background: #f5f3ef; /* 配合主頁的背景色 */
             color: #333;
             display: flex;
             flex-direction: column;
         }
 
-        /* ===== Header ===== */
-
         header {
             background: #ffffff;
-            border-bottom: 1px solid #e5e0d8;
+            border-bottom: 1px solid #eae5df;
             padding: 18px 24px;
         }
 
         .header-inner {
-            max-width: 1000px;
+            max-width: 800px;
             margin: 0 auto;
             display: flex;
             align-items: center;
-            gap: 14px;
+            gap: 16px;
         }
 
         .logo {
-            width: 48px;
-            height: 48px;
+            width: 50px;
+            height: 50px;
             object-fit: contain;
             border-radius: 12px;
+            background-color: rgba(0,0,0,0.02);
+            padding: 4px;
         }
 
         .title-area h1 {
             margin: 0;
-            font-size: 24px;
+            font-size: 22px;
+            font-weight: 700;
             color: #333;
+            letter-spacing: 0.5px;
         }
 
         .title-area p {
-            margin: 5px 0 0;
-            font-size: 14px;
-            color: #777;
+            margin: 4px 0 0;
+            font-size: 13px;
+            color: #888;
         }
-
-        /* ===== Main ===== */
 
         main {
             width: 100%;
-            max-width: 1000px;
+            max-width: 800px;
             margin: 0 auto;
-            padding: 55px 24px 70px;
+            padding: 60px 24px 70px;
             flex: 1;
         }
 
         .intro {
             text-align: center;
-            margin-bottom: 42px;
+            margin-bottom: 45px;
         }
 
         .intro h2 {
-            margin: 0 0 10px;
-            font-size: 30px;
+            margin: 0 0 12px;
+            font-size: 28px;
+            font-weight: 700;
             color: #333;
         }
 
@@ -81,110 +82,168 @@
             margin: 0;
             color: #777;
             font-size: 15px;
-            line-height: 1.7;
+            line-height: 1.8;
         }
-
-        /* ===== Cards ===== */
 
         .cards {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 24px;
+            gap: 20px;
+            width: 100%;
         }
 
+        /* ===== 極簡風卡片設計 ===== */
         .card {
-            display: block;
-            text-decoration: none;
-            color: inherit;
             background: #ffffff;
-            border: 1px solid #e1ddd6;
-            border-radius: 18px;
-            padding: 35px 30px;
-            text-align: center;
-            transition: transform 0.2s ease,
-                        box-shadow 0.2s ease,
-                        border-color 0.2s ease;
+            border: none; /* 移除邊框 */
+            border-radius: 20px;
+            padding: 32px 28px;
+            text-decoration: none;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start; /* 靠左對齊 */
+            text-align: left;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.03); /* 柔和的常駐陰影 */
+            position: relative;
+            overflow: hidden;
         }
 
         .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
-            border-color: #c9c2b8;
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.08); /* 懸停時加深陰影，增加立體感 */
         }
 
+        .card:focus-visible {
+            outline: 2px solid #999;
+            outline-offset: 3px;
+        }
+
+        /* 將 Emoji 收斂在精緻的小方塊內 */
         .card-icon {
-            font-size: 42px;
-            margin-bottom: 15px;
+            font-size: 24px;
+            width: 48px;
+            height: 48px;
+            background: #f8f6f3; /* 配合背景色的超淺底色 */
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 24px;
+            transition: transform 0.3s ease;
         }
 
-        .card h3 {
-            margin: 0;
-            font-size: 22px;
+        .card:hover .card-icon {
+            transform: scale(1.05); /* 懸停時圖示微微放大 */
+        }
+
+        .card-info {
+            flex: 1;
+            width: 100%;
+        }
+
+        .card-info h3 {
+            margin: 0 0 6px;
+            font-size: 18px;
+            font-weight: 700;
             color: #333;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
 
-        .card .chinese {
-            margin-top: 5px;
-            font-size: 15px;
-            color: #777;
+        /* 加入一個懸停時才會微微移動的箭頭，增加互動感 */
+        .card-info h3::after {
+            content: "→";
+            font-weight: normal;
+            color: #ccc;
+            font-family: Arial, sans-serif;
+            transition: transform 0.2s ease, color 0.2s ease;
         }
 
-        .card-description {
-            margin: 16px 0 0;
-            font-size: 14px;
-            line-height: 1.7;
+        .card:hover .card-info h3::after {
+            transform: translateX(4px);
             color: #888;
         }
 
-        /* ===== Back Button ===== */
+        .card-info p {
+            margin: 0;
+            font-size: 13px;
+            color: #888;
+            letter-spacing: 0.5px;
+        }
+
+        /* 將色塊改為極簡的狀態點點 */
+        .card-status {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            color: #aaa;
+            margin-top: 24px;
+            letter-spacing: 0.5px;
+        }
+
+        .card-status::before {
+            content: "";
+            display: block;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background-color: #d8cfc0; /* 柔和的圓點顏色 */
+        }
 
         .back {
-            display: block;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             width: fit-content;
-            margin: 42px auto 0;
-            padding: 10px 20px;
+            margin: 60px auto 0;
+            padding: 12px 24px;
             border: 1px solid #d8d2ca;
-            border-radius: 20px;
+            border-radius: 24px;
             background: #ffffff;
-            color: #555;
+            color: #666;
             text-decoration: none;
             font-size: 14px;
-            transition: background 0.2s ease;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
         }
 
         .back:hover {
-            background: #eeeae4;
+            background: #fbfaf9;
+            border-color: #c85a5a;
+            color: #c85a5a;
+            transform: translateY(-1px);
         }
 
-        /* ===== Footer ===== */
-
         footer {
-            background: #eee9e1;
             text-align: center;
-            padding: 28px 20px;
-            color: #777;
+            padding: 30px 20px;
+            color: #888;
             font-size: 13px;
         }
 
         footer p {
-            margin: 5px 0;
+            margin: 0;
         }
 
         footer a {
             color: #777;
             text-decoration: none;
+            transition: color 0.2s ease;
         }
 
         footer a:hover {
+            color: #333;
             text-decoration: underline;
         }
 
-        /* ===== Mobile ===== */
-
-        @media (max-width: 650px) {
-
+        @media (max-width: 600px) {
             header {
-                padding: 15px 18px;
+                padding: 15px 20px;
             }
 
             .logo {
@@ -193,23 +252,24 @@
             }
 
             .title-area h1 {
-                font-size: 20px;
+                font-size: 18px;
             }
 
             main {
-                padding: 40px 18px 55px;
+                padding: 40px 20px 50px;
             }
 
             .intro h2 {
-                font-size: 26px;
+                font-size: 24px;
             }
 
             .cards {
                 grid-template-columns: 1fr;
+                gap: 16px;
             }
 
             .card {
-                padding: 30px 24px;
+                padding: 24px 20px;
             }
         }
     </style>
@@ -217,117 +277,76 @@
 
 <body>
 
-    <!-- ===== Header ===== -->
-
     <header>
         <div class="header-inner">
-
-            <img
-                src="../kylogo.png"
-                alt="Kyrio Cifer Logo"
-                class="logo"
-            >
-
+            <img src="../kylogo.png" alt="Kyrio Cifer Logo" class="logo" onerror="this.style.display='none'">
             <div class="title-area">
-                <h1>Kyrio Cifer</h1>
-                <p>KY Archive · KY 收藏</p>
+                <h1>Kyrio Cifer Hub</h1>
+                <p>Updated Occasionally｜不定期更新</p>
             </div>
-
         </div>
     </header>
 
-
-    <!-- ===== Main Content ===== -->
-
     <main>
-
         <section class="intro">
-
-            <h2>Kyrio Cifer</h2>
-
+            <h2>🖤🥀 Archives & Projects</h2>
             <p>
-                A little archive for KY's streams, games, music and more.
+                A collection of KY's streams, projects, and more.
                 <br>
-                收集 KY 的直播、遊戲、音樂，以及未來更多內容。
+                KY 的直播、企劃與更多相關內容收藏。
             </p>
-
         </section>
-
-
-        <!-- ===== Category Cards ===== -->
 
         <section class="cards">
-
-            <!-- Music -->
-
-            <a href="music/" class="card">
-
-                <div class="card-icon">🎵</div>
-
-                <h3>Music</h3>
-
-                <div class="chinese">
-                    音樂
+            
+            <!-- Stream Archive -->
+            <a href="archive/" class="card">
+                <div class="card-icon">🔴</div>
+                <div class="card-info">
+                    <h3>Stream Archive</h3>
+                    <p>直播資訊</p>
                 </div>
-
-                <p class="card-description">
-                    Stream music playlists and songs.
-                    <br>
-                    KY 的音樂播放清單與歌曲收藏。
-                </p>
-
+                <div class="card-status">Under Construction · 建設中</div>
             </a>
 
-
+            <!-- Other Info -->
+            <a href="other/" class="card">
+                <div class="card-icon">📂</div>
+                <div class="card-info">
+                    <h3>Other Info</h3>
+                    <p>其他資訊</p>
+                </div>
+                <div class="card-status">Under Construction · 建設中</div>
+            </a>
+            
             <!-- Games -->
-
-            <a href="games/" class="card">
-
+            <a href="https://miniminimaker.github.io/kyriocifer/games/" class="card">
                 <div class="card-icon">🎮</div>
-
-                <h3>Games</h3>
-
-                <div class="chinese">
-                    遊戲
+                <div class="card-info">
+                    <h3>Stream Games Archive</h3>
+                    <p>直播遊戲列表</p>
                 </div>
-
-                <p class="card-description">
-                    Games, streams and related content.
-                    <br>
-                    KY 的遊戲、直播與相關內容。
-                </p>
-
             </a>
-
-
-            <!--
-            未來新增分類時，可以直接複製一張 card。
-
-            例如：
-
-            <a href="asmr/" class="card">
-
-                <div class="card-icon">🎧</div>
-
-                <h3>ASMR</h3>
-
-                <div class="chinese">
-                    ASMR
+            
+            <!-- Music -->
+            <a href="https://miniminimaker.github.io/kyriocifer/music/" class="card">
+                <div class="card-icon">🎵</div>
+                <div class="card-info">
+                    <h3>Stream Music Playlist</h3>
+                    <p>直播音樂清單</p>
                 </div>
-
-                <p class="card-description">
-                    ASMR archive.
-                    <br>
-                    ASMR 收藏。
-                </p>
-
             </a>
-            -->
+            
+            <!-- miniminiproject -->
+            <a href="https://kyriory.carrd.co/" target="_blank" rel="noopener noreferrer" class="card">
+                <div class="card-icon">✨</div>
+                <div class="card-info">
+                    <h3>miniminiproject</h3>
+                    <p>minimini粉絲企劃</p>
+                </div>
+            </a>
 
         </section>
-
-
-        <!-- ===== Back to Main Page ===== -->
 
         <a href="../" class="back">
             ← Back to Main Page · 回到主頁
@@ -335,33 +354,13 @@
 
     </main>
 
-
-    <!-- ===== Footer ===== -->
-
     <footer>
-
-        <p>
-            Made with ♡ by
-            <a
-                href="https://x.com/miniminimaker"
-                target="_blank"
-                rel="noopener noreferrer"
-            >
-                miniminimaker
-            </a>
-        </p>
-
         <p>
             © 2026
-            <a
-                href="https://x.com/miniminimaker"
-                target="_blank"
-                rel="noopener noreferrer"
-            >
+            <a href="https://x.com/miniminimaker" target="_blank" rel="noopener noreferrer">
                 miniminimaker
             </a>
         </p>
-
     </footer>
 
 </body>
