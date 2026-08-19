@@ -1,294 +1,180 @@
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html lang="zh-TW" class="h-full">
 <head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kyrio Cifer Hub - miniminimaker</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = { 
+            darkMode: 'media', 
+            theme: { 
+                extend: { 
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: {
+                        vbg: '#F0EBE3',
+                        vcard: '#FAF9F6',
+                        vborder: '#E1DCD2',
+                        vtext: '#4F4538',
+                        vmuted: '#8C8273',
+                        vaccent: '#B45309',
+                    }
+                } 
+            } 
+        }
+    </script>
+    
     <style>
-        * {
-            box-sizing: border-box;
+        body { font-family: 'Inter', sans-serif; background-color: #F0EBE3; color: #4F4538; overflow-x: hidden; }
+
+        @media (prefers-color-scheme: dark) {
+            .dark-mode-bg { background-color: #1C1917 !important; }
+            .dark-mode-card { background-color: #27272A !important; }
+            .dark-mode-text { color: #E7E5E4 !important; }
+            .dark-mode-muted { color: #A1A1AA !important; }
+            .dark-mode-border { border-color: #3F3F46 !important; }
         }
 
-        body {
-            margin: 0;
-            min-height: 100vh;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
-            background: #f5f3ef;
-            color: #333;
-            display: flex;
-            flex-direction: column;
-        }
-
-        main {
-            width: 100%;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 80px 24px 70px;
-            flex: 1;
-        }
-
-        .intro {
-            text-align: center;
-            margin-bottom: 50px;
-        }
-
-        .intro-logo {
-            width: 110px;
-            height: 110px;
-            object-fit: contain;
-            display: block;
-            margin: 0 auto 24px auto;
-            border-radius: 28px;
-            background-color: #ffffff;
-            padding: 8px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.04);
-            transition: transform 0.3s ease;
-        }
-
-        .intro-logo:hover {
-            transform: translateY(-3px);
-        }
-
-        .intro h2 {
-            margin: 0 0 12px;
-            font-size: 28px;
-            font-weight: 700;
-            color: #333;
-        }
-
-        .intro p {
-            margin: 0;
-            color: #777;
-            font-size: 15px;
-            line-height: 1.8;
-        }
-
-        .cards {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
-            width: 100%;
-        }
-
-        .card {
-            background: #ffffff;
-            border: none;
-            border-radius: 20px;
-            padding: 32px 28px;
-            text-decoration: none;
-            color: #333;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            text-align: left;
-            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-            box-shadow: 0 4px 20px rgba(0,0,0,0.03);
-            position: relative;
-            overflow: hidden;
-        }
-
-        a.card:hover {
+        /* Custom Hover effect for interactive cards */
+        .interactive-card:hover {
             transform: translateY(-4px);
-            box-shadow: 0 12px 30px rgba(0,0,0,0.08);
-            cursor: pointer;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            border-color: #D6D0C4;
         }
-
-        a.card:focus-visible {
-            outline: 2px solid #999;
-            outline-offset: 3px;
-        }
-
-        .card-icon {
-            font-size: 24px;
-            width: 48px;
-            height: 48px;
-            background: #f8f6f3;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 24px;
-            transition: transform 0.3s ease;
-        }
-
-        a.card:hover .card-icon {
-            transform: scale(1.05);
-        }
-
-        .card-info {
-            flex: 1;
-            width: 100%;
-        }
-
-        .card-info h3 {
-            margin: 0 0 6px;
-            font-size: 18px;
-            font-weight: 700;
-            color: #333;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        a.card .card-info h3::after {
-            content: "→";
-            font-weight: normal;
-            color: #ccc;
-            font-family: Arial, sans-serif;
-            transition: transform 0.2s ease, color 0.2s ease;
-        }
-
-        a.card:hover .card-info h3::after {
-            transform: translateX(4px);
-            color: #888;
-        }
-
-        .card-info p {
-            margin: 0;
-            font-size: 13px;
-            color: #888;
-            letter-spacing: 0.5px;
-        }
-
-        .card-status {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 12px;
-            color: #aaa;
-            margin-top: 24px;
-            letter-spacing: 0.5px;
-        }
-
-        .card-status::before {
-            content: "";
-            display: block;
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            background-color: #d8cfc0;
-        }
-
-        footer {
-            text-align: center;
-            padding: 30px 20px;
-            color: #888;
-            font-size: 13px;
-        }
-
-        footer p {
-            margin: 0;
-        }
-
-        footer a {
-            color: #b45309;
-            text-decoration: none;
-            transition: opacity 0.2s ease;
-        }
-
-        footer a:hover {
-            opacity: 0.8;
-        }
-
-        footer a:focus-visible {
-            outline: 2px solid #b45309;
-            outline-offset: 3px;
-            border-radius: 2px;
-        }
-
-        @media (max-width: 600px) {
-            main {
-                padding: 50px 20px 50px;
-            }
-
-            .intro-logo {
-                width: 85px;
-                height: 85px;
-                margin-bottom: 20px;
-                border-radius: 22px;
-            }
-
-            .intro h2 {
-                font-size: 24px;
-            }
-
-            .cards {
-                grid-template-columns: 1fr;
-                gap: 16px;
-            }
-
-            .card {
-                padding: 24px 20px;
+        
+        @media (prefers-color-scheme: dark) {
+            .interactive-card:hover {
+                box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+                border-color: #52525B;
             }
         }
     </style>
 </head>
-<body>
-    <main>
-        <section class="intro">
-            <img src="logo.png" alt="Kyrio Cifer Logo" class="intro-logo">
-            <h2>Kyrio Cifer Hub</h2>
-            <p>Updated Occasionally｜不定期更新</p>
+<body class="flex flex-col min-h-screen dark:dark-mode-bg transition-colors duration-300">
+
+    <main class="flex-1 w-full max-w-[800px] mx-auto pt-20 px-6 pb-20 flex flex-col items-center">
+        
+        <section class="text-center mb-14 flex flex-col items-center">
+            <div class="w-[110px] h-[110px] sm:w-[130px] sm:h-[130px] rounded-3xl bg-white dark:bg-black/20 p-2.5 shadow-sm border border-vborder/50 dark:dark-mode-border mb-6 flex items-center justify-center transition-transform hover:-translate-y-1 duration-300">
+                <img src="logo.png" alt="Kyrio Cifer Logo" class="w-full h-full object-contain rounded-2xl" onerror="this.style.display='none'">
+            </div>
+            <h2 class="text-[26px] sm:text-[30px] font-bold vtext dark:dark-mode-text mb-2 tracking-tight">
+                Kyrio Cifer Hub
+            </h2>
+            <p class="text-[15px] vmuted dark:dark-mode-muted">
+                Updated Occasionally｜不定期更新
+            </p>
         </section>
 
-        <section class="cards">
+        <section class="grid grid-cols-1 sm:grid-cols-2 gap-5 w-full">
             
-            <div class="card">
-                <div class="card-icon">🔴</div>
-                <div class="card-info">
-                    <h3>Stream Archive</h3>
-                    <p>直播資訊</p>
+            <!-- Stream Archive (Construction) -->
+            <div class="bg-vcard dark:dark-mode-card border border-vborder/70 dark:dark-mode-border rounded-[20px] p-6 sm:p-7 flex flex-col items-start text-left shadow-sm transition-all duration-300">
+                <div class="text-[26px] w-[52px] h-[52px] bg-vbg dark:bg-black/30 rounded-2xl flex items-center justify-center mb-5 border border-vborder/40 dark:dark-mode-border">
+                    🔴
                 </div>
-                <div class="card-status">Under Construction · 建設中</div>
+                <div class="flex-1 w-full">
+                    <h3 class="m-0 text-[18px] font-bold vtext dark:dark-mode-text mb-1.5 flex items-center justify-between">
+                        Stream Archive
+                    </h3>
+                    <p class="m-0 text-[13px] vmuted dark:dark-mode-muted tracking-wide">
+                        直播資訊
+                    </p>
+                </div>
+                <div class="flex items-center gap-2 text-[12px] vmuted/70 dark:dark-mode-muted/70 mt-6 tracking-wide">
+                    <span class="w-1.5 h-1.5 rounded-full bg-vborder dark:bg-zinc-600"></span>
+                    Under Construction · 建設中
+                </div>
             </div>
 
-            <div class="card">
-                <div class="card-icon">📂</div>
-                <div class="card-info">
-                    <h3>Other Info</h3>
-                    <p>其他資訊</p>
+            <!-- Other Info (Construction) -->
+            <div class="bg-vcard dark:dark-mode-card border border-vborder/70 dark:dark-mode-border rounded-[20px] p-6 sm:p-7 flex flex-col items-start text-left shadow-sm transition-all duration-300">
+                <div class="text-[26px] w-[52px] h-[52px] bg-vbg dark:bg-black/30 rounded-2xl flex items-center justify-center mb-5 border border-vborder/40 dark:dark-mode-border">
+                    📂
                 </div>
-                <div class="card-status">Under Construction · 建設中</div>
+                <div class="flex-1 w-full">
+                    <h3 class="m-0 text-[18px] font-bold vtext dark:dark-mode-text mb-1.5 flex items-center justify-between">
+                        Other Info
+                    </h3>
+                    <p class="m-0 text-[13px] vmuted dark:dark-mode-muted tracking-wide">
+                        其他資訊
+                    </p>
+                </div>
+                <div class="flex items-center gap-2 text-[12px] vmuted/70 dark:dark-mode-muted/70 mt-6 tracking-wide">
+                    <span class="w-1.5 h-1.5 rounded-full bg-vborder dark:bg-zinc-600"></span>
+                    Under Construction · 建設中
+                </div>
             </div>
             
-            <a href="https://miniminimaker.github.io/kyriocifer/games/" class="card">
-                <div class="card-icon">🎮</div>
-                <div class="card-info">
-                    <h3>Stream Games Archive</h3>
-                    <p>直播遊戲列表</p>
+            <!-- Stream Games Archive -->
+            <a href="https://miniminimaker.github.io/kyriocifer/games/" class="interactive-card bg-vcard dark:dark-mode-card border border-vborder/70 dark:dark-mode-border rounded-[20px] p-6 sm:p-7 flex flex-col items-start text-left shadow-sm transition-all duration-300 group outline-none focus-visible:ring-2 focus-visible:ring-vaccent focus-visible:ring-offset-2 focus-visible:ring-offset-vbg">
+                <div class="text-[26px] w-[52px] h-[52px] bg-vbg dark:bg-black/30 rounded-2xl flex items-center justify-center mb-5 border border-vborder/40 dark:dark-mode-border group-hover:scale-105 transition-transform duration-300">
+                    🎮
+                </div>
+                <div class="flex-1 w-full">
+                    <h3 class="m-0 text-[18px] font-bold vtext dark:dark-mode-text mb-1.5 flex items-center justify-between group-hover:text-vaccent transition-colors">
+                        Stream Games Archive
+                        <span class="text-vmuted/40 group-hover:text-vaccent/60 group-hover:translate-x-1 transition-all font-normal font-sans">→</span>
+                    </h3>
+                    <p class="m-0 text-[13px] vmuted dark:dark-mode-muted tracking-wide">
+                        直播遊戲列表
+                    </p>
                 </div>
             </a>
             
-            <a href="https://miniminimaker.github.io/kyriocifer/music/" class="card">
-                <div class="card-icon">🎵</div>
-                <div class="card-info">
-                    <h3>Stream Music Playlist</h3>
-                    <p>直播音樂清單</p>
+            <!-- Stream Music Playlist -->
+            <a href="https://miniminimaker.github.io/kyriocifer/music/" class="interactive-card bg-vcard dark:dark-mode-card border border-vborder/70 dark:dark-mode-border rounded-[20px] p-6 sm:p-7 flex flex-col items-start text-left shadow-sm transition-all duration-300 group outline-none focus-visible:ring-2 focus-visible:ring-vaccent focus-visible:ring-offset-2 focus-visible:ring-offset-vbg">
+                <div class="text-[26px] w-[52px] h-[52px] bg-vbg dark:bg-black/30 rounded-2xl flex items-center justify-center mb-5 border border-vborder/40 dark:dark-mode-border group-hover:scale-105 transition-transform duration-300">
+                    🎵
+                </div>
+                <div class="flex-1 w-full">
+                    <h3 class="m-0 text-[18px] font-bold vtext dark:dark-mode-text mb-1.5 flex items-center justify-between group-hover:text-vaccent transition-colors">
+                        Stream Music Playlist
+                        <span class="text-vmuted/40 group-hover:text-vaccent/60 group-hover:translate-x-1 transition-all font-normal font-sans">→</span>
+                    </h3>
+                    <p class="m-0 text-[13px] vmuted dark:dark-mode-muted tracking-wide">
+                        直播音樂清單
+                    </p>
                 </div>
             </a>
             
-            <a href="https://kyriory.carrd.co/" target="_blank" rel="noopener noreferrer" class="card">
-                <div class="card-icon">✨</div>
-                <div class="card-info">
-                    <h3>miniminiproject</h3>
-                    <p>minimini粉絲企劃</p>
+            <!-- miniminiproject -->
+            <a href="https://kyriory.carrd.co/" target="_blank" rel="noopener noreferrer" class="interactive-card bg-vcard dark:dark-mode-card border border-vborder/70 dark:dark-mode-border rounded-[20px] p-6 sm:p-7 flex flex-col items-start text-left shadow-sm transition-all duration-300 group outline-none focus-visible:ring-2 focus-visible:ring-vaccent focus-visible:ring-offset-2 focus-visible:ring-offset-vbg sm:col-span-2 md:col-span-1">
+                <div class="text-[26px] w-[52px] h-[52px] bg-vbg dark:bg-black/30 rounded-2xl flex items-center justify-center mb-5 border border-vborder/40 dark:dark-mode-border group-hover:scale-105 transition-transform duration-300">
+                    ✨
+                </div>
+                <div class="flex-1 w-full">
+                    <h3 class="m-0 text-[18px] font-bold vtext dark:dark-mode-text mb-1.5 flex items-center justify-between group-hover:text-vaccent transition-colors">
+                        miniminiproject
+                        <span class="text-vmuted/40 group-hover:text-vaccent/60 group-hover:translate-x-1 transition-all font-normal font-sans">→</span>
+                    </h3>
+                    <p class="m-0 text-[13px] vmuted dark:dark-mode-muted tracking-wide">
+                        minimini粉絲企劃
+                    </p>
                 </div>
             </a>
+            
         </section>
     </main>
 
-    <footer class="py-10 px-6 border-t border-[#E1DCD2]/50 text-center mt-auto" style="margin-top: auto; border-top: 1px solid rgba(225, 220, 210, 0.5); padding: 40px 24px;">
-        <p style="font-size: 12px; font-weight: 400; color: #8C8273; margin-top: 4px; line-height: 1.4;">
+    <footer class="py-10 px-6 border-t border-vborder/50 dark:dark-mode-border text-center mt-auto">
+        <p class="text-[12px] font-normal text-vmuted dark:dark-mode-muted mt-[4px] leading-[1.4]">
             &copy; 2026
             <a href="https://x.com/miniminimaker"
                target="_blank"
                rel="noopener noreferrer"
-               style="color: #B45309; text-decoration: none; transition: opacity 0.2s ease;"
-               onmouseover="this.style.opacity='0.8'"
-               onmouseout="this.style.opacity='1'">
+               class="text-vaccent hover:opacity-80 transition-opacity">
                 miniminimaker
             </a>
         </p>
     </footer>
+
 </body>
 </html>
