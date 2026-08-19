@@ -21,54 +21,38 @@
             flex-direction: column;
         }
 
-        header {
-            background: #ffffff;
-            border-bottom: 1px solid #eae5df;
-            padding: 18px 24px;
-        }
-
-        .header-inner {
-            max-width: 800px;
-            margin: 0 auto;
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-
-        .logo {
-            width: 50px;
-            height: 50px;
-            object-fit: contain;
-            border-radius: 12px;
-            background-color: rgba(0,0,0,0.02);
-            padding: 4px;
-        }
-
-        .title-area h1 {
-            margin: 0;
-            font-size: 22px;
-            font-weight: 700;
-            color: #333;
-            letter-spacing: 0.5px;
-        }
-
-        .title-area p {
-            margin: 4px 0 0;
-            font-size: 13px;
-            color: #888;
-        }
+        /* 移除了原本的 header 與 header-inner 樣式，讓版面更純粹 */
 
         main {
             width: 100%;
             max-width: 800px;
             margin: 0 auto;
-            padding: 60px 24px 70px;
+            /* 調整上方的留白 (80px)，給予舒適的呼吸空間 */
+            padding: 80px 24px 70px;
             flex: 1;
         }
 
         .intro {
             text-align: center;
-            margin-bottom: 45px;
+            margin-bottom: 50px;
+        }
+
+        /* 為放在內容區的 LOGO 重新設計樣式 */
+        .intro-logo {
+            width: 110px;
+            height: 110px;
+            object-fit: contain;
+            display: block;
+            margin: 0 auto 24px auto; /* 置中並與下方文字拉開距離 */
+            border-radius: 28px;
+            background-color: #ffffff; /* 給予乾淨的白底 */
+            padding: 8px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.04); /* 增加一點點立體陰影 */
+            transition: transform 0.3s ease;
+        }
+
+        .intro-logo:hover {
+            transform: translateY(-3px);
         }
 
         .intro h2 {
@@ -194,31 +178,6 @@
             background-color: #d8cfc0; /* 柔和的圓點顏色 */
         }
 
-        .back {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: fit-content;
-            margin: 60px auto 0;
-            padding: 12px 24px;
-            border: 1px solid #d8d2ca;
-            border-radius: 24px;
-            background: #ffffff;
-            color: #666;
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: 500;
-            transition: all 0.2s ease;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
-        }
-
-        .back:hover {
-            background: #fbfaf9;
-            border-color: #c85a5a;
-            color: #c85a5a;
-            transform: translateY(-1px);
-        }
-
         footer {
             text-align: center;
             padding: 30px 20px;
@@ -242,21 +201,16 @@
         }
 
         @media (max-width: 600px) {
-            header {
-                padding: 15px 20px;
-            }
-
-            .logo {
-                width: 42px;
-                height: 42px;
-            }
-
-            .title-area h1 {
-                font-size: 18px;
-            }
-
             main {
-                padding: 40px 20px 50px;
+                /* 手機版適度縮減上方留白 */
+                padding: 50px 20px 50px;
+            }
+
+            .intro-logo {
+                width: 85px;
+                height: 85px;
+                margin-bottom: 20px;
+                border-radius: 22px;
             }
 
             .intro h2 {
@@ -277,24 +231,14 @@
 
 <body>
 
-    <header>
-        <div class="header-inner">
-            <img src="../kylogo.png" alt="Kyrio Cifer Logo" class="logo" onerror="this.style.display='none'">
-            <div class="title-area">
-                <h1>Kyrio Cifer Hub</h1>
-                <p>Updated Occasionally｜不定期更新</p>
-            </div>
-        </div>
-    </header>
+    <!-- 移除了原先空蕩的 Header 區塊，讓主內容直接呈現 -->
 
     <main>
         <section class="intro">
-            <h2>🖤🥀 Archives & Projects</h2>
-            <p>
-                A collection of KY's streams, projects, and more.
-                <br>
-                KY 的直播、企劃與更多相關內容收藏。
-            </p>
+            <!-- 將蝴蝶 LOGO 移至標題上方，並確保圖片路徑正確 -->
+            <img src="image_d6b17b.png" alt="Kyrio Cifer Logo" class="intro-logo">
+            <h2>Kyrio Cifer Hub</h2>
+            <p>Updated Occasionally｜不定期更新</p>
         </section>
 
         <section class="cards">
@@ -347,10 +291,6 @@
             </a>
 
         </section>
-
-        <a href="../" class="back">
-            ← Back to Main Page · 回到主頁
-        </a>
 
     </main>
 
