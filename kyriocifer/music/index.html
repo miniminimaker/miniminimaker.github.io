@@ -4,15 +4,12 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://cdnjs.cloudflare.com">
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🎵Kyrio Cifer's Stream Music Playlist</title>
-    
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
     <script>
         tailwind.config = { 
             darkMode: 'media', 
@@ -33,21 +30,13 @@
             } 
         }
     </script>
-    
     <style>
         body { font-family: 'Inter', sans-serif; background-color: #F0EBE3; color: #4F4538; overflow-x: hidden; }
         .glass-panel { background-color: #F9F8F4; backdrop-filter: none; }
         .table-fixed-layout { table-layout: fixed; width: 100%; border-collapse: collapse; }
-        .cell-wrap-text { 
-            word-break: break-word; 
-            overflow-wrap: break-word; 
-            white-space: normal; 
-            line-height: 1.6;
-            vertical-align: top;
-        }
+        .cell-wrap-text { word-break: break-word; overflow-wrap: break-word; white-space: normal; line-height: 1.6; vertical-align: top; }
         .song-data-text { font-size: 12px; font-weight: 400; color: #4F4538; font-style: normal; }
         .table-header-text { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: #8C8273; }
-
         @media (prefers-color-scheme: dark) {
             .dark-mode-bg { background-color: #1C1917 !important; }
             .dark-mode-card { background-color: #27272A !important; }
@@ -56,7 +45,6 @@
             .dark-mode-border { border-color: #3F3F46 !important; }
             .glass-panel { background-color: #1C1917 !important; }
         }
-
         .custom-scrollbar::-webkit-scrollbar { height: 4px; width: 6px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #E1DCD2; border-radius: 10px; }
@@ -82,7 +70,6 @@
                 </p>
             </div>
         </div>
-        
         <div class="flex items-center gap-2">
             <button id="btn-retry" onclick="window.fetchSongsFromBackend()" class="hidden px-3 py-1.5 rounded-md bg-vborder/40 hover:bg-vborder/80 dark:bg-white/5 dark:hover:bg-white/10 text-xs font-medium vtext dark:dark-mode-text transition-colors items-center gap-1.5">
                 <i class="fa-solid fa-rotate-right"></i> Retry
@@ -100,7 +87,6 @@
                     收錄Kyrio Cifer直播中播放曲目，支援搜尋、瀏覽與串流平台跳轉。
                 </p>
             </div>
-
             <div class="space-y-0.5">
                 <p class="text-[12px] font-normal vmuted dark:dark-mode-muted leading-[1.5]">
                     This is an unofficial website for reference only.
@@ -109,7 +95,6 @@
                     本網站為非官方網站，僅供參考。
                 </p>
             </div>
-
             <div class="space-y-0.5">
                 <p class="text-[12px] font-normal vmuted dark:dark-mode-muted leading-[1.5]">
                     Please let me know if you spot any errors or incorrect information.
@@ -136,9 +121,7 @@
             </div>
 
             <div class="flex flex-col gap-1.5 -mt-1">
-                <div class="flex items-center gap-1.5 overflow-x-auto custom-scrollbar pb-2" id="alphabet-nav">
-                    <!-- Dynamically populated -->
-                </div>
+                <div class="flex items-center gap-1.5 overflow-x-auto custom-scrollbar pb-2" id="alphabet-nav"></div>
             </div>
         </div>
 
@@ -171,10 +154,7 @@
     <footer class="py-10 px-6 border-t border-vborder/50 dark:dark-mode-border text-center mt-auto">
         <p class="text-[12px] font-normal vmuted dark:dark-mode-muted mt-[4px] leading-[1.4]">
             &copy; 2026
-            <a href="https://x.com/miniminimaker"
-               target="_blank"
-               rel="noopener noreferrer"
-               class="text-vaccent hover:opacity-80 transition-opacity">
+            <a href="https://x.com/miniminimaker" target="_blank" rel="noopener noreferrer" class="text-vaccent hover:opacity-80 transition-opacity">
                 miniminimaker
             </a>
         </p>
@@ -244,7 +224,6 @@
                     throw new Error("Failed to fetch from API.");
                 }
             } catch (err) {
-                console.error('Fetch error:', err);
                 if (syncTimeEl) syncTimeEl.innerHTML = 'Data connection error';
                 if (btnRetry) btnRetry.classList.remove('hidden');
                 
@@ -262,9 +241,7 @@
                 }
             }
         };
-    </script>
-    
-    <script>
+
         window.buildAlphabetNav = function() {
             const navEl = document.getElementById('alphabet-nav');
             if (!navEl) return;
@@ -292,9 +269,7 @@
                 const artistA = (a.artist || '').trim().toLowerCase();
                 const artistB = (b.artist || '').trim().toLowerCase();
                 const artistComp = artistA.localeCompare(artistB, 'zh-TW', { sensitivity: 'base' });
-                
                 if (artistComp !== 0) return artistComp;
-                
                 const titleA = (a.title || '').trim().toLowerCase();
                 const titleB = (b.title || '').trim().toLowerCase();
                 return titleA.localeCompare(titleB, 'zh-TW', { sensitivity: 'base' });
@@ -308,16 +283,13 @@
             
             const filtered = window.songsData.filter(song => {
                 if (filterLetter !== 'ALL' && song.firstLetter !== filterLetter) return false;
-                
                 if (query) {
                     return (song.title || '').toLowerCase().includes(query) ||
                            (song.artist || '').toLowerCase().includes(query) ||
                            (song.album || '').toLowerCase().includes(query);
                 }
-                
                 return true;
             });
-            
             return window.sortSongs(filtered);
         };
 
@@ -396,3 +368,4 @@
     </script>
 </body>
 </html>
+```eof
