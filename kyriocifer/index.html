@@ -4,15 +4,12 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://cdnjs.cloudflare.com">
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kyrio Cifer Hub</title>
-    
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Castoro+Titling&display=swap" rel="stylesheet">
-    
     <script>
         tailwind.config = { 
             darkMode: 'media', 
@@ -31,10 +28,8 @@
             } 
         }
     </script>
-    
     <style>
         body { font-family: 'Inter', sans-serif; background-color: #F0EBE3; color: #4F4538; overflow-x: hidden; }
-
         @media (prefers-color-scheme: dark) {
             .dark-mode-bg { background-color: #1C1917 !important; }
             .dark-mode-card { background-color: #27272A !important; }
@@ -42,14 +37,11 @@
             .dark-mode-muted { color: #A1A1AA !important; }
             .dark-mode-border { border-color: #3F3F46 !important; }
         }
-
-        /* Custom Hover effect for interactive cards */
         .interactive-card:hover {
             transform: translateY(-4px);
             box-shadow: 0 10px 25px rgba(0,0,0,0.05);
             border-color: #D6D0C4;
         }
-        
         @media (prefers-color-scheme: dark) {
             .interactive-card:hover {
                 box-shadow: 0 10px 25px rgba(0,0,0,0.2);
@@ -59,9 +51,7 @@
     </style>
 </head>
 <body class="flex flex-col min-h-screen dark:dark-mode-bg transition-colors duration-300">
-
-    <main class="flex-1 w-full max-w-[1100px] mx-auto pt-20 px-6 pb-20 flex flex-col items-center">
-        
+    <main class="flex-1 w-full max-w-[1220px] mx-auto pt-20 px-6 pb-20 flex flex-col items-center">
         <section class="text-center mb-14 flex flex-col items-center">
             <div class="w-[110px] h-[110px] sm:w-[130px] sm:h-[130px] rounded-3xl bg-white dark:bg-black/20 p-2.5 shadow-sm border border-vborder/50 dark:dark-mode-border mb-6 flex items-center justify-center transition-transform hover:-translate-y-1 duration-300">
                 <img src="logo.png" alt="Kyrio Cifer Logo" class="w-full h-full object-contain rounded-2xl" onerror="this.style.display='none'">
@@ -75,9 +65,7 @@
         </section>
 
         <section class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5 w-full">
-            
-            <!-- Get to Know Kyrio Cifer | 認識Kyrio Cifer (Construction) -->
-            <div class="bg-vcard dark:dark-mode-card border border-vborder/70 dark:dark-mode-border rounded-[20px] p-6 sm:p-7 flex flex-col items-start text-left shadow-sm transition-all duration-300">
+            <div class="bg-vcard dark:dark-mode-card border border-vborder/70 dark:dark-mode-border rounded-[20px] px-4 sm:px-5 py-8 sm:py-9 flex flex-col items-start text-left shadow-sm transition-all duration-300">
                 <div class="text-[18px] w-[52px] h-[52px] bg-vbg dark:bg-black/30 rounded-2xl flex items-center justify-center mb-5 border border-vborder/40 dark:dark-mode-border">
                     ✨
                 </div>
@@ -89,14 +77,13 @@
                         認識Kyrio Cifer
                     </p>
                 </div>
-                <div class="flex items-center gap-2 text-[12px] vmuted/70 dark:dark-mode-muted/70 mt-6 tracking-wide">
+                <div class="flex items-center gap-2 text-[12px] vmuted/70 dark:dark-mode-muted/70 mt-8 tracking-wide">
                     <span class="w-1.5 h-1.5 rounded-full bg-vborder dark:bg-zinc-600"></span>
                     Under Construction · 建設中
                 </div>
             </div>
 
-            <!-- Stream Archive (Construction) -->
-            <div class="bg-vcard dark:dark-mode-card border border-vborder/70 dark:dark-mode-border rounded-[20px] p-6 sm:p-7 flex flex-col items-start text-left shadow-sm transition-all duration-300">
+            <div class="bg-vcard dark:dark-mode-card border border-vborder/70 dark:dark-mode-border rounded-[20px] px-4 sm:px-5 py-8 sm:py-9 flex flex-col items-start text-left shadow-sm transition-all duration-300">
                 <div class="text-[18px] w-[52px] h-[52px] bg-vbg dark:bg-black/30 rounded-2xl flex items-center justify-center mb-5 border border-vborder/40 dark:dark-mode-border">
                     🔴
                 </div>
@@ -108,14 +95,13 @@
                         直播資訊
                     </p>
                 </div>
-                <div class="flex items-center gap-2 text-[12px] vmuted/70 dark:dark-mode-muted/70 mt-6 tracking-wide">
+                <div class="flex items-center gap-2 text-[12px] vmuted/70 dark:dark-mode-muted/70 mt-8 tracking-wide">
                     <span class="w-1.5 h-1.5 rounded-full bg-vborder dark:bg-zinc-600"></span>
                     Under Construction · 建設中
                 </div>
             </div>
 
-            <!-- Stream Games Archive -->
-            <a href="https://miniminimaker.github.io/kyriocifer/games/" class="interactive-card bg-vcard dark:dark-mode-card border border-vborder/70 dark:dark-mode-border rounded-[20px] p-6 sm:p-7 flex flex-col items-start text-left shadow-sm transition-all duration-300 group outline-none focus-visible:ring-2 focus-visible:ring-vaccent focus-visible:ring-offset-2 focus-visible:ring-offset-vbg">
+            <a href="https://miniminimaker.github.io/kyriocifer/games/" class="interactive-card bg-vcard dark:dark-mode-card border border-vborder/70 dark:dark-mode-border rounded-[20px] px-4 sm:px-5 py-8 sm:py-9 flex flex-col items-start text-left shadow-sm transition-all duration-300 group outline-none focus-visible:ring-2 focus-visible:ring-vaccent focus-visible:ring-offset-2 focus-visible:ring-offset-vbg">
                 <div class="text-[20px] w-[52px] h-[52px] bg-vbg dark:bg-black/30 rounded-2xl flex items-center justify-center mb-5 border border-vborder/40 dark:dark-mode-border group-hover:scale-105 transition-transform duration-300">
                     🎮
                 </div>
@@ -130,9 +116,8 @@
                 </div>
             </a>
             
-            <!-- Stream Music Playlist -->
-            <a href="https://miniminimaker.github.io/kyriocifer/music/" class="interactive-card bg-vcard dark:dark-mode-card border border-vborder/70 dark:dark-mode-border rounded-[20px] p-6 sm:p-7 flex flex-col items-start text-left shadow-sm transition-all duration-300 group outline-none focus-visible:ring-2 focus-visible:ring-vaccent focus-visible:ring-offset-2 focus-visible:ring-offset-vbg">
-                <div class="text-[18px] w-[52px] h-[52px] bg-vbg dark:bg-black/30 rounded-2xl flex items-center justify-center mb-5 border border-vborder/40 dark:dark-mode-border group-hover:scale-105 transition-transform duration-300">
+            <a href="https://miniminimaker.github.io/kyriocifer/music/" class="interactive-card bg-vcard dark:dark-mode-card border border-vborder/70 dark:dark-mode-border rounded-[20px] px-4 sm:px-5 py-8 sm:py-9 flex flex-col items-start text-left shadow-sm transition-all duration-300 group outline-none focus-visible:ring-2 focus-visible:ring-vaccent focus-visible:ring-offset-2 focus-visible:ring-offset-vbg">
+                <div class="text-[20px] w-[52px] h-[52px] bg-vbg dark:bg-black/30 rounded-2xl flex items-center justify-center mb-5 border border-vborder/40 dark:dark-mode-border group-hover:scale-105 transition-transform duration-300">
                     🎵
                 </div>
                 <div class="flex-1 w-full">
@@ -146,8 +131,7 @@
                 </div>
             </a>
             
-            <!-- ASMR | Patreon (Construction) -->
-            <div class="bg-vcard dark:dark-mode-card border border-vborder/70 dark:dark-mode-border rounded-[20px] p-6 sm:p-7 flex flex-col items-start text-left shadow-sm transition-all duration-300">
+            <div class="bg-vcard dark:dark-mode-card border border-vborder/70 dark:dark-mode-border rounded-[20px] px-4 sm:px-5 py-8 sm:py-9 flex flex-col items-start text-left shadow-sm transition-all duration-300">
                 <div class="text-[18px] w-[52px] h-[52px] bg-vbg dark:bg-black/30 rounded-2xl flex items-center justify-center mb-5 border border-vborder/40 dark:dark-mode-border">
                     🎙️
                 </div>
@@ -159,14 +143,13 @@
                         語音與贊助內容
                     </p>
                 </div>
-                <div class="flex items-center gap-2 text-[12px] vmuted/70 dark:dark-mode-muted/70 mt-6 tracking-wide">
+                <div class="flex items-center gap-2 text-[12px] vmuted/70 dark:dark-mode-muted/70 mt-8 tracking-wide">
                     <span class="w-1.5 h-1.5 rounded-full bg-vborder dark:bg-zinc-600"></span>
                     Under Construction · 建設中
                 </div>
             </div>
 
-            <!-- Other Info (Construction) -->
-            <div class="bg-vcard dark:dark-mode-card border border-vborder/70 dark:dark-mode-border rounded-[20px] p-6 sm:p-7 flex flex-col items-start text-left shadow-sm transition-all duration-300">
+            <div class="bg-vcard dark:dark-mode-card border border-vborder/70 dark:dark-mode-border rounded-[20px] px-4 sm:px-5 py-8 sm:py-9 flex flex-col items-start text-left shadow-sm transition-all duration-300">
                 <div class="text-[20px] w-[52px] h-[52px] bg-vbg dark:bg-black/30 rounded-2xl flex items-center justify-center mb-5 border border-vborder/40 dark:dark-mode-border">
                     📂
                 </div>
@@ -178,14 +161,13 @@
                         其他資訊
                     </p>
                 </div>
-                <div class="flex items-center gap-2 text-[12px] vmuted/70 dark:dark-mode-muted/70 mt-6 tracking-wide">
+                <div class="flex items-center gap-2 text-[12px] vmuted/70 dark:dark-mode-muted/70 mt-8 tracking-wide">
                     <span class="w-1.5 h-1.5 rounded-full bg-vborder dark:bg-zinc-600"></span>
                     Under Construction · 建設中
                 </div>
             </div>
             
-            <!-- miniminiproject -->
-            <a href="https://kyriory.carrd.co/" target="_blank" rel="noopener noreferrer" class="interactive-card bg-vcard dark:dark-mode-card border border-vborder/70 dark:dark-mode-border rounded-[20px] p-6 sm:p-7 flex flex-col items-start text-left shadow-sm transition-all duration-300 group outline-none focus-visible:ring-2 focus-visible:ring-vaccent focus-visible:ring-offset-2 focus-visible:ring-offset-vbg">
+            <a href="https://kyriory.carrd.co/" target="_blank" rel="noopener noreferrer" class="interactive-card bg-vcard dark:dark-mode-card border border-vborder/70 dark:dark-mode-border rounded-[20px] px-4 sm:px-5 py-8 sm:py-9 flex flex-col items-start text-left shadow-sm transition-all duration-300 group outline-none focus-visible:ring-2 focus-visible:ring-vaccent focus-visible:ring-offset-2 focus-visible:ring-offset-vbg">
                 <div class="text-[20px] w-[52px] h-[52px] bg-vbg dark:bg-black/30 rounded-2xl flex items-center justify-center mb-5 border border-vborder/40 dark:dark-mode-border group-hover:scale-105 transition-transform duration-300">
                     ☀️
                 </div>
@@ -199,21 +181,17 @@
                     </p>
                 </div>
             </a>
-            
         </section>
     </main>
 
     <footer class="py-10 px-6 border-t border-vborder/50 dark:dark-mode-border text-center mt-auto">
         <p class="text-[12px] font-normal vmuted dark:dark-mode-muted mt-[4px] leading-[1.4]">
             &copy; 2026
-            <a href="https://x.com/miniminimaker"
-               target="_blank"
-               rel="noopener noreferrer"
-               class="text-vaccent hover:opacity-80 transition-opacity">
+            <a href="https://x.com/miniminimaker" target="_blank" rel="noopener noreferrer" class="text-vaccent hover:opacity-80 transition-opacity">
                 miniminimaker
             </a>
         </p>
     </footer>
-
 </body>
 </html>
+```eof
