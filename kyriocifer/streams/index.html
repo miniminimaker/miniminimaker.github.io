@@ -156,7 +156,7 @@
 
             fetchData: async function(isManual = false) {
                 const statusText = document.getElementById('sync-status');
-                if (statusText) statusText.innerText = 'Syncing...';
+                if (statusText) statusText.innerText = 'Syncing database...';
 
                 if (this.data.length === 0) {
                     this.showState('<i class="fa-solid fa-circle-notch fa-spin text-2xl text-vaccent"></i>', 'Loading schedule...');
