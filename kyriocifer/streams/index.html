@@ -1,1 +1,450 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📅 Kyrio Cifer Schedule | 行程資料庫</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = { 
+            darkMode: 'media', 
+            theme: { 
+                extend: { 
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: {
+                        vbg: '#F0EBE3',
+                        vcard: '#FAF9F6',
+                        vborder: '#E1DCD2',
+                        vtext: '#4F4538',
+                        vmuted: '#8C8273',
+                        vaccent: '#B45309',
+                        vlink: '#3B82F6',
+                    }
+                } 
+            } 
+        }
+    </script>
+    
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #F0EBE3; color: #4F4538; overflow-x: hidden; }
+        .glass-panel { background-color: #F9F8F4; backdrop-filter: none; }
+        .cell-wrap-text { word-break: break-word; overflow-wrap: break-word; white-space: normal; line-height: 1.6; }
+        
+        @media (prefers-color-scheme: dark) {
+            .dark-mode-bg { background-color: #1C1917 !important; }
+            .dark-mode-card { background-color: #27272A !important; }
+            .dark-mode-text { color: #E7E5E4 !important; }
+            .dark-mode-muted { color: #A1A1AA !important; }
+            .dark-mode-border { border-color: #3F3F46 !important; }
+            .glass-panel { background-color: #1C1917 !important; }
+        }
+        
+        .custom-scrollbar::-webkit-scrollbar { height: 4px; width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #E1DCD2; border-radius: 10px; }
+        @media (prefers-color-scheme: dark) {
+            .custom-scrollbar::-webkit-scrollbar-thumb { background: #3F3F46; }
+        }
+        
+        .fade-in { animation: fadeIn 0.3s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
 
+<body class="flex flex-col min-h-screen dark:dark-mode-bg transition-colors duration-300">
+
+    <header class="border-b border-vborder/50 dark:dark-mode-border glass-panel sticky top-0 z-30 px-6 py-[18px] flex flex-wrap gap-4 items-center justify-between shadow-sm/5">
+        <div class="flex items-center space-x-4">
+           <div class="w-11 h-11 rounded-xl bg-[#F8F5EF] border border-[#E5DED3] dark:border-[#3F3F46] dark:bg-[#27272A] flex items-center justify-center overflow-hidden">
+                <i class="fa-regular fa-calendar text-vaccent text-xl"></i>
+            </div>
+            <div class="flex flex-col">
+                <h1 class="text-[18px] sm:text-[20px] font-bold vtext dark:dark-mode-text leading-[1.25] flex items-center">
+                    <span>Kyrio Cifer Schedule</span>
+                </h1>
+                <p class="text-[12px] font-normal vmuted dark:dark-mode-muted mt-[4px] leading-[1.4]">
+                    行程資料庫 ‒ Auto-synced with Google Sheets
+                </p>
+            </div>
+        </div>
+        <div class="flex items-center gap-2">
+            <div id="sync-status" class="text-xs font-medium text-vmuted dark:dark-mode-muted hidden sm:block mr-2"></div>
+            <button id="btn-refresh" onclick="app.fetchData(true)" class="px-3 py-1.5 rounded-md bg-vborder/40 hover:bg-vborder/80 dark:bg-white/5 dark:hover:bg-white/10 text-xs font-medium vtext dark:dark-mode-text transition-colors items-center gap-1.5 flex">
+                <i class="fa-solid fa-rotate-right" id="refresh-icon"></i> <span class="hidden sm:inline">Refresh</span>
+            </button>
+        </div>
+    </header>
+
+    <main class="flex-1 max-w-[1000px] w-full mx-auto p-6 md:p-8 flex flex-col gap-8">
+        
+        <section class="flex flex-col gap-2">
+            <p class="text-[16px] font-medium vtext dark:dark-mode-text leading-[1.55]">
+                Welcome to Kyrio Cifer's stream schedule. Times are displayed in Asia/Taipei timezone.
+            </p>
+        </section>
+
+        <!-- 動態生成的 Sheet Filter 按鈕會放在這裡 -->
+        <div id="sheet-filters" class="flex flex-wrap items-center gap-2 mt-2">
+            <!-- Buttons will be injected here -->
+        </div>
+
+        <div id="schedule-container" class="flex flex-col gap-4 min-h-[300px]">
+            <div id="state-message" class="py-24 text-center bg-vcard dark:dark-mode-card rounded-xl border border-vborder/70 dark:dark-mode-border shadow-sm">
+                <div class="flex flex-col items-center justify-center gap-3">
+                    <i class="fa-solid fa-circle-notch fa-spin text-2xl text-vaccent"></i>
+                    <span class="text-sm font-medium vtext dark:dark-mode-text">Loading schedule...｜讀取行程中...</span>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="py-8 px-6 border-t border-vborder/50 dark:dark-mode-border text-center mt-auto">
+        <p class="text-[12px] font-normal vmuted dark:dark-mode-muted leading-[1.4]">
+            &copy; 2026 
+            <a href="https://x.com/miniminimaker" target="_blank" rel="noopener noreferrer" class="text-vaccent hover:opacity-80 transition-opacity">
+                miniminimaker
+            </a>
+        </p>
+    </footer>
+        
+    <script>
+        const CONFIG = {
+            API_URL: "https://script.google.com/macros/s/AKfycbyPCf9bam7EYO5aq6ZXh7YfyvYeV5fleJJK63gQ-kRv5mCcus25mpsat9y5zXISo6ciHg/exec",
+            TIMEZONE: "Asia/Taipei",
+            REFRESH_INTERVAL: 5 * 60 * 1000 
+        };
+
+        const app = {
+            data: [],
+            sheets: new Set(),
+            currentSheetFilter: null,
+            refreshTimer: null,
+
+            init: function() {
+                this.fetchData();
+                this.startAutoRefresh();
+            },
+
+            // 從 API 獲取資料
+            fetchData: async function(isManual = false) {
+                const refreshIcon = document.getElementById('refresh-icon');
+                const statusText = document.getElementById('sync-status');
+                
+                if (refreshIcon) refreshIcon.classList.add('fa-spin');
+                if (statusText) statusText.innerText = 'Syncing...';
+
+                if (this.data.length === 0) {
+                    this.showState('<i class="fa-solid fa-circle-notch fa-spin text-2xl text-vaccent"></i>', 'Loading schedule...');
+                }
+
+                try {
+                    const res = await fetch(CONFIG.API_URL);
+                    const result = await res.json();
+                    
+                    if (result.success) {
+                        this.processData(result.events || []);
+                        
+                        if (!this.currentSheetFilter && this.sheets.size > 0) {
+                            this.currentSheetFilter = Array.from(this.sheets)[0];
+                        }
+                        
+                        this.renderSheetFilters();
+                        this.render();
+                        if (statusText) {
+                            const d = new Date();
+                            statusText.innerText = `Updated: ${d.getHours().toString().padStart(2,'0')}:${d.getMinutes().toString().padStart(2,'0')}`;
+                        }
+                    } else {
+                        throw new Error("API returned failure status.");
+                    }
+                } catch (err) {
+                    console.error("Schedule Fetch Error:", err);
+                    if (this.data.length === 0) {
+                        this.showState('<i class="fa-solid fa-triangle-exclamation text-rose-600 dark:text-rose-400 text-3xl"></i>', 'Unable to load schedule.<br>Please try again later.');
+                    }
+                    if (statusText) statusText.innerText = 'Sync failed';
+                } finally {
+                    if (refreshIcon) refreshIcon.classList.remove('fa-spin');
+                }
+            },
+
+            // 處理並解析 Google Sheet 資料
+            processData: function(rawEvents) {
+                const now = new Date(); 
+                this.sheets.clear();
+
+                this.data = rawEvents.map(event => {
+                    const dateRaw = event['Date\n日期'] || event['Date 日期'] || event.date || event['日期'] || '';
+                    const timeRaw = event['Time(GMT+8)\n時間GMT+8'] || event['Time(GMT+8) 時間GMT+8'] || event.time || event['時間'] || '';
+                    
+                    let title = event['Stream title\n直播標題'] || event['Stream title 直播標題'] || event['Content'] || event['內容'] || 'Untitled Stream';
+                    const contentEn = event['Content'] || '';
+                    const contentZh = event['內容'] || '';
+                    const game = [contentEn, contentZh].filter(Boolean).join(' | ');
+                    
+                    let category = 'Stream';
+                    if (contentEn.toLowerCase().includes('no stream') || contentZh.includes('休息')) {
+                        category = 'Off Day';
+                    }
+                    
+                    const note1 = event['Notes *1\n備註*1'] || event['Notes *1 備註*1'] || '';
+                    const note2 = event['Notes *2\n備註*2'] || event['Notes *2 備註*2'] || '';
+                    const note = [note1, note2].filter(Boolean).join(' / ');
+
+                    const vodLink = event['VODs'] || '';
+                    const tlLink = event['Translation\n翻譯記錄'] || event['Translation 翻譯記錄'] || '';
+                    
+                    const sheetName = event._sheetName || 'Default';
+                    if(sheetName !== 'Default') {
+                        this.sheets.add(sheetName);
+                    }
+
+                    let eventDate = null;
+                    let dateDisplay = '';
+                    let dayDisplay = '';
+                    let timeDisplay = timeRaw;
+
+                    if (dateRaw) {
+                        let parsedDateString = String(dateRaw);
+                        if (parsedDateString.match(/^\d{4}\.\d{2}\.\d{2}$/)) {
+                            parsedDateString = parsedDateString.replace(/\./g, '-');
+                        }
+                        
+                        eventDate = new Date(parsedDateString);
+                        
+                        if (!isNaN(eventDate)) {
+                            if (timeRaw && typeof timeRaw === 'string') {
+                                const timeMatch = timeRaw.match(/(\d{1,2}):(\d{2})/);
+                                if (timeMatch) {
+                                    eventDate.setHours(parseInt(timeMatch[1]), parseInt(timeMatch[2]), 0);
+                                }
+                            }
+                            
+                            const y = eventDate.getFullYear();
+                            const m = String(eventDate.getMonth() + 1).padStart(2, '0');
+                            const d = String(eventDate.getDate()).padStart(2, '0');
+                            const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+                            
+                            dateDisplay = `${y}.${m}.${d}`;
+                            dayDisplay = days[eventDate.getDay()];
+                        } else {
+                            dateDisplay = dateRaw; 
+                        }
+                    }
+
+                    // 判斷是否為「今天」（依年月日比對）
+                    let isToday = false;
+                    if (eventDate && !isNaN(eventDate)) {
+                        const nowDateStr = `${now.getFullYear()}.${String(now.getMonth() + 1).padStart(2, '0')}.${String(now.getDate()).padStart(2, '0')}`;
+                        isToday = (dateDisplay === nowDateStr);
+                    }
+
+                    return {
+                        originalDate: eventDate,
+                        dateDisplay,
+                        dayDisplay,
+                        timeDisplay,
+                        title,
+                        category,
+                        game,
+                        note,
+                        vodLink,
+                        tlLink,
+                        isToday,
+                        sheetName,
+                        isOffDay: category === 'Off Day'
+                    };
+                });
+            },
+            
+            renderSheetFilters: function() {
+                const container = document.getElementById('sheet-filters');
+                if (!container) return;
+
+                const sheetsArray = Array.from(this.sheets); 
+                if (sheetsArray.length === 0) {
+                    container.innerHTML = '';
+                    return;
+                }
+
+                let html = '';
+                sheetsArray.forEach(sheet => {
+                    const isActive = this.currentSheetFilter === sheet;
+                    const activeClass = isActive ? 'bg-vtext dark:bg-white text-vbg dark:text-black shadow-sm' : 'text-vmuted hover:bg-vborder/30 dark:hover:bg-white/5';
+                    html += `<button class="filter-btn px-3 py-1.5 rounded-lg text-sm font-semibold transition-colors flex items-center gap-1.5 ${activeClass}" data-sheet="${sheet}">
+                                <i class="fa-regular fa-folder text-xs"></i> ${sheet}
+                             </button>`;
+                });
+                
+                container.innerHTML = html;
+
+                container.querySelectorAll('.filter-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        this.currentSheetFilter = e.currentTarget.getAttribute('data-sheet');
+                        this.renderSheetFilters();
+                        this.render();
+                    });
+                });
+            },
+
+            getFilteredData: function() {
+                let filtered = [...this.data];
+                
+                if (this.currentSheetFilter) {
+                    filtered = filtered.filter(e => e.sheetName === this.currentSheetFilter);
+                }
+
+                filtered.sort((a, b) => {
+                    if (!a.originalDate) return 1;
+                    if (!b.originalDate) return -1;
+                    return a.originalDate.getTime() - b.originalDate.getTime();
+                });
+                return filtered;
+            },
+
+            render: function() {
+                const container = document.getElementById('schedule-container');
+                if (!container) return;
+
+                const displayData = this.getFilteredData();
+
+                if (displayData.length === 0) {
+                    this.showState('<i class="fa-regular fa-calendar-xmark text-vmuted/50 text-4xl"></i>', 'No events found.｜目前沒有行程');
+                    return;
+                }
+
+                container.innerHTML = '';
+                const fragment = document.createDocumentFragment();
+
+                displayData.forEach(event => {
+                    const cardWrapper = document.createElement('div');
+                    cardWrapper.className = "flex items-center gap-3 relative";
+
+                    // 當天左側加上「▸」指標標記（大小與日期數字相同，且垂直置中）
+                    let indicatorHtml = '';
+                    if (event.isToday) {
+                        indicatorHtml = `<div class="text-vaccent dark:text-orange-400 text-[17px] md:text-[19px] font-bold shrink-0 select-none flex items-center justify-center w-4">▸</div>`;
+                    } else {
+                        indicatorHtml = `<div class="w-4 shrink-0"></div>`; // 保持對齊間距
+                    }
+
+                    const card = document.createElement('div');
+                    const offDayBgClass = event.isOffDay ? "bg-vborder/20 dark:bg-black/20" : "bg-vcard dark:dark-mode-card";
+                    
+                    card.className = `flex flex-col md:flex-row ${offDayBgClass} border border-vborder/70 dark:dark-mode-border rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow fade-in flex-grow`;
+                    
+                    // --- 建立 VOD 與 Translation 按鈕 ---
+                    let linksHtml = '';
+                    if (event.vodLink && event.vodLink !== 'Link' && (event.vodLink.startsWith('http://') || event.vodLink.startsWith('https://'))) {
+                        let linkIcon = 'fa-arrow-up-right-from-square';
+                        let linkText = 'VOD';
+                        if(event.vodLink.includes('youtube.com') || event.vodLink.includes('youtu.be')) {
+                             linkIcon = 'fa-brands fa-youtube';
+                             linkText = 'VOD';
+                        } else if (event.vodLink.includes('twitch.tv')) {
+                             linkIcon = 'fa-brands fa-twitch';
+                             linkText = 'Twitch';
+                        }
+                        linksHtml += `
+                        <a href="${event.vodLink}" target="_blank" class="w-full md:w-auto text-center px-3 py-1.5 rounded-lg bg-vaccent/10 dark:bg-vaccent/20 text-vaccent dark:text-orange-400 text-[12px] font-bold hover:bg-vaccent/20 dark:hover:bg-vaccent/30 transition-colors inline-flex justify-center items-center gap-1.5 border border-vaccent/20 shrink-0">
+                            <i class="${linkIcon}"></i> ${linkText}
+                        </a>`;
+                    }
+
+                    if (event.tlLink && event.tlLink !== 'Link' && (event.tlLink.startsWith('http://') || event.tlLink.startsWith('https://'))) {
+                        linksHtml += `
+                        <a href="${event.tlLink}" target="_blank" class="w-full md:w-auto text-center px-3 py-1.5 rounded-lg bg-vlink/10 dark:bg-vlink/20 text-vlink dark:text-blue-400 text-[12px] font-bold hover:bg-vlink/20 dark:hover:bg-vlink/30 transition-colors inline-flex justify-center items-center gap-1.5 border border-vlink/20 shrink-0">
+                            <i class="fa-solid fa-language"></i> Translation
+                        </a>`;
+                    }
+
+                    let metaHtml = '';
+                    if (event.game && !event.isOffDay) {
+                         metaHtml += `<span class="flex items-center gap-1"><i class="fa-solid fa-gamepad opacity-70"></i> ${event.game}</span>`;
+                    }
+                    if (event.note) {
+                         metaHtml += `<span class="flex items-center gap-1"><i class="fa-solid fa-circle-info opacity-70"></i> ${event.note}</span>`;
+                    }
+
+                    const metaDiv = metaHtml ? `<div class="flex flex-wrap gap-x-4 gap-y-1 mt-2 text-[13px] vmuted dark:dark-mode-muted">${metaHtml}</div>` : '';
+
+                    const titleClass = event.isOffDay ? "text-vmuted dark:text-[#A1A1AA]" : "vtext dark:dark-mode-text";
+
+                    card.innerHTML = `
+                        <div class="flex-shrink-0 w-full md:w-[160px] flex flex-col justify-center items-center p-4 md:border-r border-vborder/50 dark:border-[#3F3F46] bg-vbg/40 dark:bg-black/10">
+                            <div class="flex flex-col items-center text-center">
+                                <div class="text-[17px] md:text-[19px] font-bold text-vaccent dark:text-orange-400 tracking-wide">${event.dateDisplay || '-'}</div>
+                                <div class="text-[12px] font-medium vmuted dark:dark-mode-muted mt-0.5">${event.dayDisplay || '-'}</div>
+                                ${event.timeDisplay ? `<div class="text-[15px] md:text-[17px] font-bold vtext dark:dark-mode-text mt-2 md:mt-3 bg-vborder/30 dark:bg-white/10 px-2 py-0.5 rounded">${event.timeDisplay}</div>` : ''}
+                            </div>
+                            
+                            ${linksHtml ? `<div class="flex flex-row md:flex-col justify-center items-stretch w-full gap-2 mt-4 px-2">${linksHtml}</div>` : ''}
+                        </div>
+                        
+                        <div class="flex-grow p-4 md:px-6 flex flex-col justify-center">
+                            <div class="flex flex-col gap-3">
+                                <div class="flex flex-col w-full">
+                                    <div class="flex flex-col gap-1">
+                                        ${(() => {
+                                            if (!event.title) return '';
+                                            const titleStr = String(event.title);
+                                            const parts = titleStr.split('\n');
+                                            
+                                            if (parts.length > 1) {
+                                                let html = `<h3 class="text-[15px] md:text-[16px] font-bold ${titleClass} leading-snug">${parts[0].trim()}</h3>`;
+                                                html += `<h4 class="text-[14px] md:text-[15px] font-semibold ${titleClass} leading-snug mt-1">${parts.slice(1).join(' ').trim()}</h4>`;
+                                                return html;
+                                            }
+                                            return `<h3 class="text-[15px] md:text-[16px] font-bold ${titleClass} leading-snug">${titleStr}</h3>`;
+                                        })()}
+                                    </div>
+                                    
+                                    ${metaDiv}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+
+                    cardWrapper.innerHTML = indicatorHtml;
+                    cardWrapper.appendChild(card);
+                    fragment.appendChild(cardWrapper);
+                });
+
+                container.appendChild(fragment);
+            },
+
+            showState: function(iconHtml, message) {
+                const container = document.getElementById('schedule-container');
+                if (container) {
+                    container.innerHTML = `
+                        <div class="py-20 text-center bg-vcard dark:dark-mode-card rounded-xl border border-vborder/70 dark:dark-mode-border shadow-sm">
+                            <div class="flex flex-col items-center justify-center gap-4 max-w-sm mx-auto">
+                                ${iconHtml}
+                                <div class="text-[14px] leading-relaxed font-medium vtext dark:dark-mode-text">${message}</div>
+                            </div>
+                        </div>
+                    `;
+                }
+            },
+
+            startAutoRefresh: function() {
+                if (this.refreshTimer) clearInterval(this.refreshTimer);
+                this.refreshTimer = setInterval(() => {
+                    this.fetchData();
+                }, CONFIG.REFRESH_INTERVAL);
+            }
+        };
+
+        window.addEventListener('DOMContentLoaded', () => {
+            app.init();
+        });
+    </script>
+</body>
+</html>
