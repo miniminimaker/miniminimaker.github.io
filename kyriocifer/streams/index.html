@@ -6,7 +6,7 @@
     <link rel="preconnect" href="https://cdnjs.cloudflare.com">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>📅Kyrio Cifer's stream schedule</title>
+    <title>📅 Kyrio Cifer's stream schedule</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -75,7 +75,6 @@
             </div>
         </div>
         <div class="flex items-center gap-2">
-            <!-- Refresh button removed -->
         </div>
     </header>
 
@@ -353,7 +352,7 @@
 
                     let indicatorHtml = '';
                     if (event.isToday) {
-                        indicatorHtml = `<div class="text-vaccent dark:text-orange-400 text-[17px] md:text-[19px] font-bold shrink-0 select-none flex items-center justify-center w-4">▸</div>`;
+                        indicatorHtml = `<div class="text-vaccent dark:text-orange-400 text-[15px] md:text-[17px] font-bold shrink-0 select-none flex items-center justify-center w-4">▸</div>`;
                     } else {
                         indicatorHtml = `<div class="w-4 shrink-0"></div>`;
                     }
@@ -366,14 +365,14 @@
                     let linksHtml = '';
                     if (event.vodLink) {
                         linksHtml += `
-                        <a href="${event.vodLink}" target="_blank" class="px-2.5 py-1.5 rounded-md bg-red-50 dark:bg-red-950/30 text-red-600 dark:text-red-400 text-[12px] font-semibold hover:bg-red-100 dark:hover:bg-red-900/50 transition-colors inline-flex justify-center items-center gap-1.5 border border-red-200/60 dark:border-red-900/30">
+                        <a href="${event.vodLink}" target="_blank" class="px-2.5 py-1.5 rounded-md bg-red-50 dark:bg-red-950/30 text-red-600 dark:text-red-400 text-[11px] font-semibold hover:bg-red-100 dark:hover:bg-red-900/50 transition-colors inline-flex justify-center items-center gap-1.5 border border-red-200/60 dark:border-red-900/30">
                             <i class="fa-brands fa-youtube"></i> VOD
                         </a>`;
                     }
 
                     if (event.tlLink) {
                         linksHtml += `
-                        <a href="${event.tlLink}" target="_blank" class="px-2.5 py-1.5 rounded-md bg-[#F7FEE7] dark:bg-[#365314]/30 text-[#65A30D] dark:text-[#A3E635] text-[12px] font-semibold hover:bg-[#ECFCCB] dark:hover:bg-[#365314]/50 transition-colors inline-flex justify-center items-center gap-1.5 border border-[#ECFCCB] dark:border-[#4D7C0F]/45">
+                        <a href="${event.tlLink}" target="_blank" class="px-2.5 py-1.5 rounded-md bg-[#F0FDF4] dark:bg-[#14532D]/30 text-[#4D7C0F] dark:text-[#84CC16] text-[11px] font-semibold hover:bg-[#DCFCE7] dark:hover:bg-[#14532D]/50 transition-colors inline-flex justify-center items-center gap-1.5 border border-[#BBF7D0] dark:border-[#166534]/50">
                             <i class="fa-solid fa-language"></i> 翻譯
                         </a>`;
                     }
@@ -386,16 +385,16 @@
                          metaHtml += `<span class="flex items-center gap-1"><i class="fa-solid fa-circle-info opacity-70"></i> ${event.note}</span>`;
                     }
 
-                    const metaDiv = metaHtml ? `<div class="flex flex-wrap gap-x-4 gap-y-1 mt-2 text-[13px] vmuted dark:dark-mode-muted">${metaHtml}</div>` : '';
+                    const metaDiv = metaHtml ? `<div class="flex flex-wrap gap-x-4 gap-y-1 mt-2 text-[12px] vmuted dark:dark-mode-muted">${metaHtml}</div>` : '';
 
                     const titleClass = event.isOffDay ? "text-vmuted dark:text-[#A1A1AA]" : "vtext dark:dark-mode-text";
 
                     card.innerHTML = `
                         <div class="flex-shrink-0 w-full md:w-[185px] flex flex-col justify-center items-center p-4 md:border-r border-vborder/50 dark:border-[#3F3F46] bg-vbg/40 dark:bg-black/10">
                             <div class="flex flex-col items-center text-center">
-                                <div class="text-[17px] md:text-[19px] font-bold text-vaccent dark:text-orange-400 tracking-wide">${event.dateDisplay || '-'}</div>
-                                <div class="text-[12px] font-medium vmuted dark:dark-mode-muted mt-0.5">${event.dayDisplay || '-'}</div>
-                                ${event.timeDisplay ? `<div class="text-[15px] md:text-[17px] font-bold vtext dark:dark-mode-text mt-2 md:mt-3 bg-vborder/30 dark:bg-white/10 px-2 py-0.5 rounded">${event.timeDisplay}</div>` : ''}
+                                <div class="text-[15px] md:text-[17px] font-bold text-vaccent dark:text-orange-400 tracking-wide">${event.dateDisplay || '-'}</div>
+                                <div class="text-[11px] font-medium vmuted dark:dark-mode-muted mt-0.5">${event.dayDisplay || '-'}</div>
+                                ${event.timeDisplay ? `<div class="text-[13px] md:text-[15px] font-bold vtext dark:dark-mode-text mt-2 md:mt-3 bg-vborder/30 dark:bg-white/10 px-2 py-0.5 rounded">${event.timeDisplay}</div>` : ''}
                             </div>
                             
                             ${linksHtml ? `<div class="flex flex-wrap justify-center items-center w-full gap-2 mt-3 px-1">${linksHtml}</div>` : ''}
@@ -411,11 +410,11 @@
                                             const parts = titleStr.split('\n');
                                             
                                             if (parts.length > 1) {
-                                                let html = `<h3 class="text-[15px] md:text-[16px] font-bold ${titleClass} leading-snug">${parts[0].trim()}</h3>`;
-                                                html += `<h4 class="text-[15px] md:text-[16px] font-bold ${titleClass} leading-snug mt-1">${parts.slice(1).join(' ').trim()}</h4>`;
+                                                let html = `<h3 class="text-[14px] md:text-[15px] font-bold ${titleClass} leading-snug">${parts[0].trim()}</h3>`;
+                                                html += `<h4 class="text-[14px] md:text-[15px] font-bold ${titleClass} leading-snug mt-1">${parts.slice(1).join(' ').trim()}</h4>`;
                                                 return html;
                                             }
-                                            return `<h3 class="text-[15px] md:text-[16px] font-bold ${titleClass} leading-snug">${titleStr}</h3>`;
+                                            return `<h3 class="text-[14px] md:text-[15px] font-bold ${titleClass} leading-snug">${titleStr}</h3>`;
                                         })()}
                                     </div>
                                     
