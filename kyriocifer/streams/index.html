@@ -6,7 +6,7 @@
     <link rel="preconnect" href="https://cdnjs.cloudflare.com">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>📅 Kyrio Cifer Schedule | 行程資料庫</title>
+    <title>📅Kyrio Cifer's stream schedule</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -24,6 +24,7 @@
                         vtext: '#4F4538',
                         vmuted: '#8C8273',
                         vaccent: '#B45309',
+                        vlink: '#65A30D',
                     }
                 } 
             } 
@@ -74,9 +75,7 @@
             </div>
         </div>
         <div class="flex items-center gap-2">
-            <button id="btn-refresh" onclick="app.fetchData(true)" class="px-3 py-1.5 rounded-md bg-vborder/40 hover:bg-vborder/80 dark:bg-white/5 dark:hover:bg-white/10 text-xs font-medium vtext dark:dark-mode-text transition-colors items-center gap-1.5 flex">
-                <i class="fa-solid fa-rotate-right" id="refresh-icon"></i> <span class="hidden sm:inline">Refresh</span>
-            </button>
+            <!-- Refresh button removed -->
         </div>
     </header>
 
@@ -85,10 +84,10 @@
         <section class="flex flex-col gap-4">
             <div class="space-y-0.5">
                 <p class="text-[17px] font-medium vtext dark:dark-mode-text leading-[1.55]">
-                    Welcome to Kyrio Cifer's stream schedule. Times are displayed in Asia/Taipei timezone.
+                    Archive of Kyrio Cifer’s streaming schedule, with all times displayed in UTC+8.
                 </p>
                 <p class="text-[15px] font-normal vtext dark:dark-mode-text leading-[1.6]">
-                    歡迎來到Kyrio Cifer的直播行程表，時間顯示為台北時間 (Asia/Taipei)。
+                    收錄Kyrio Cifer歷來的直播行程表，時間顯示為UTC+8。
                 </p>
             </div>
             <div class="space-y-0.5">
@@ -155,10 +154,7 @@
             },
 
             fetchData: async function(isManual = false) {
-                const refreshIcon = document.getElementById('refresh-icon');
                 const statusText = document.getElementById('sync-status');
-                
-                if (refreshIcon) refreshIcon.classList.add('fa-spin');
                 if (statusText) statusText.innerText = 'Syncing...';
 
                 if (this.data.length === 0) {
@@ -193,8 +189,6 @@
                         this.showState('<i class="fa-solid fa-triangle-exclamation text-rose-600 dark:text-rose-400 text-3xl"></i>', 'Unable to load schedule.<br>Please try again later.');
                     }
                     if (statusText) statusText.innerText = 'Sync failed';
-                } finally {
-                    if (refreshIcon) refreshIcon.classList.remove('fa-spin');
                 }
             },
 
@@ -379,7 +373,7 @@
 
                     if (event.tlLink) {
                         linksHtml += `
-                        <a href="${event.tlLink}" target="_blank" class="px-2.5 py-1.5 rounded-md bg-[#F4FBEB] dark:bg-[#22301A] text-[#658A2B] dark:text-[#A8D45A] text-[12px] font-semibold hover:bg-[#EAF5DC] dark:hover:bg-[#2C3E22] transition-colors inline-flex justify-center items-center gap-1.5 border border-[#D5EFA8] dark:border-[#385522]">
+                        <a href="${event.tlLink}" target="_blank" class="px-2.5 py-1.5 rounded-md bg-[#F7FEE7] dark:bg-[#365314]/30 text-[#65A30D] dark:text-[#A3E635] text-[12px] font-semibold hover:bg-[#ECFCCB] dark:hover:bg-[#365314]/50 transition-colors inline-flex justify-center items-center gap-1.5 border border-[#ECFCCB] dark:border-[#4D7C0F]/45">
                             <i class="fa-solid fa-language"></i> 翻譯
                         </a>`;
                     }
@@ -418,7 +412,7 @@
                                             
                                             if (parts.length > 1) {
                                                 let html = `<h3 class="text-[15px] md:text-[16px] font-bold ${titleClass} leading-snug">${parts[0].trim()}</h3>`;
-                                                html += `<h4 class="text-[14px] md:text-[15px] font-medium ${titleClass} leading-snug mt-1">${parts.slice(1).join(' ').trim()}</h4>`;
+                                                html += `<h4 class="text-[15px] md:text-[16px] font-bold ${titleClass} leading-snug mt-1">${parts.slice(1).join(' ').trim()}</h4>`;
                                                 return html;
                                             }
                                             return `<h3 class="text-[15px] md:text-[16px] font-bold ${titleClass} leading-snug">${titleStr}</h3>`;
