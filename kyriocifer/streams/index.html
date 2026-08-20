@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-TW" class="h-full">
+<html lang="en" class="h-full">
 <head>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -25,6 +25,7 @@
                         vmuted: '#8C8273',
                         vaccent: '#B45309',
                         vlink: '#65A30D',
+                        vtranslate: '#658C59',
                     }
                 } 
             } 
@@ -32,7 +33,7 @@
     </script>
     
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #F0EBE3; color: #4F4538; overflow-x: hidden; }
+        body { font-family: 'Inter', sans-serif; background-color: #F0EBE3; color: #4F4538; overflow-x: hidden; scroll-behavior: smooth; }
         .glass-panel { background-color: #F9F8F4; backdrop-filter: none; }
         .cell-wrap-text { word-break: break-word; overflow-wrap: break-word; white-space: normal; line-height: 1.6; }
         
@@ -62,7 +63,7 @@
     <header class="border-b border-vborder/50 dark:dark-mode-border glass-panel sticky top-0 z-30 px-6 py-[18px] flex flex-wrap gap-4 items-center justify-between shadow-sm/5">
         <div class="flex items-center space-x-4">
            <div class="w-11 h-11 rounded-xl bg-[#F8F5EF] border border-[#E5DED3] dark:border-[#3F3F46] dark:bg-[#27272A] flex items-center justify-center overflow-hidden">
-                <img src="logo.png" alt="Logo" class="w-9 h-9 object-contain">
+                <img src="logo.png" alt="Logo" class="w-9 h-9 object-contain" onerror="this.onerror=null; this.src='https://placehold.co/36x36/F8F5EF/4F4538?text=KC';">
             </div>
             <div class="flex flex-col">
                 <h1 class="text-[18px] sm:text-[20px] font-bold vtext dark:dark-mode-text leading-[1.25] flex items-center">
@@ -146,6 +147,7 @@
             sheets: new Set(),
             currentSheetFilter: null,
             refreshTimer: null,
+            hasScrolledToToday: false,
 
             init: function() {
                 this.fetchData();
@@ -179,6 +181,13 @@
                             const dateStr = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
                             statusText.innerHTML = `▸ Last Updated: ${dateStr}, ${timeStr}`;
                         }
+
+                        // 畫面渲染完成後自動平滑滾動到今天的行程
+                        if (!this.hasScrolledToToday) {
+                            setTimeout(() => {
+                                this.scrollToToday();
+                            }, 200);
+                        }
                     } else {
                         throw new Error("API returned failure status.");
                     }
@@ -188,6 +197,24 @@
                         this.showState('<i class="fa-solid fa-triangle-exclamation text-rose-600 dark:text-rose-400 text-3xl"></i>', 'Unable to load schedule.<br>Please try again later.');
                     }
                     if (statusText) statusText.innerText = 'Sync failed';
+                }
+            },
+
+            scrollToToday: function() {
+                const todayEl = document.getElementById('today-event-card');
+                if (todayEl) {
+                    todayEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    this.hasScrolledToToday = true;
+                } else {
+                    // 如果剛好今天沒有行程，找距離今天最近的未來行程
+                    const cards = document.querySelectorAll('.schedule-card-wrapper');
+                    for (let card of cards) {
+                        if (card.getAttribute('data-is-future') === 'true') {
+                            card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                            this.hasScrolledToToday = true;
+                            break;
+                        }
+                    }
                 }
             },
 
@@ -255,12 +282,14 @@
                     }
 
                     let isToday = false;
+                    let isFuture = false;
                     if (eventDate && !isNaN(eventDate)) {
                         const options = { timeZone: 'Asia/Taipei', year: 'numeric', month: '2-digit', day: '2-digit' };
                         const formatter = new Intl.DateTimeFormat('en-CA', options);
                         const todayTaipeiStr = formatter.format(now); 
                         const eventTaipeiStr = formatter.format(eventDate);
                         isToday = (todayTaipeiStr === eventTaipeiStr);
+                        isFuture = (eventTaipeiStr > todayTaipeiStr);
                     }
 
                     const isValidUrl = (url) => {
@@ -281,6 +310,7 @@
                         vodLink: isValidUrl(vodLink) ? vodLink : '',
                         tlLink: isValidUrl(tlLink) ? tlLink : '',
                         isToday,
+                        isFuture,
                         sheetName,
                         isOffDay: category === 'Off Day'
                     };
@@ -348,11 +378,16 @@
 
                 displayData.forEach(event => {
                     const cardWrapper = document.createElement('div');
-                    cardWrapper.className = "flex items-center gap-3 relative";
+                    cardWrapper.className = "flex items-center gap-3 relative schedule-card-wrapper";
+                    cardWrapper.setAttribute('data-is-future', event.isFuture ? 'true' : 'false');
+                    
+                    if (event.isToday) {
+                        cardWrapper.id = 'today-event-card';
+                    }
 
                     let indicatorHtml = '';
                     if (event.isToday) {
-                        indicatorHtml = `<div class="text-vaccent dark:text-orange-400 text-[15px] md:text-[17px] font-bold shrink-0 select-none flex items-center justify-center w-4">▸</div>`;
+                        indicatorHtml = `<div class="text-vaccent dark:text-orange-400 text-[15px] md:text-[19px] font-bold shrink-0 select-none flex items-center justify-center w-4">▸</div>`;
                     } else {
                         indicatorHtml = `<div class="w-4 shrink-0"></div>`;
                     }
@@ -372,7 +407,7 @@
 
                     if (event.tlLink) {
                         linksHtml += `
-                        <a href="${event.tlLink}" target="_blank" class="px-2.5 py-1.5 rounded-md bg-[#F0FDF4] dark:bg-[#14532D]/30 text-[#4D7C0F] dark:text-[#84CC16] text-[11px] font-semibold hover:bg-[#DCFCE7] dark:hover:bg-[#14532D]/50 transition-colors inline-flex justify-center items-center gap-1.5 border border-[#BBF7D0] dark:border-[#166534]/50">
+                        <a href="${event.tlLink}" target="_blank" class="px-2.5 py-1.5 rounded-md bg-[#EEF5EC] dark:bg-[#14532D]/30 text-[#527947] dark:text-[#84CC16] text-[11px] font-semibold hover:bg-[#E2EFE0] dark:hover:bg-[#14532D]/50 transition-colors inline-flex justify-center items-center gap-1.5 border border-[#D5E6D0] dark:border-[#166534]/50">
                             <i class="fa-solid fa-language"></i> 翻譯
                         </a>`;
                     }
@@ -392,9 +427,9 @@
                     card.innerHTML = `
                         <div class="flex-shrink-0 w-full md:w-[185px] flex flex-col justify-center items-center p-4 md:border-r border-vborder/50 dark:border-[#3F3F46] bg-vbg/40 dark:bg-black/10">
                             <div class="flex flex-col items-center text-center">
-                                <div class="text-[15px] md:text-[17px] font-bold text-vaccent dark:text-orange-400 tracking-wide">${event.dateDisplay || '-'}</div>
+                                <div class="text-[14px] md:text-[16px] font-bold text-vaccent dark:text-orange-400 tracking-wide">${event.dateDisplay || '-'}</div>
                                 <div class="text-[11px] font-medium vmuted dark:dark-mode-muted mt-0.5">${event.dayDisplay || '-'}</div>
-                                ${event.timeDisplay ? `<div class="text-[13px] md:text-[15px] font-bold vtext dark:dark-mode-text mt-2 md:mt-3 bg-vborder/30 dark:bg-white/10 px-2 py-0.5 rounded">${event.timeDisplay}</div>` : ''}
+                                ${event.timeDisplay ? `<div class="text-[12px] md:text-[14px] font-bold vtext dark:dark-mode-text mt-2 md:mt-3 bg-vborder/30 dark:bg-white/10 px-2 py-0.5 rounded">${event.timeDisplay}</div>` : ''}
                             </div>
                             
                             ${linksHtml ? `<div class="flex flex-wrap justify-center items-center w-full gap-2 mt-3 px-1">${linksHtml}</div>` : ''}
@@ -410,11 +445,11 @@
                                             const parts = titleStr.split('\n');
                                             
                                             if (parts.length > 1) {
-                                                let html = `<h3 class="text-[14px] md:text-[15px] font-bold ${titleClass} leading-snug">${parts[0].trim()}</h3>`;
-                                                html += `<h4 class="text-[14px] md:text-[15px] font-bold ${titleClass} leading-snug mt-1">${parts.slice(1).join(' ').trim()}</h4>`;
+                                                let html = `<h3 class="text-[13px] md:text-[14px] font-bold ${titleClass} leading-snug">${parts[0].trim()}</h3>`;
+                                                html += `<h4 class="text-[13px] md:text-[14px] font-medium ${titleClass} leading-snug mt-1">${parts.slice(1).join(' ').trim()}</h4>`;
                                                 return html;
                                             }
-                                            return `<h3 class="text-[14px] md:text-[15px] font-bold ${titleClass} leading-snug">${titleStr}</h3>`;
+                                            return `<h3 class="text-[13px] md:text-[14px] font-bold ${titleClass} leading-snug">${titleStr}</h3>`;
                                         })()}
                                     </div>
                                     
