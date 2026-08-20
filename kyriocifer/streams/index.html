@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="h-full">
+<html lang="zh-TW" class="h-full">
 <head>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -24,7 +24,6 @@
                         vtext: '#4F4538',
                         vmuted: '#8C8273',
                         vaccent: '#B45309',
-                        vlink: '#3B82F6',
                     }
                 } 
             } 
@@ -62,39 +61,62 @@
     <header class="border-b border-vborder/50 dark:dark-mode-border glass-panel sticky top-0 z-30 px-6 py-[18px] flex flex-wrap gap-4 items-center justify-between shadow-sm/5">
         <div class="flex items-center space-x-4">
            <div class="w-11 h-11 rounded-xl bg-[#F8F5EF] border border-[#E5DED3] dark:border-[#3F3F46] dark:bg-[#27272A] flex items-center justify-center overflow-hidden">
-                <i class="fa-regular fa-calendar text-vaccent text-xl"></i>
+                <img src="logo.png" alt="Logo" class="w-9 h-9 object-contain">
             </div>
             <div class="flex flex-col">
                 <h1 class="text-[18px] sm:text-[20px] font-bold vtext dark:dark-mode-text leading-[1.25] flex items-center">
+                    <span class="mr-2 whitespace-nowrap text-[20px]">📅</span>
                     <span>Kyrio Cifer Schedule</span>
                 </h1>
                 <p class="text-[12px] font-normal vmuted dark:dark-mode-muted mt-[4px] leading-[1.4]">
-                    行程資料庫 ‒ Auto-synced with Google Sheets
+                    ‒‒‒‒‒‒‒‒‒ Made with ♡ by <a href="https://x.com/miniminimaker" target="_blank" class="text-vaccent hover:opacity-80 transition-opacity">miniminimaker</a>
                 </p>
             </div>
         </div>
         <div class="flex items-center gap-2">
-            <div id="sync-status" class="text-xs font-medium text-vmuted dark:dark-mode-muted hidden sm:block mr-2"></div>
             <button id="btn-refresh" onclick="app.fetchData(true)" class="px-3 py-1.5 rounded-md bg-vborder/40 hover:bg-vborder/80 dark:bg-white/5 dark:hover:bg-white/10 text-xs font-medium vtext dark:dark-mode-text transition-colors items-center gap-1.5 flex">
                 <i class="fa-solid fa-rotate-right" id="refresh-icon"></i> <span class="hidden sm:inline">Refresh</span>
             </button>
         </div>
     </header>
 
-    <main class="flex-1 max-w-[1000px] w-full mx-auto p-6 md:p-8 flex flex-col gap-8">
+    <main class="flex-1 max-w-[1400px] w-full mx-auto p-6 md:p-12 flex flex-col gap-12">
         
-        <section class="flex flex-col gap-2">
-            <p class="text-[16px] font-medium vtext dark:dark-mode-text leading-[1.55]">
-                Welcome to Kyrio Cifer's stream schedule. Times are displayed in Asia/Taipei timezone.
-            </p>
+        <section class="flex flex-col gap-4">
+            <div class="space-y-0.5">
+                <p class="text-[17px] font-medium vtext dark:dark-mode-text leading-[1.55]">
+                    Welcome to Kyrio Cifer's stream schedule. Times are displayed in Asia/Taipei timezone.
+                </p>
+                <p class="text-[15px] font-normal vtext dark:dark-mode-text leading-[1.6]">
+                    歡迎來到Kyrio Cifer的直播行程表，時間顯示為台北時間 (Asia/Taipei)。
+                </p>
+            </div>
+            <div class="space-y-0.5">
+                <p class="text-[12px] font-normal vmuted dark:dark-mode-muted leading-[1.5]">
+                    This is an unofficial website for reference only.
+                </p>
+                <p class="text-[12px] font-normal vmuted dark:dark-mode-muted leading-[1.5]">
+                    本網站為非官方網站，僅供參考。
+                </p>
+            </div>
+            <div class="space-y-0.5">
+                <p class="text-[12px] font-normal vmuted dark:dark-mode-muted leading-[1.5]">
+                    Please let me know if you spot any errors or incorrect information.
+                </p>
+                <p class="text-[12px] font-normal vmuted dark:dark-mode-muted leading-[1.5]">
+                    如發現資料錯誤或需要更正，歡迎聯繫通知。
+                </p>
+            </div>
         </section>
 
-        <!-- 動態生成的 Sheet Filter 按鈕會放在這裡 -->
-        <div id="sheet-filters" class="flex flex-wrap items-center gap-2 mt-2">
-            <!-- Buttons will be injected here -->
+        <div class="flex flex-col gap-6">
+            <div class="flex flex-wrap items-center justify-between gap-3 text-xs vmuted dark:dark-mode-muted px-1">
+                <div id="sheet-filters" class="flex flex-wrap items-center gap-2"></div>
+                <div id="sync-status" class="font-medium"></div>
+            </div>
         </div>
 
-        <div id="schedule-container" class="flex flex-col gap-4 min-h-[300px]">
+        <div id="schedule-container" class="flex flex-col gap-4 min-h-[300px] mb-8">
             <div id="state-message" class="py-24 text-center bg-vcard dark:dark-mode-card rounded-xl border border-vborder/70 dark:dark-mode-border shadow-sm">
                 <div class="flex flex-col items-center justify-center gap-3">
                     <i class="fa-solid fa-circle-notch fa-spin text-2xl text-vaccent"></i>
@@ -105,8 +127,8 @@
 
     </main>
 
-    <footer class="py-8 px-6 border-t border-vborder/50 dark:dark-mode-border text-center mt-auto">
-        <p class="text-[12px] font-normal vmuted dark:dark-mode-muted leading-[1.4]">
+    <footer class="py-10 px-6 border-t border-vborder/50 dark:dark-mode-border text-center mt-auto">
+        <p class="text-[12px] font-normal vmuted dark:dark-mode-muted mt-[4px] leading-[1.4]">
             &copy; 2026 
             <a href="https://x.com/miniminimaker" target="_blank" rel="noopener noreferrer" class="text-vaccent hover:opacity-80 transition-opacity">
                 miniminimaker
@@ -132,7 +154,6 @@
                 this.startAutoRefresh();
             },
 
-            // 從 API 獲取資料
             fetchData: async function(isManual = false) {
                 const refreshIcon = document.getElementById('refresh-icon');
                 const statusText = document.getElementById('sync-status');
@@ -159,7 +180,9 @@
                         this.render();
                         if (statusText) {
                             const d = new Date();
-                            statusText.innerText = `Updated: ${d.getHours().toString().padStart(2,'0')}:${d.getMinutes().toString().padStart(2,'0')}`;
+                            const timeStr = d.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+                            const dateStr = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+                            statusText.innerHTML = `▸ Last Updated: ${dateStr}, ${timeStr}`;
                         }
                     } else {
                         throw new Error("API returned failure status.");
@@ -175,7 +198,6 @@
                 }
             },
 
-            // 處理並解析 Google Sheet 資料
             processData: function(rawEvents) {
                 const now = new Date(); 
                 this.sheets.clear();
@@ -239,12 +261,20 @@
                         }
                     }
 
-                    // 判斷是否為「今天」（依年月日比對）
                     let isToday = false;
                     if (eventDate && !isNaN(eventDate)) {
-                        const nowDateStr = `${now.getFullYear()}.${String(now.getMonth() + 1).padStart(2, '0')}.${String(now.getDate()).padStart(2, '0')}`;
-                        isToday = (dateDisplay === nowDateStr);
+                        const options = { timeZone: 'Asia/Taipei', year: 'numeric', month: '2-digit', day: '2-digit' };
+                        const formatter = new Intl.DateTimeFormat('en-CA', options);
+                        const todayTaipeiStr = formatter.format(now); 
+                        const eventTaipeiStr = formatter.format(eventDate);
+                        isToday = (todayTaipeiStr === eventTaipeiStr);
                     }
+
+                    const isValidUrl = (url) => {
+                        if (!url || typeof url !== 'string') return false;
+                        const trimmed = url.trim();
+                        return (trimmed.startsWith('http://') || trimmed.startsWith('https://'));
+                    };
 
                     return {
                         originalDate: eventDate,
@@ -255,8 +285,8 @@
                         category,
                         game,
                         note,
-                        vodLink,
-                        tlLink,
+                        vodLink: isValidUrl(vodLink) ? vodLink : '',
+                        tlLink: isValidUrl(tlLink) ? tlLink : '',
                         isToday,
                         sheetName,
                         isOffDay: category === 'Off Day'
@@ -327,12 +357,11 @@
                     const cardWrapper = document.createElement('div');
                     cardWrapper.className = "flex items-center gap-3 relative";
 
-                    // 當天左側加上「▸」指標標記（大小與日期數字相同，且垂直置中）
                     let indicatorHtml = '';
                     if (event.isToday) {
                         indicatorHtml = `<div class="text-vaccent dark:text-orange-400 text-[17px] md:text-[19px] font-bold shrink-0 select-none flex items-center justify-center w-4">▸</div>`;
                     } else {
-                        indicatorHtml = `<div class="w-4 shrink-0"></div>`; // 保持對齊間距
+                        indicatorHtml = `<div class="w-4 shrink-0"></div>`;
                     }
 
                     const card = document.createElement('div');
@@ -340,28 +369,18 @@
                     
                     card.className = `flex flex-col md:flex-row ${offDayBgClass} border border-vborder/70 dark:dark-mode-border rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow fade-in flex-grow`;
                     
-                    // --- 建立 VOD 與 Translation 按鈕 ---
                     let linksHtml = '';
-                    if (event.vodLink && event.vodLink !== 'Link' && (event.vodLink.startsWith('http://') || event.vodLink.startsWith('https://'))) {
-                        let linkIcon = 'fa-arrow-up-right-from-square';
-                        let linkText = 'VOD';
-                        if(event.vodLink.includes('youtube.com') || event.vodLink.includes('youtu.be')) {
-                             linkIcon = 'fa-brands fa-youtube';
-                             linkText = 'VOD';
-                        } else if (event.vodLink.includes('twitch.tv')) {
-                             linkIcon = 'fa-brands fa-twitch';
-                             linkText = 'Twitch';
-                        }
+                    if (event.vodLink) {
                         linksHtml += `
-                        <a href="${event.vodLink}" target="_blank" class="w-full md:w-auto text-center px-3 py-1.5 rounded-lg bg-vaccent/10 dark:bg-vaccent/20 text-vaccent dark:text-orange-400 text-[12px] font-bold hover:bg-vaccent/20 dark:hover:bg-vaccent/30 transition-colors inline-flex justify-center items-center gap-1.5 border border-vaccent/20 shrink-0">
-                            <i class="${linkIcon}"></i> ${linkText}
+                        <a href="${event.vodLink}" target="_blank" class="px-2.5 py-1.5 rounded-md bg-red-50 dark:bg-red-950/30 text-red-600 dark:text-red-400 text-[12px] font-semibold hover:bg-red-100 dark:hover:bg-red-900/50 transition-colors inline-flex justify-center items-center gap-1.5 border border-red-200/60 dark:border-red-900/30">
+                            <i class="fa-brands fa-youtube"></i> VOD
                         </a>`;
                     }
 
-                    if (event.tlLink && event.tlLink !== 'Link' && (event.tlLink.startsWith('http://') || event.tlLink.startsWith('https://'))) {
+                    if (event.tlLink) {
                         linksHtml += `
-                        <a href="${event.tlLink}" target="_blank" class="w-full md:w-auto text-center px-3 py-1.5 rounded-lg bg-vlink/10 dark:bg-vlink/20 text-vlink dark:text-blue-400 text-[12px] font-bold hover:bg-vlink/20 dark:hover:bg-vlink/30 transition-colors inline-flex justify-center items-center gap-1.5 border border-vlink/20 shrink-0">
-                            <i class="fa-solid fa-language"></i> Translation
+                        <a href="${event.tlLink}" target="_blank" class="px-2.5 py-1.5 rounded-md bg-[#F4FBEB] dark:bg-[#22301A] text-[#658A2B] dark:text-[#A8D45A] text-[12px] font-semibold hover:bg-[#EAF5DC] dark:hover:bg-[#2C3E22] transition-colors inline-flex justify-center items-center gap-1.5 border border-[#D5EFA8] dark:border-[#385522]">
+                            <i class="fa-solid fa-language"></i> 翻譯
                         </a>`;
                     }
 
@@ -378,14 +397,14 @@
                     const titleClass = event.isOffDay ? "text-vmuted dark:text-[#A1A1AA]" : "vtext dark:dark-mode-text";
 
                     card.innerHTML = `
-                        <div class="flex-shrink-0 w-full md:w-[160px] flex flex-col justify-center items-center p-4 md:border-r border-vborder/50 dark:border-[#3F3F46] bg-vbg/40 dark:bg-black/10">
+                        <div class="flex-shrink-0 w-full md:w-[185px] flex flex-col justify-center items-center p-4 md:border-r border-vborder/50 dark:border-[#3F3F46] bg-vbg/40 dark:bg-black/10">
                             <div class="flex flex-col items-center text-center">
                                 <div class="text-[17px] md:text-[19px] font-bold text-vaccent dark:text-orange-400 tracking-wide">${event.dateDisplay || '-'}</div>
                                 <div class="text-[12px] font-medium vmuted dark:dark-mode-muted mt-0.5">${event.dayDisplay || '-'}</div>
                                 ${event.timeDisplay ? `<div class="text-[15px] md:text-[17px] font-bold vtext dark:dark-mode-text mt-2 md:mt-3 bg-vborder/30 dark:bg-white/10 px-2 py-0.5 rounded">${event.timeDisplay}</div>` : ''}
                             </div>
                             
-                            ${linksHtml ? `<div class="flex flex-row md:flex-col justify-center items-stretch w-full gap-2 mt-4 px-2">${linksHtml}</div>` : ''}
+                            ${linksHtml ? `<div class="flex flex-wrap justify-center items-center w-full gap-2 mt-3 px-1">${linksHtml}</div>` : ''}
                         </div>
                         
                         <div class="flex-grow p-4 md:px-6 flex flex-col justify-center">
@@ -399,7 +418,7 @@
                                             
                                             if (parts.length > 1) {
                                                 let html = `<h3 class="text-[15px] md:text-[16px] font-bold ${titleClass} leading-snug">${parts[0].trim()}</h3>`;
-                                                html += `<h4 class="text-[14px] md:text-[15px] font-semibold ${titleClass} leading-snug mt-1">${parts.slice(1).join(' ').trim()}</h4>`;
+                                                html += `<h4 class="text-[14px] md:text-[15px] font-medium ${titleClass} leading-snug mt-1">${parts.slice(1).join(' ').trim()}</h4>`;
                                                 return html;
                                             }
                                             return `<h3 class="text-[15px] md:text-[16px] font-bold ${titleClass} leading-snug">${titleStr}</h3>`;
