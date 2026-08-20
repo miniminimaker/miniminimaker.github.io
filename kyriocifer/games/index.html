@@ -145,7 +145,6 @@
                                 <div class="flex flex-col items-center justify-center gap-3">
                                     <i class="fa-solid fa-circle-notch fa-spin text-2xl text-vaccent"></i>
                                     <span class="text-sm font-medium vtext dark:dark-mode-text">Loading game database...｜正在讀取遊戲資料...</span>
-                                    <span class="text-xs vmuted dark:dark-mode-muted">Fetching from Cloud Excel (ALL Worksheet)</span>
                                 </div>
                             </td>
                         </tr>
@@ -226,8 +225,11 @@
                 
                 if (DOM.updatedText) {
                     if (json.lastSynced) {
-                        const date = new Date(json.lastSynced).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
-                        DOM.updatedText.innerText = `▸ Last Updated: ${date}`;
+                        const dateObj = new Date(json.lastSynced);
+                        const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+                        const day = String(dateObj.getDate()).padStart(2, '0');
+                        const time = dateObj.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
+                        DOM.updatedText.innerText = `▸ Last Updated: ${month}/${day}, ${time}`;
                     } else {
                         DOM.updatedText.innerText = `▸ Last Updated: Just now`;
                     }
