@@ -7,15 +7,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kyrio Cifer Hub</title>
+
     <script src="https://cdn.tailwindcss.com"></script>
+
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Castoro+Titling&display=swap" rel="stylesheet">
+
     <script>
         tailwind.config = { 
             darkMode: 'media', 
             theme: { 
                 extend: { 
-                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    fontFamily: { 
+                        sans: ['Inter', 'sans-serif'] 
+                    },
                     colors: {
                         vbg: '#F0EBE3',
                         vcard: '#FAF9F6',
@@ -25,26 +30,50 @@
                         vaccent: '#B45309',
                     }
                 } 
-            } 
+            }
         }
     </script>
+
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #F0EBE3; color: #4F4538; overflow-x: hidden; }
-        @media (prefers-color-scheme: dark) {
-            .dark-mode-bg { background-color: #1C1917 !important; }
-            .dark-mode-card { background-color: #27272A !important; }
-            .dark-mode-text { color: #E7E5E4 !important; }
-            .dark-mode-muted { color: #A1A1AA !important; }
-            .dark-mode-border { border-color: #3F3F46 !important; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F0EBE3;
+            color: #4F4538;
+            overflow-x: hidden;
         }
+
+        @media (prefers-color-scheme: dark) {
+            .dark-mode-bg {
+                background-color: #1C1917 !important;
+            }
+
+            .dark-mode-card {
+                background-color: #27272A !important;
+            }
+
+            .dark-mode-text {
+                color: #E7E5E4 !important;
+            }
+
+            .dark-mode-muted {
+                color: #A1A1AA !important;
+            }
+
+            .dark-mode-border {
+                border-color: #3F3F46 !important;
+            }
+        }
+
         .interactive-card {
             transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
+
         .interactive-card:hover {
             transform: translateY(-3px);
             box-shadow: 0 12px 28px -6px rgba(79, 69, 56, 0.08);
             border-color: #D6D0C4;
         }
+
         @media (prefers-color-scheme: dark) {
             .interactive-card:hover {
                 box-shadow: 0 12px 28px -6px rgba(0, 0, 0, 0.3);
@@ -53,175 +82,304 @@
         }
     </style>
 </head>
+
 <body class="flex flex-col min-h-screen dark:dark-mode-bg transition-colors duration-300 selection:bg-vaccent/20">
+
     <main class="flex-1 w-full max-w-[960px] mx-auto pt-16 sm:pt-20 px-5 sm:px-8 pb-20 flex flex-col items-center">
+
         <section class="text-center mb-12 sm:mb-16 flex flex-col items-center w-full">
+
             <div class="w-[100px] h-[100px] sm:w-[120px] sm:h-[120px] rounded-[28px] bg-white dark:bg-black/20 p-2 shadow-sm border border-vborder/60 dark:dark-mode-border mb-5 flex items-center justify-center transition-transform hover:scale-105 duration-300">
                 <img src="logo.png" alt="Kyrio Cifer Logo" class="w-full h-full object-contain rounded-2xl" onerror="this.style.display='none'">
             </div>
+
             <h2 class="text-[26px] sm:text-[34px] vtext dark:dark-mode-text mb-2 tracking-wide flex items-center justify-center gap-2" style="font-family: 'Castoro Titling', serif; font-weight: 400;">
                 <span class="text-[18px] sm:text-[22px]">🥀🖤</span>Kyrio Cifer Hub
             </h2>
+
             <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-vborder/30 dark:bg-zinc-800/50 border border-vborder/40 dark:dark-mode-border">
                 <span class="w-1.5 h-1.5 rounded-full bg-vaccent animate-pulse"></span>
+
                 <p class="text-[12px] sm:text-[13px] vmuted dark:dark-mode-muted font-medium tracking-wide">
                     Updated Occasionally｜不定期更新
                 </p>
             </div>
+
         </section>
 
+
         <section class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5 w-full">
+
+            <!-- Get to Know Kyrio Cifer -->
             <div class="bg-vcard dark:dark-mode-card border border-vborder/70 dark:dark-mode-border rounded-[20px] p-6 flex flex-col justify-between shadow-sm relative overflow-hidden group">
+
                 <div class="absolute top-0 right-0 w-32 h-32 bg-vaccent/5 rounded-bl-full pointer-events-none transition-transform group-hover:scale-110 duration-500"></div>
+
                 <div>
+
                     <div class="flex items-center justify-between mb-4">
+
                         <div class="text-[20px] w-12 h-12 bg-vbg dark:bg-black/30 rounded-2xl flex items-center justify-center border border-vborder/40 dark:dark-mode-border shadow-inner">
                             ✨
                         </div>
+
                         <span class="inline-flex items-center gap-1.5 text-[11px] font-medium px-2.5 py-1 rounded-full bg-vborder/30 dark:bg-zinc-800 text-vmuted dark:dark-mode-muted">
-                            <span class="w-1 h-1 rounded-full bg-vmuted"></span> Under Construction
+                            <span class="w-1 h-1 rounded-full bg-vmuted"></span>
+                            Under Construction
                         </span>
+
                     </div>
+
                     <h3 class="text-[17px] sm:text-[18px] font-bold vtext dark:dark-mode-text mb-1 tracking-tight">
                         Get to Know Kyrio Cifer
                     </h3>
+
                     <p class="text-[13px] vmuted dark:dark-mode-muted tracking-wide font-normal">
                         認識Kyrio Cifer
                     </p>
+
                 </div>
             </div>
 
-       <a href="https://miniminimaker.github.io/kyriocifer/streams/" class="interactive-card bg-vcard dark:dark-mode-card border border-vborder/70 dark:dark-mode-border rounded-[20px] p-6 flex flex-col justify-between shadow-sm relative overflow-hidden group outline-none focus-visible:ring-2 focus-visible:ring-vaccent focus-visible:ring-offset-2 focus-visible:ring-offset-vbg">
-    <div class="absolute top-0 right-0 w-32 h-32 bg-vaccent/5 rounded-bl-full pointer-events-none transition-transform group-hover:scale-110 duration-500"></div>
 
-    <div>
-        <div class="flex items-center justify-between mb-4">
-            <div class="text-[18px] w-12 h-12 bg-vbg dark:bg-black/30 rounded-2xl flex items-center justify-center border border-vborder/40 dark:dark-mode-border shadow-inner group-hover:scale-105 transition-transform">
-                🔴
-            </div>
+            <!-- Stream Archive -->
+            <a href="https://miniminimaker.github.io/kyriocifer/streams/"
+               class="interactive-card bg-vcard dark:dark-mode-card border border-vborder/70 dark:dark-mode-border rounded-[20px] p-6 flex flex-col justify-between shadow-sm relative overflow-hidden group outline-none focus-visible:ring-2 focus-visible:ring-vaccent focus-visible:ring-offset-2 focus-visible:ring-offset-vbg">
 
-        <h3 class="text-[17px] sm:text-[18px] font-bold vtext dark:dark-mode-text mb-1 tracking-tight group-hover:text-vaccent transition-colors">
-            Stream Archive
-        </h3>
-
-        <p class="text-[13px] vmuted dark:dark-mode-muted tracking-wide font-normal">
-            直播資訊
-        </p>
-    </div>
-</a>
-
-            <a href="https://miniminimaker.github.io/kyriocifer/games/" class="interactive-card bg-vcard dark:dark-mode-card border border-vborder/70 dark:dark-mode-border rounded-[20px] p-6 flex flex-col justify-between shadow-sm relative overflow-hidden group outline-none focus-visible:ring-2 focus-visible:ring-vaccent focus-visible:ring-offset-2 focus-visible:ring-offset-vbg">
                 <div class="absolute top-0 right-0 w-32 h-32 bg-vaccent/5 rounded-bl-full pointer-events-none transition-transform group-hover:scale-110 duration-500"></div>
+
                 <div>
+
                     <div class="flex items-center justify-between mb-4">
+
+                        <div class="text-[18px] w-12 h-12 bg-vbg dark:bg-black/30 rounded-2xl flex items-center justify-center border border-vborder/40 dark:dark-mode-border shadow-inner group-hover:scale-105 transition-transform">
+                            🔴
+                        </div>
+
+                        <div class="w-8 h-8 rounded-full bg-vborder/30 dark:bg-zinc-800 flex items-center justify-center text-vmuted group-hover:bg-vaccent group-hover:text-white transition-all">
+                            <span class="text-sm font-sans transform group-hover:translate-x-0.5 transition-transform">
+                                →
+                            </span>
+                        </div>
+
+                    </div>
+
+                    <h3 class="text-[17px] sm:text-[18px] font-bold vtext dark:dark-mode-text mb-1 tracking-tight group-hover:text-vaccent transition-colors">
+                        Stream Archive
+                    </h3>
+
+                    <p class="text-[13px] vmuted dark:dark-mode-muted tracking-wide font-normal">
+                        直播資訊
+                    </p>
+
+                </div>
+
+            </a>
+
+
+            <!-- Stream Games Archive -->
+            <a href="https://miniminimaker.github.io/kyriocifer/games/"
+               class="interactive-card bg-vcard dark:dark-mode-card border border-vborder/70 dark:dark-mode-border rounded-[20px] p-6 flex flex-col justify-between shadow-sm relative overflow-hidden group outline-none focus-visible:ring-2 focus-visible:ring-vaccent focus-visible:ring-offset-2 focus-visible:ring-offset-vbg">
+
+                <div class="absolute top-0 right-0 w-32 h-32 bg-vaccent/5 rounded-bl-full pointer-events-none transition-transform group-hover:scale-110 duration-500"></div>
+
+                <div>
+
+                    <div class="flex items-center justify-between mb-4">
+
                         <div class="text-[20px] w-12 h-12 bg-vbg dark:bg-black/30 rounded-2xl flex items-center justify-center border border-vborder/40 dark:dark-mode-border shadow-inner group-hover:scale-105 transition-transform">
                             🎮
                         </div>
+
                         <div class="w-8 h-8 rounded-full bg-vborder/30 dark:bg-zinc-800 flex items-center justify-center text-vmuted group-hover:bg-vaccent group-hover:text-white transition-all">
-                            <span class="text-sm font-sans transform group-hover:translate-x-0.5 transition-transform">→</span>
+                            <span class="text-sm font-sans transform group-hover:translate-x-0.5 transition-transform">
+                                →
+                            </span>
                         </div>
+
                     </div>
+
                     <h3 class="text-[17px] sm:text-[18px] font-bold vtext dark:dark-mode-text mb-1 tracking-tight group-hover:text-vaccent transition-colors">
                         Stream Games Archive
                     </h3>
+
                     <p class="text-[13px] vmuted dark:dark-mode-muted tracking-wide font-normal">
                         直播遊戲列表
                     </p>
+
                 </div>
+
             </a>
-            
-            <a href="https://miniminimaker.github.io/kyriocifer/music/" class="interactive-card bg-vcard dark:dark-mode-card border border-vborder/70 dark:dark-mode-border rounded-[20px] p-6 flex flex-col justify-between shadow-sm relative overflow-hidden group outline-none focus-visible:ring-2 focus-visible:ring-vaccent focus-visible:ring-offset-2 focus-visible:ring-offset-vbg">
+
+
+            <!-- Stream Music Playlist -->
+            <a href="https://miniminimaker.github.io/kyriocifer/music/"
+               class="interactive-card bg-vcard dark:dark-mode-card border border-vborder/70 dark:dark-mode-border rounded-[20px] p-6 flex flex-col justify-between shadow-sm relative overflow-hidden group outline-none focus-visible:ring-2 focus-visible:ring-vaccent focus-visible:ring-offset-2 focus-visible:ring-offset-vbg">
+
                 <div class="absolute top-0 right-0 w-32 h-32 bg-vaccent/5 rounded-bl-full pointer-events-none transition-transform group-hover:scale-110 duration-500"></div>
+
                 <div>
+
                     <div class="flex items-center justify-between mb-4">
+
                         <div class="text-[18px] w-12 h-12 bg-vbg dark:bg-black/30 rounded-2xl flex items-center justify-center border border-vborder/40 dark:dark-mode-border shadow-inner group-hover:scale-105 transition-transform">
                             🎵
                         </div>
+
                         <div class="w-8 h-8 rounded-full bg-vborder/30 dark:bg-zinc-800 flex items-center justify-center text-vmuted group-hover:bg-vaccent group-hover:text-white transition-all">
-                            <span class="text-sm font-sans transform group-hover:translate-x-0.5 transition-transform">→</span>
+                            <span class="text-sm font-sans transform group-hover:translate-x-0.5 transition-transform">
+                                →
+                            </span>
                         </div>
+
                     </div>
+
                     <h3 class="text-[17px] sm:text-[18px] font-bold vtext dark:dark-mode-text mb-1 tracking-tight group-hover:text-vaccent transition-colors">
                         Stream Music Playlist
                     </h3>
+
                     <p class="text-[13px] vmuted dark:dark-mode-muted tracking-wide font-normal">
                         直播音樂清單
                     </p>
+
                 </div>
+
             </a>
-            
+
+
+            <!-- ASMR Patreon -->
             <div class="bg-vcard dark:dark-mode-card border border-vborder/70 dark:dark-mode-border rounded-[20px] p-6 flex flex-col justify-between shadow-sm relative overflow-hidden group">
+
                 <div class="absolute top-0 right-0 w-32 h-32 bg-vaccent/5 rounded-bl-full pointer-events-none transition-transform group-hover:scale-110 duration-500"></div>
+
                 <div>
+
                     <div class="flex items-center justify-between mb-4">
+
                         <div class="text-[20px] w-12 h-12 bg-vbg dark:bg-black/30 rounded-2xl flex items-center justify-center border border-vborder/40 dark:dark-mode-border shadow-inner">
                             🎙️
                         </div>
+
                         <span class="inline-flex items-center gap-1.5 text-[11px] font-medium px-2.5 py-1 rounded-full bg-vborder/30 dark:bg-zinc-800 text-vmuted dark:dark-mode-muted">
-                            <span class="w-1 h-1 rounded-full bg-vmuted"></span> Under Construction
+                            <span class="w-1 h-1 rounded-full bg-vmuted"></span>
+                            Under Construction
                         </span>
+
                     </div>
+
                     <h3 class="text-[17px] sm:text-[18px] font-bold vtext dark:dark-mode-text mb-1 tracking-tight">
                         ASMR｜Patreon
                     </h3>
+
                     <p class="text-[13px] vmuted dark:dark-mode-muted tracking-wide font-normal">
                         語音與贊助內容
                     </p>
+
                 </div>
+
             </div>
 
+
+            <!-- Other Info -->
             <div class="bg-vcard dark:dark-mode-card border border-vborder/70 dark:dark-mode-border rounded-[20px] p-6 flex flex-col justify-between shadow-sm relative overflow-hidden group">
+
                 <div class="absolute top-0 right-0 w-32 h-32 bg-vaccent/5 rounded-bl-full pointer-events-none transition-transform group-hover:scale-110 duration-500"></div>
+
                 <div>
+
                     <div class="flex items-center justify-between mb-4">
+
                         <div class="text-[20px] w-12 h-12 bg-vbg dark:bg-black/30 rounded-2xl flex items-center justify-center border border-vborder/40 dark:dark-mode-border shadow-inner">
                             📂
                         </div>
+
                         <span class="inline-flex items-center gap-1.5 text-[11px] font-medium px-2.5 py-1 rounded-full bg-vborder/30 dark:bg-zinc-800 text-vmuted dark:dark-mode-muted">
-                            <span class="w-1 h-1 rounded-full bg-vmuted"></span> Under Construction
+                            <span class="w-1 h-1 rounded-full bg-vmuted"></span>
+                            Under Construction
                         </span>
+
                     </div>
+
                     <h3 class="text-[17px] sm:text-[18px] font-bold vtext dark:dark-mode-text mb-1 tracking-tight">
                         Other Info
                     </h3>
+
                     <p class="text-[13px] vmuted dark:dark-mode-muted tracking-wide font-normal">
                         其他資訊
                     </p>
+
                 </div>
+
             </div>
-            
-            <a href="https://kyriory.carrd.co/" target="_blank" rel="noopener noreferrer" class="interactive-card md:col-span-2 bg-vcard dark:dark-mode-card border border-vborder/70 dark:dark-mode-border rounded-[20px] p-6 flex flex-col sm:flex-row sm:items-center justify-between shadow-sm relative overflow-hidden group outline-none focus-visible:ring-2 focus-visible:ring-vaccent focus-visible:ring-offset-2 focus-visible:ring-offset-vbg">
+
+
+            <!-- miniminiproject -->
+            <a href="https://kyriory.carrd.co/"
+               target="_blank"
+               rel="noopener noreferrer"
+               class="interactive-card md:col-span-2 bg-vcard dark:dark-mode-card border border-vborder/70 dark:dark-mode-border rounded-[20px] p-6 flex flex-col sm:flex-row sm:items-center justify-between shadow-sm relative overflow-hidden group outline-none focus-visible:ring-2 focus-visible:ring-vaccent focus-visible:ring-offset-2 focus-visible:ring-offset-vbg">
+
                 <div class="absolute top-0 right-0 w-48 h-48 bg-vaccent/5 rounded-bl-full pointer-events-none transition-transform group-hover:scale-110 duration-500"></div>
+
                 <div class="flex items-center gap-4 mb-4 sm:mb-0">
+
                     <div class="text-[20px] w-12 h-12 bg-vbg dark:bg-black/30 rounded-2xl flex items-center justify-center border border-vborder/40 dark:dark-mode-border shadow-inner group-hover:scale-105 transition-transform flex-shrink-0">
                         ☀️
                     </div>
+
                     <div>
+
                         <h3 class="text-[17px] sm:text-[18px] font-bold vtext dark:dark-mode-text mb-0.5 tracking-tight group-hover:text-vaccent transition-colors">
                             miniminiproject
                         </h3>
+
                         <p class="text-[13px] vmuted dark:dark-mode-muted tracking-wide font-normal">
                             minimini粉絲企劃
                         </p>
+
                     </div>
+
                 </div>
+
                 <div class="flex items-center gap-2 self-end sm:self-center">
-                    <span class="text-[12px] font-medium text-vmuted group-hover:text-vaccent transition-colors">Visit Carrd</span>
+
+                    <span class="text-[12px] font-medium text-vmuted group-hover:text-vaccent transition-colors">
+                        Visit Carrd
+                    </span>
+
                     <div class="w-8 h-8 rounded-full bg-vborder/30 dark:bg-zinc-800 flex items-center justify-center text-vmuted group-hover:bg-vaccent group-hover:text-white transition-all">
-                        <span class="text-sm font-sans transform group-hover:translate-x-0.5 transition-transform">→</span>
+
+                        <span class="text-sm font-sans transform group-hover:translate-x-0.5 transition-transform">
+                            →
+                        </span>
+
                     </div>
+
                 </div>
+
             </a>
+
         </section>
+
     </main>
 
+
     <footer class="py-10 px-6 border-t border-vborder/50 dark:dark-mode-border text-center mt-auto">
+
         <p class="text-[12px] font-normal vmuted dark:dark-mode-muted leading-[1.4]">
+
             &copy; 2026
-            <a href="https://x.com/miniminimaker" target="_blank" rel="noopener noreferrer" class="text-vaccent hover:opacity-80 transition-opacity ml-1 font-medium">
+
+            <a href="https://x.com/miniminimaker"
+               target="_blank"
+               rel="noopener noreferrer"
+               class="text-vaccent hover:opacity-80 transition-opacity ml-1 font-medium">
                 miniminimaker
             </a>
+
         </p>
+
     </footer>
+
 </body>
 </html>
