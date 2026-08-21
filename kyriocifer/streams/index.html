@@ -702,9 +702,9 @@
 
                 dailyLogs.forEach(row => {
                     html += `
-                        <tr class="hover:bg-vbg/30 dark:hover:bg-white/5 transition-colors">
+                        <tr class="hover:bg-transparent transition-colors">
                             <td class="py-3.5 px-5 font-medium vtext dark:dark-mode-text text-center">${row.dateRaw || '-'}</td>
-                            <td class="py-3.5 px-5 font-normal text-vaccent text-center">${row.days || '-'}</td>
+                            <td class="py-3.5 px-5 font-normal vtext dark:dark-mode-text text-center">${row.days || '-'}</td>
                             <td class="py-3.5 px-5 font-normal vtext dark:dark-mode-text text-center">${row.totalSubs ? Number(String(row.totalSubs).replace(/,/g, '')).toLocaleString() : '-'}</td>
                             <td class="py-3.5 px-5 vmuted dark:dark-mode-muted text-center">${row.streamHours || '-'}</td>
                         </tr>
