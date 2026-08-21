@@ -144,7 +144,7 @@
                             <td colspan="6" class="py-24 text-center">
                                 <div class="flex flex-col items-center justify-center gap-3">
                                     <i class="fa-solid fa-circle-notch fa-spin text-2xl text-vaccent"></i>
-                                    <span class="text-sm font-medium vtext dark:dark-mode-text">Loading data, please wait...｜讀取資料中...</span>
+                                    <span class="text-sm font-medium vtext dark:dark-mode-text">Loading data, please wait…｜讀取資料請稍後...</span>
                                 </div>
                             </td>
                         </tr>
@@ -199,7 +199,7 @@
         }
 
         async function fetchGameData() {
-            setUIState('loading', 'Loading game database...｜正在讀取遊戲資料...');
+            setUIState('loading', 'Loading data, please wait…｜讀取資料請稍後...');
             
             if (!DATA_SOURCE_URL) {
                 setTimeout(() => setUIState('error', 'DATA_SOURCE_URL is not configured.<br>請設定指向 🎮 直播遊戲 (ALL 分頁) 的資料來源 API。'), 800);
@@ -237,7 +237,7 @@
 
             } catch (error) {
                 console.error("Fetch failed:", error);
-                setUIState('error', 'Unable to load game data.｜目前無法讀取遊戲資料。<br>請檢查 API 或網路連線。');
+                setUIState('error', 'Unable to load data.｜目前無法讀取資料。<br>請檢查 API 或網路連線。');
             }
         }
 
