@@ -83,10 +83,10 @@
         <section class="flex flex-col gap-4">
             <div class="space-y-0.5">
                 <p class="text-[17px] font-medium vtext dark:dark-mode-text leading-[1.55]">
-                    Archive of Kyrio Cifer’s ASMR & Content.
+                    Archive of Kyrio Cifer’s ASMR/Patreon.
                 </p>
                 <p class="text-[15px] font-normal vtext dark:dark-mode-text leading-[1.6]">
-                    收錄Kyrio Cifer的ASMR內容作品。
+                    收錄Kyrio Cifer的ASMR/Patreon內容作品。
                 </p>
            </div>
             <div class="space-y-0.5">
@@ -128,7 +128,7 @@
         
     <script>
         const CONFIG = {
-            API_URL: "https://script.google.com/macros/s/AKfycbyfY8c1v349IzpCY-3Wo19iY_UkRVGVZ5vC7nTyejNaSZZ8wa6y-3A1t7iOa82oZMM/exec",
+            API_URL: "https://script.google.com/macros/s/AKfycbyMsfAieg6jUrgY3zoTjCKGiNaXSJu8eKA9hop60jpSeJbREeOQes0CG568iJLUnpw/exec",
             TIMEZONE: "Asia/Taipei",
             REFRESH_INTERVAL: 5 * 60 * 1000 
         };
@@ -155,7 +155,15 @@
 
                 try {
                     const res = await fetch(CONFIG.API_URL);
-                    const result = await res.json();
+                    const text = await res.text();
+                    
+                    let result;
+                    try {
+                        result = JSON.parse(text);
+                    } catch (e) {
+                        console.error("Non-JSON response received:", text);
+                        throw new Error("API returned non-JSON response.");
+                    }
                     
                     if (result.success) {
                         this.processData(result.events || []);
@@ -218,14 +226,24 @@
                     
                     const kDate = findKey(['上架時間', 'release', 'date']);
                     const kType = findKey(['類型', 'type']);
-                    const kLink = findKey(['link', '連結', '網址', 'url']);
+                    const kLink = findKey(['連結', 'link']);
                     
                     const kZh = findKey(['內容中譯', 'mandarin']);
                     const kEn = keys.find(k => k.includes('內容') && !k.includes('中譯')) || findKey(['content']);
 
                     const dateRaw = kDate ? event[kDate] : '';
                     const typeRaw = kType ? event[kType] : '';
-                    const linkRaw = kLink ? event[kLink] : '';
+                    let linkRaw = kLink ? event[kLink] : '';
+                    
+                    // Fallback search for any url in keys if linkRaw is empty or just string
+                    if (!linkRaw) {
+                        for (let k of keys) {
+                            if (k.toLowerCase().includes('link') || k.toLowerCase().includes('連結')) {
+                                if (event[k]) linkRaw = event[k];
+                            }
+                        }
+                    }
+
                     const contentEn = kEn ? event[kEn] : '';
                     const contentZh = kZh ? event[kZh] : '';
                     
@@ -275,7 +293,7 @@
                         dateDisplay: dateDisplay,
                         dayDisplay: dayDisplay,
                         type: typeRaw,
-                        link: typeof linkRaw === 'string' ? linkRaw.trim() : '',
+                        link: linkRaw,
                         contentEn: contentEn,
                         contentZh: contentZh,
                         sheetName: sheetName,
@@ -389,22 +407,25 @@
                     
                     let linkHtml = '';
                     if (event.link) {
-                        const isUrl = event.link.startsWith('http://') || event.link.startsWith('https://');
+                        const linkStr = String(event.link).trim();
+                        const isUrl = linkStr.startsWith('http');
                         if (isUrl) {
                             linkHtml = `
-                            <a href="${event.link}" target="_blank" rel="noopener noreferrer" class="px-2.5 py-1.5 rounded-md bg-blue-50 dark:bg-blue-950/30 text-blue-600 dark:text-blue-400 text-[11px] font-semibold hover:bg-blue-100 dark:hover:bg-blue-900/50 transition-colors inline-flex justify-center items-center gap-1.5 border border-blue-200/60 dark:border-blue-900/30 mt-3 md:mt-4">
+                            <a href="${linkStr}" target="_blank" class="px-2.5 py-1.5 rounded-md bg-blue-50 dark:bg-blue-950/30 text-blue-600 dark:text-blue-400 text-[11px] font-semibold hover:bg-blue-100 dark:hover:bg-blue-900/50 transition-colors inline-flex justify-center items-center gap-1.5 border border-blue-200/60 dark:border-blue-900/30 mt-3 md:mt-4">
                                 <i class="fa-solid fa-link"></i> Link
                             </a>`;
                         } else {
-                            linkHtml = `<div class="mt-3 text-blue-600 dark:text-blue-400 text-[11px] font-medium p-1.5 bg-blue-50 dark:bg-blue-900/20 rounded-md break-all border border-blue-100 dark:border-blue-800/30 text-center">${event.link}</div>`;
+                            linkHtml = `<div class="mt-3 text-blue-600 dark:text-blue-400 text-[11px] font-medium p-1.5 bg-blue-50 dark:bg-blue-900/20 rounded-md break-all border border-blue-100 dark:border-blue-800/30 text-center">${linkStr}</div>`;
                         }
                     }
 
                     card.innerHTML = `
                         <div class="flex-shrink-0 w-full md:w-[185px] flex flex-col justify-center items-center p-4 md:border-r border-vborder/50 dark:border-[#3F3F46] bg-vbg/40 dark:bg-black/10">
                             <div class="flex flex-col items-center text-center">
-                                <div class="text-[14px] md:text-[16px] font-bold text-vaccent dark:text-orange-400 tracking-wide">${event.dateDisplay || '-'}</div>
-                                <div class="text-[11px] font-medium vmuted dark:dark-mode-muted mt-0.5">${event.dayDisplay || '-'}</div>
+                                <div class="text-[14px] md:text-[16px] font-bold text-vaccent dark:text-orange-400 tracking-wide flex items-center gap-1.5">
+                                    <span>${event.dateDisplay || '-'}</span>
+                                    <span class="text-[11px] font-medium vmuted dark:dark-mode-muted">${event.dayDisplay || '-'}</span>
+                                </div>
                             </div>
                             
                             ${linkHtml}
@@ -430,7 +451,11 @@
                         </div>
                     `;
 
-                    cardWrapper.innerHTML = indicatorHtml;
+                    cardWrapper.appendChild(indicatorHtml ? Object.assign(document.createElement('div'),{innerHTML:indicatorHtml}).firstElementChild : null);
+                    if(indicatorHtml){
+                         cardWrapper.innerHTML = indicatorHtml;
+                    }
+                    
                     cardWrapper.appendChild(card);
                     fragment.appendChild(cardWrapper);
                 });
