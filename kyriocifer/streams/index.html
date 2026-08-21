@@ -60,10 +60,11 @@
 
 <body class="flex flex-col min-h-screen dark:dark-mode-bg transition-colors duration-300">
 
+    <!-- STREAMING_CHUNK:Rendering header section... -->
     <header class="border-b border-vborder/50 dark:dark-mode-border glass-panel sticky top-0 z-30 px-6 py-[18px] flex flex-wrap gap-4 items-center justify-between shadow-sm/5">
         <div class="flex items-center space-x-4">
-         <a href="https://miniminimaker.github.io/kyriocifer/" class="w-11 h-11 rounded-xl bg-[#F8F5EF] border border-[#E5DED3] flex items-center justify-center overflow-hidden hover:opacity-90 transition-opacity">
-                <img src="logo.png" alt="Logo" class="w-9 h-9 object-contain">
+            <a href="https://miniminimaker.github.io/kyriocifer/" class="w-11 h-11 rounded-xl bg-[#F8F5EF] border border-[#E5DED3] flex items-center justify-center overflow-hidden hover:opacity-90 transition-opacity">
+                <img src="logo.png" alt="Logo" class="w-9 h-9 object-contain" onerror="this.src='https://placehold.co/36x36/F0EBE3/4F4538?text=KC'">
             </a>
             <div class="flex flex-col">
                 <h1 class="text-[18px] sm:text-[20px] font-bold vtext dark:dark-mode-text leading-[1.25] flex items-center">
@@ -78,6 +79,7 @@
         <div class="flex items-center gap-2"></div>
     </header>
 
+    <!-- STREAMING_CHUNK:Rendering main container... -->
     <main class="flex-1 max-w-[1400px] w-full mx-auto p-6 md:p-12 flex flex-col gap-12">
         
         <section class="flex flex-col gap-4">
@@ -181,7 +183,7 @@
                             statusText.innerHTML = `▸ <span style="font-weight: 600;">Last Updated</span>: ${dateStr}, ${timeStr}`;
                         }
 
-                        if (!this.hasScrolledToToday) {
+                        if (!this.hasScrolledToToday && !this.isSubathonTab(this.currentSheetFilter)) {
                             setTimeout(() => {
                                 this.scrollToToday();
                             }, 200);
@@ -196,6 +198,12 @@
                     }
                     if (statusText) statusText.innerText = 'Sync failed';
                 }
+            },
+
+            isSubathonTab: function(sheetName) {
+                if (!sheetName) return false;
+                const lower = sheetName.toLowerCase();
+                return lower.includes('subathon') || lower.includes('訂閱馬拉松');
             },
 
             scrollToToday: function() {
@@ -220,6 +228,50 @@
                 this.sheets.clear();
 
                 this.data = rawEvents.map(event => {
+                    const sheetName = event._sheetName || 'Default';
+                    if (sheetName !== 'Default') {
+                        this.sheets.add(sheetName);
+                    }
+
+                    if (this.isSubathonTab(sheetName)) {
+                        const dateRaw = event['Date 日期'] || event.date || '';
+                        const days = event['Days 天數'] || '';
+                        const totalSubs = event['Total Subs 訂閱數量'] || '';
+                        const streamHours = event['Streram Hours 直播總長'] || '';
+                        
+                        const releaseTime = event['Release Time 上架時間'] || '';
+                        const completedVal = event['Completed 完成'];
+                        const completed = completedVal === true || String(completedVal).toLowerCase() === 'true' || String(completedVal) === '✔' || String(completedVal) === '☑';
+                        
+                        const subGoal = event['Subscription Goal 訂閱目標數'] || '';
+                        const contentEn = event['Content'] || '';
+                        const contentZh = event['內容'] || '';
+                        const daysReached = event['Days reached 達標天數'] || '';
+                        
+                        const topGifterRank = event['Top Gifter Rank'] || '';
+                        const topGifterDescEn = event['Top Gifter Desc En'] || '';
+                        const topGifterDescZh = event['Top Gifter Desc Zh'] || '';
+
+                        return {
+                            sheetName,
+                            isSubathon: true,
+                            dateRaw,
+                            days,
+                            totalSubs,
+                            streamHours,
+                            releaseTime,
+                            completed,
+                            subGoal,
+                            contentEn,
+                            contentZh,
+                            daysReached,
+                            topGifterRank,
+                            topGifterDescEn,
+                            topGifterDescZh
+                        };
+                    }
+
+                    // Standard Stream Schedule tab logic
                     const dateRaw = event['Date\n日期'] || event['Date 日期'] || event.date || event['日期'] || '';
                     const timeRaw = event['Time(GMT+8)\n時間GMT+8'] || event['Time(GMT+8) 時間GMT+8'] || event.time || event['時間'] || '';
                     
@@ -239,11 +291,6 @@
 
                     const vodLink = event['VODs'] || '';
                     const tlLink = event['Translation\n翻譯記錄'] || event['Translation 翻譯記錄'] || '';
-                    
-                    const sheetName = event._sheetName || 'Default';
-                    if(sheetName !== 'Default') {
-                        this.sheets.add(sheetName);
-                    }
 
                     let eventDate = null;
                     let dateDisplay = '';
@@ -269,10 +316,10 @@
                             const y = eventDate.getFullYear();
                             const m = String(eventDate.getMonth() + 1).padStart(2, '0');
                             const d = String(eventDate.getDate()).padStart(2, '0');
-                            const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+                            const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
                             
                             dateDisplay = `${y}.${m}.${d}`;
-                            dayDisplay = days[eventDate.getDay()];
+                            dayDisplay = daysOfWeek[eventDate.getDay()];
                         } else {
                             dateDisplay = dateRaw; 
                         }
@@ -296,6 +343,7 @@
                     };
 
                     return {
+                        isSubathon: false,
                         originalDate: eventDate,
                         dateDisplay,
                         dayDisplay,
@@ -328,8 +376,10 @@
                 sheetsArray.forEach(sheet => {
                     const isActive = this.currentSheetFilter === sheet;
                     const activeClass = isActive ? 'bg-vtext dark:bg-white text-vbg dark:text-black shadow-sm' : 'text-vmuted hover:bg-vborder/30 dark:hover:bg-white/5';
+                    const iconClass = this.isSubathonTab(sheet) ? 'fa-solid fa-fire-flame-curved' : 'fa-regular fa-folder';
+                    
                     html += `<button class="filter-btn px-3 py-1.5 rounded-lg text-sm font-semibold transition-colors flex items-center gap-1.5 ${activeClass}" data-sheet="${sheet}">
-                                <i class="fa-regular fa-folder text-xs"></i> ${sheet}
+                                <i class="${iconClass} text-xs"></i> ${sheet}
                            </button>`;
                 });
                 
@@ -351,11 +401,13 @@
                     filtered = filtered.filter(e => e.sheetName === this.currentSheetFilter);
                 }
 
-                filtered.sort((a, b) => {
-                    if (!a.originalDate) return 1;
-                    if (!b.originalDate) return -1;
-                    return a.originalDate.getTime() - b.originalDate.getTime();
-                });
+                if (!this.isSubathonTab(this.currentSheetFilter)) {
+                    filtered.sort((a, b) => {
+                        if (!a.originalDate) return 1;
+                        if (!b.originalDate) return -1;
+                        return a.originalDate.getTime() - b.originalDate.getTime();
+                    });
+                }
                 return filtered;
             },
 
@@ -371,6 +423,13 @@
                 }
 
                 container.innerHTML = '';
+
+                if (this.isSubathonTab(this.currentSheetFilter)) {
+                    this.renderSubathonView(container, displayData);
+                    return;
+                }
+
+                // Standard Schedule Layout
                 const fragment = document.createDocumentFragment();
 
                 displayData.forEach(event => {
@@ -418,7 +477,6 @@
                     }
 
                     const metaDiv = metaHtml ? `<div class="flex flex-wrap gap-x-4 gap-y-1 mt-2 text-[12px] vmuted dark:dark-mode-muted">${metaHtml}</div>` : '';
-
                     const titleClass = event.isOffDay ? "text-vmuted dark:text-[#A1A1AA]" : "vtext dark:dark-mode-text";
 
                     card.innerHTML = `
@@ -430,10 +488,8 @@
                                 </div>
                                 ${event.timeDisplay ? `<div class="text-[12px] md:text-[14px] font-bold vtext dark:dark-mode-text mt-2 md:mt-3 bg-vborder/30 dark:bg-white/10 px-2 py-0.5 rounded">${event.timeDisplay}</div>` : ''}
                             </div>
-                            
                             ${linksHtml ? `<div class="flex flex-wrap justify-center items-center w-full gap-2 mt-3 px-1">${linksHtml}</div>` : ''}
                         </div>
-                        
                         <div class="flex-grow p-4 md:px-6 flex flex-col justify-center">
                             <div class="flex flex-col gap-3">
                                 <div class="flex flex-col w-full">
@@ -442,7 +498,6 @@
                                             if (!event.title) return '';
                                             const titleStr = String(event.title);
                                             const parts = titleStr.split('\n');
-                                            
                                             if (parts.length > 1) {
                                                 let html = `<h3 class="text-[13px] md:text-[14px] font-bold ${titleClass} leading-snug">${parts[0].trim()}</h3>`;
                                                 html += `<h4 class="text-[13px] md:text-[14px] font-medium ${titleClass} leading-snug mt-1">${parts.slice(1).join(' ').trim()}</h4>`;
@@ -451,7 +506,6 @@
                                             return `<h3 class="text-[13px] md:text-[14px] font-bold ${titleClass} leading-snug">${titleStr}</h3>`;
                                         })()}
                                     </div>
-                                    
                                     ${metaDiv}
                                 </div>
                             </div>
@@ -464,6 +518,191 @@
                 });
 
                 container.appendChild(fragment);
+            },
+
+            renderSubathonView: function(container, data) {
+                const dailyLogs = data.filter(item => item.days && String(item.days).trim() !== '');
+                const goals = data.filter(item => item.subGoal !== '' && item.subGoal !== null && item.subGoal !== undefined);
+                const topGifters = data.filter(item => item.topGifterRank && String(item.topGifterRank).trim() !== '');
+
+                let maxSubs = 0;
+                dailyLogs.forEach(d => {
+                    const val = parseInt(String(d.totalSubs).replace(/,/g, ''));
+                    if (!isNaN(val) && val > maxSubs) maxSubs = val;
+                });
+
+                let html = `
+                    <div class="flex flex-col gap-8 fade-in">
+                        <!-- Hero Stat Card -->
+                        <div class="bg-vcard dark:dark-mode-card border border-vborder/70 dark:dark-mode-border rounded-2xl p-6 md:p-8 shadow-sm flex flex-col md:flex-row items-center justify-between gap-6">
+                            <div class="flex items-center gap-4">
+                                <div class="w-14 h-14 rounded-xl bg-vaccent/10 text-vaccent flex items-center justify-center text-2xl font-bold shrink-0">
+                                    <i class="fa-solid fa-fire-flame-curved"></i>
+                                </div>
+                                <div class="flex flex-col">
+                                    <h2 class="text-[20px] md:text-[24px] font-bold vtext dark:dark-mode-text">
+                                        ${this.currentSheetFilter} 訂閱馬拉松
+                                    </h2>
+                                    <p class="text-[13px] vmuted dark:dark-mode-muted mt-1">
+                                        Tracking daily subscription stats, subathon goals, and community unlocks.
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-4 bg-vbg/60 dark:bg-black/20 px-5 py-3 rounded-xl border border-vborder/50 dark:border-white/5 w-full md:w-auto justify-around">
+                                <div class="flex flex-col items-center">
+                                    <span class="text-[11px] uppercase tracking-wider font-semibold vmuted">Total Tracked Days</span>
+                                    <span class="text-[18px] font-bold text-vaccent mt-0.5">${dailyLogs.length} Days</span>
+                                </div>
+                                <div class="w-[1px] h-8 bg-vborder dark:bg-white/10"></div>
+                                <div class="flex flex-col items-center">
+                                    <span class="text-[11px] uppercase tracking-wider font-semibold vmuted">Peak Subs</span>
+                                    <span class="text-[18px] font-bold vtext dark:dark-mode-text mt-0.5">${maxSubs.toLocaleString()}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Subathon Goals Section -->
+                        <div class="flex flex-col gap-4">
+                            <div class="flex items-center justify-between px-1">
+                                <h3 class="text-[16px] font-bold vtext dark:dark-mode-text flex items-center gap-2">
+                                    <i class="fa-solid fa-trophy text-vaccent"></i>Subathon Goals｜訂閱目標與解鎖項目
+                                </h3>
+                                <span class="text-xs vmuted">${goals.filter(r => r.completed).length} / ${goals.length} Completed</span>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                `;
+
+                goals.forEach(r => {
+                    const isChecked = r.completed;
+                    const cardBg = isChecked ? 'bg-emerald-50/40 dark:bg-emerald-950/10 border-emerald-200/60 dark:border-emerald-900/30' : 'bg-vcard dark:dark-mode-card border-vborder/70 dark:dark-mode-border';
+                    const checkIcon = isChecked ? '<i class="fa-solid fa-circle-check text-emerald-600 dark:text-emerald-400"></i>' : '<i class="fa-regular fa-circle text-vmuted/40"></i>';
+                    
+                    html += `
+                        <div class="${cardBg} border rounded-xl p-4 flex flex-col justify-between gap-3 shadow-sm hover:shadow transition-all relative">
+                            <div class="flex items-start justify-between gap-3">
+                                <div class="flex items-center gap-2">
+                                    <span class="text-[15px] font-bold text-vaccent dark:text-orange-400 bg-vaccent/10 px-2.5 py-1 rounded-lg">
+                                        ${r.subGoal} Subs
+                                    </span>
+                                </div>
+                                <div class="text-lg shrink-0 mt-0.5" title="${isChecked ? 'Completed' : 'Pending'}">
+                                    ${checkIcon}
+                                </div>
+                            </div>
+                            
+                            <div class="flex flex-col gap-1">
+                                <h4 class="text-[14px] font-bold vtext dark:dark-mode-text leading-snug">${r.contentEn || 'Untitled Goal'}</h4>
+                                ${r.contentZh ? `<p class="text-[13px] vmuted dark:dark-mode-muted leading-snug">${r.contentZh}</p>` : ''}
+                            </div>
+
+                            <div class="flex items-center justify-between pt-2 border-t border-vborder/40 dark:border-white/5 text-[11px] vmuted">
+                                <span>${r.daysReached ? `<i class="fa-solid fa-flag-checkered text-vaccent mr-1"></i> ${r.daysReached}` : 'Pending reach'}</span>
+                                ${r.releaseTime && String(r.releaseTime).toLowerCase() !== 'false' && String(r.releaseTime).startsWith('http') ? `<a href="${r.releaseTime}" target="_blank" class="text-vlink font-semibold hover:underline flex items-center gap-1"><i class="fa-solid fa-link text-[10px]"></i> Link</a>` : ''}
+                            </div>
+                        </div>
+                    `;
+                });
+
+                html += `
+                            </div>
+                        </div>
+                `;
+
+                // Top Gifters Section
+                if (topGifters.length > 0) {
+                    html += `
+                        <div class="flex flex-col gap-4 mt-2">
+                            <div class="flex items-center justify-between px-1">
+                                <h3 class="text-[16px] font-bold vtext dark:dark-mode-text flex items-center gap-2">
+                                    <i class="fa-solid fa-gift text-vaccent"></i>Top Gifters Rewards｜送禮排行榜獎勵
+                                </h3>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    `;
+                    topGifters.forEach(tg => {
+                        let enHtml = '';
+                        if (tg.topGifterDescEn) {
+                            const lines = String(tg.topGifterDescEn).split('\n');
+                            enHtml = lines.map(line => {
+                                const trimmed = line.trim();
+                                if (!trimmed) return '';
+                                return `<div class="text-[13px] vtext dark:dark-mode-text font-bold my-0.5">${trimmed}</div>`;
+                            }).join('');
+                        }
+
+                        let zhHtml = '';
+                        if (tg.topGifterDescZh) {
+                            const lines = String(tg.topGifterDescZh).split('\n');
+                            zhHtml = lines.map(line => {
+                                const trimmed = line.trim();
+                                if (!trimmed) return '';
+                                return `<div class="text-[13px] vmuted dark:dark-mode-muted font-normal my-0.5">${trimmed}</div>`;
+                            }).join('');
+                        }
+
+                        html += `
+                            <div class="bg-vcard dark:dark-mode-card border border-vborder/70 dark:dark-mode-border rounded-xl p-5 flex flex-col gap-3 shadow-sm">
+                                <div class="text-[14px] font-bold text-vaccent dark:text-orange-400 bg-vaccent/10 px-3 py-1 rounded-lg w-fit">
+                                    ${tg.topGifterRank}
+                                </div>
+                                <div class="flex flex-col gap-1 text-[13px] pt-1 border-t border-vborder/40 dark:border-white/5">
+                                    ${enHtml}
+                                    ${zhHtml ? `<div class="mt-1 pt-1 border-t border-dashed border-vborder/40 dark:border-white/5">${zhHtml}</div>` : ''}
+                                </div>
+                            </div>
+                        `;
+                    });
+                    html += `
+                            </div>
+                        </div>
+                    `;
+                }
+
+                // Daily Progress Log Section
+                html += `
+                        <div class="flex flex-col gap-4 mt-2">
+                            <div class="flex items-center justify-between px-1">
+                                <h3 class="text-[16px] font-bold vtext dark:dark-mode-text flex items-center gap-2">
+                                    <i class="fa-solid fa-chart-line text-vaccent"></i>Daily Progress Log｜每日數據追蹤紀錄
+                                </h3>
+                            </div>
+
+                            <div class="bg-vcard dark:dark-mode-card border border-vborder/70 dark:dark-mode-border rounded-xl overflow-hidden shadow-sm">
+                                <div class="overflow-x-auto custom-scrollbar">
+                                    <table class="w-full text-left border-collapse">
+                                        <thead>
+                                            <tr class="bg-vbg/60 dark:bg-black/20 border-b border-vborder/70 dark:border-[#3F3F46] text-[12px] vmuted uppercase tracking-wider">
+                                                <th class="py-3.5 px-5 font-semibold">Date｜日期</th>
+                                                <th class="py-3.5 px-5 font-semibold">Day｜天數</th>
+                                                <th class="py-3.5 px-5 font-semibold">Total Subs｜訂閱數量</th>
+                                                <th class="py-3.5 px-5 font-semibold">Stream Hours｜直播總長</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="divide-y divide-vborder/50 dark:divide-[#3F3F46] text-[13px]">
+                `;
+
+                dailyLogs.forEach(row => {
+                    html += `
+                        <tr class="hover:bg-vbg/30 dark:hover:bg-white/5 transition-colors">
+                            <td class="py-3.5 px-5 font-medium vtext dark:dark-mode-text">${row.dateRaw || '-'}</td>
+                            <td class="py-3.5 px-5 font-semibold text-vaccent">${row.days || '-'}</td>
+                            <td class="py-3.5 px-5 font-bold vtext dark:dark-mode-text">${row.totalSubs ? Number(String(row.totalSubs).replace(/,/g, '')).toLocaleString() : '-'}</td>
+                            <td class="py-3.5 px-5 vmuted dark:dark-mode-muted">${row.streamHours || '-'}</td>
+                        </tr>
+                    `;
+                });
+
+                html += `
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                container.innerHTML = html;
             },
 
             showState: function(iconHtml, message) {
@@ -494,3 +733,4 @@
     </script>
 </body>
 </html>
+```eof
