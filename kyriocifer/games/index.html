@@ -202,7 +202,7 @@
             setUIState('loading', 'Loading data, please wait…｜讀取資料請稍後...');
             
             if (!DATA_SOURCE_URL) {
-                setTimeout(() => setUIState('error', 'DATA_SOURCE_URL is not configured.<br>請設定指向 🎮 直播遊戲 (ALL 分頁) 的資料來源 API。'), 800);
+                setTimeout(() => setUIState('error', 'DATA_SOURCE_URL is not configured.'), 800);
                 return;
             }
 
@@ -237,7 +237,7 @@
 
             } catch (error) {
                 console.error("Fetch failed:", error);
-                setUIState('error', 'Unable to load data.｜目前無法讀取資料。<br>請檢查 API 或網路連線。');
+                setUIState('error', '');
             }
         }
 
@@ -248,10 +248,7 @@
             let totalRowCount = 0;
 
             const is2DArray = Array.isArray(rawData) && Array.isArray(rawData[0]);
-            if (!is2DArray) {
-                setUIState('error', '資料格式錯誤。請確認 Google Apps Script 回傳為 2D 陣列。');
-                return;
-            }
+            if (!is2DArray) return;
 
             const subHeaders = rawData[1] || [];
             for (let i = 4; i < subHeaders.length; i++) {
@@ -407,7 +404,6 @@
 
         function setUIState(state, message = '') {
             if (!DOM.tbody) return;
-            DOM.tbody.innerHTML = '';
             if (DOM.btnRetry) DOM.btnRetry.classList.add('hidden');
             
             let icon = '';
@@ -415,15 +411,16 @@
                 icon = '<i class="fa-solid fa-circle-notch fa-spin text-vaccent text-2xl"></i>';
                 if (DOM.statsText) DOM.statsText.innerHTML = `Connecting...`;
             } else if (state === 'error') {
-                icon = '<i class="fa-solid fa-triangle-exclamation text-rose-600 dark:text-rose-400 text-3xl"></i>';
                 if (DOM.btnRetry) DOM.btnRetry.classList.remove('hidden');
                 if (DOM.statsText) DOM.statsText.innerHTML = `Data connection error`;
+                return;
             } else if (state === 'empty') {
                 icon = '<i class="fa-solid fa-box-open text-vmuted/50 text-3xl"></i>';
             } else if (state === 'success') {
                 return;
             }
 
+            DOM.tbody.innerHTML = '';
             const tr = document.createElement('tr');
             tr.innerHTML = `
                 <td colspan="6" class="py-24 text-center">
