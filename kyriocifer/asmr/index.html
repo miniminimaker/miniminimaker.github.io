@@ -1,1 +1,336 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="h-full">
+<head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📁 Kyrio Cifer's Content Archive</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = { 
+            darkMode: 'media', 
+            theme: { 
+                extend: { 
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: {
+                        vbg: '#F0EBE3',
+                        vcard: '#FAF9F6',
+                        vborder: '#E1DCD2',
+                        vtext: '#4F4538',
+                        vmuted: '#8C8273',
+                        vaccent: '#B45309',
+                        vlink: '#65A30D',
+                    }
+                } 
+            } 
+        }
+    </script>
+    
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #F0EBE3; color: #4F4538; overflow-x: hidden; scroll-behavior: smooth; }
+        .glass-panel { background-color: #F9F8F4; backdrop-filter: none; }
+        
+        @media (prefers-color-scheme: dark) {
+            .dark-mode-bg { background-color: #1C1917 !important; }
+            .dark-mode-card { background-color: #27272A !important; }
+            .dark-mode-text { color: #E7E5E4 !important; }
+            .dark-mode-muted { color: #A1A1AA !important; }
+            .dark-mode-border { border-color: #3F3F46 !important; }
+            .glass-panel { background-color: #1C1917 !important; }
+        }
+        
+        .custom-scrollbar::-webkit-scrollbar { height: 8px; width: 8px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 10px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #9ca3af; }
+        @media (prefers-color-scheme: dark) {
+            .custom-scrollbar::-webkit-scrollbar-thumb { background: #52525b; }
+            .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #71717a; }
+        }
+        
+        .fade-in { animation: fadeIn 0.3s ease-in-out forwards; opacity: 0; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
 
+<body class="flex flex-col min-h-screen dark:dark-mode-bg transition-colors duration-300">
+
+    <header class="border-b border-vborder/50 dark:dark-mode-border glass-panel sticky top-0 z-30 px-6 py-[18px] flex flex-wrap gap-4 items-center justify-between shadow-sm/5">
+        <div class="flex items-center space-x-4">
+         <a href="https://miniminimaker.github.io/kyriocifer/" class="w-11 h-11 rounded-xl bg-[#F8F5EF] border border-[#E5DED3] flex items-center justify-center overflow-hidden hover:opacity-90 transition-opacity">
+                <img src="logo.png" alt="Logo" class="w-9 h-9 object-contain" onerror="this.style.display='none';">
+            </a>
+            <div class="flex flex-col">
+                <h1 class="text-[18px] sm:text-[20px] font-bold vtext dark:dark-mode-text leading-[1.25] flex items-center">
+                    <span class="mr-2 whitespace-nowrap text-[20px]">📁</span>
+                    <span>Kyrio Cifer's Content Archive</span>
+                </h1>
+                <p class="text-[12px] font-normal vmuted dark:dark-mode-muted mt-[4px] leading-[1.4]">
+                    ‒‒‒‒‒ Made with ♡ by <a href="https://x.com/miniminimaker" target="_blank" class="text-vaccent hover:opacity-80 transition-opacity">miniminimaker</a>
+                </p>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-1 max-w-[1400px] w-full mx-auto p-4 md:p-8 flex flex-col gap-6">
+        
+        <section class="flex flex-col gap-3">
+            <div class="space-y-0.5">
+                <p class="text-[16px] md:text-[17px] font-medium vtext dark:dark-mode-text leading-[1.55]">
+                    Archive of Kyrio Cifer’s ASMR & Content.
+                </p>
+                <p class="text-[14px] md:text-[15px] font-normal vtext dark:dark-mode-text leading-[1.6]">
+                    收錄 Kyrio Cifer 歷來的 ASMR 與各類內容作品。
+                </p>
+            </div>
+            <div class="space-y-0.5 mt-2">
+                <p class="text-[12px] font-normal vmuted dark:dark-mode-muted leading-[1.5]">
+                    This is an unofficial website for reference only. / 本網站為非官方網站，僅供參考。
+                </p>
+            </div>
+        </section>
+
+        <div class="flex flex-col gap-4 mt-2">
+            <div class="flex flex-wrap items-center justify-between gap-3 text-xs vmuted dark:dark-mode-muted px-1">
+                <div id="sheet-filters" class="flex flex-wrap items-center gap-2"></div>
+                <div id="sync-status" class="font-medium whitespace-nowrap ml-auto"></div>
+            </div>
+        </div>
+
+        <div id="schedule-container" class="flex flex-col min-h-[300px] mb-8 bg-vcard dark:dark-mode-card rounded-xl border border-vborder/70 dark:dark-mode-border shadow-sm overflow-hidden">
+            <div id="state-message" class="py-24 text-center">
+                <div class="flex flex-col items-center justify-center gap-3">
+                    <i class="fa-solid fa-circle-notch fa-spin text-2xl text-vaccent"></i>
+                    <span class="text-sm font-medium vtext dark:dark-mode-text">Loading database...｜讀取資料中...</span>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="py-10 px-6 border-t border-vborder/50 dark:dark-mode-border text-center mt-auto">
+        <p class="text-[12px] font-normal vmuted dark:dark-mode-muted mt-[4px] leading-[1.4]">
+            &copy; 
+            <a href="https://x.com/miniminimaker" target="_blank" rel="noopener noreferrer" class="text-vaccent hover:opacity-80 transition-opacity">
+                miniminimaker
+            </a>
+        </p>
+    </footer>
+        
+    <script>
+        const CONFIG = {
+            // 👇 確保這裡貼上的是您「最新部署」的 API 網址
+            API_URL: "https://script.google.com/macros/s/AKfycbzIYzXXkcKvRKjYnIcIu0zWBMk22AUjov5muYFxOnIOJN4Xn2bgFhSyLNWfv3mdrrc/exec",
+            REFRESH_INTERVAL: 5 * 60 * 1000 // 5 minutes
+        };
+
+        const app = {
+            data: [],
+            sheets: new Set(),
+            currentSheetFilter: null,
+            refreshTimer: null,
+
+            init: function() {
+                this.fetchData();
+                this.startAutoRefresh();
+            },
+
+            fetchData: async function() {
+                const statusText = document.getElementById('sync-status');
+                if (statusText) statusText.innerHTML = '<i class="fa-solid fa-sync fa-spin mr-1"></i> Syncing...';
+
+                if (this.data.length === 0) {
+                    this.showState('<i class="fa-solid fa-circle-notch fa-spin text-2xl text-vaccent"></i>', 'Loading database...｜讀取資料中...');
+                }
+
+                try {
+                    const res = await fetch(CONFIG.API_URL);
+                    const result = await res.json();
+                    
+                    console.log("API 成功回傳的原始資料：", result); // 按下 F12 可以在 Console 看到資料長怎樣
+                    
+                    if (result.success) {
+                        this.processData(result.events || []);
+                        
+                        if (!this.currentSheetFilter && this.sheets.size > 0) {
+                            this.currentSheetFilter = Array.from(this.sheets)[0];
+                        }
+                        
+                        this.renderSheetFilters();
+                        this.render();
+                        
+                        if (statusText) {
+                            const d = new Date();
+                            const timeStr = d.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
+                            const dateStr = d.toLocaleDateString('en-US', { month: '2-digit', day: '2-digit' });
+                            statusText.innerHTML = `▸ <span style="font-weight: 600;">Last Updated</span>: ${dateStr}, ${timeStr}`;
+                        }
+                    } else {
+                        throw new Error("API returned failure status.");
+                    }
+                } catch (err) {
+                    console.error("Fetch Error:", err);
+                    if (this.data.length === 0) {
+                        this.showState('<i class="fa-solid fa-triangle-exclamation text-rose-600 dark:text-rose-400 text-3xl mb-2"></i>', 'Unable to load data.<br>Please check console or try again later.');
+                    }
+                    if (statusText) statusText.innerHTML = '<span class="text-rose-500">Sync failed</span>';
+                }
+            },
+
+            processData: function(rawEvents) {
+                this.sheets.clear();
+
+                this.data = rawEvents.map(event => {
+                    const keys = Object.keys(event);
+                    
+                    // 智慧關鍵字尋找：就算表格標題被修改或加了空格，只要包含關鍵字就能找到對應的欄位
+                    const findKey = (keywords) => keys.find(k => keywords.some(kw => k.toLowerCase().includes(kw.toLowerCase())));
+                    
+                    const kDate = findKey(['上架時間', 'release', 'date']);
+                    const kType = findKey(['類型', 'type']);
+                    const kLink = findKey(['連結', 'link']);
+                    const kTrans = findKey(['翻譯記錄', 'translation']);
+                    
+                    // 為了區分「內容」與「內容中譯」，特別分開寫判斷
+                    const kZh = findKey(['內容中譯', 'mandarin']);
+                    const kEn = keys.find(k => k.includes('內容') && !k.includes('中譯')) || findKey(['content']);
+
+                    const dateRaw = kDate ? event[kDate] : '';
+                    const typeRaw = kType ? event[kType] : '';
+                    const linkRaw = kLink ? event[kLink] : '';
+                    const transRaw = kTrans ? event[kTrans] : '';
+                    const contentEn = kEn ? event[kEn] : '';
+                    const contentZh = kZh ? event[kZh] : '';
+                    
+                    const sheetName = event._sheetName || 'Default';
+                    if(sheetName !== 'Default') {
+                        this.sheets.add(sheetName);
+                    }
+
+                    const isValidUrl = (url) => {
+                        if (!url || typeof url !== 'string') return false;
+                        const trimmed = url.trim();
+                        return (trimmed.startsWith('http://') || trimmed.startsWith('https://'));
+                    };
+
+                    let finalLink = '';
+                    if (isValidUrl(linkRaw)) {
+                        finalLink = linkRaw;
+                    } else {
+                        finalLink = linkRaw; 
+                    }
+
+                    return {
+                        dateDisplay: dateRaw,
+                        type: typeRaw,
+                        link: finalLink,
+                        translation: transRaw,
+                        contentEn: contentEn,
+                        contentZh: contentZh,
+                        sheetName: sheetName
+                    };
+                });
+                
+                // 過濾掉完全空白的行
+                this.data = this.data.filter(e => e.dateDisplay || e.contentEn || e.contentZh);
+            },
+            
+            renderSheetFilters: function() {
+                const container = document.getElementById('sheet-filters');
+                if (!container) return;
+
+                const sheetsArray = Array.from(this.sheets); 
+                if (sheetsArray.length === 0) {
+                    container.innerHTML = '';
+                    return;
+                }
+
+                let html = '';
+                sheetsArray.forEach(sheet => {
+                    const isActive = this.currentSheetFilter === sheet;
+                    const activeClass = isActive 
+                        ? 'bg-vtext dark:bg-white text-vbg dark:text-black shadow-sm' 
+                        : 'text-vmuted hover:bg-vborder/30 dark:hover:bg-white/5';
+                    
+                    html += `<button class="filter-btn px-4 py-1.5 rounded-lg text-[13px] font-semibold transition-colors flex items-center gap-2 ${activeClass}" data-sheet="${sheet}">
+                                <i class="fa-regular fa-folder text-xs"></i> ${sheet}
+                             </button>`;
+                });
+                
+                container.innerHTML = html;
+
+                container.querySelectorAll('.filter-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        this.currentSheetFilter = e.currentTarget.getAttribute('data-sheet');
+                        this.renderSheetFilters();
+                        this.render();
+                    });
+                });
+            },
+
+            getFilteredData: function() {
+                let filtered = [...this.data];
+                if (this.currentSheetFilter) {
+                    filtered = filtered.filter(e => e.sheetName === this.currentSheetFilter);
+                }
+                return filtered;
+            },
+
+            render: function() {
+                const container = document.getElementById('schedule-container');
+                if (!container) return;
+
+                const displayData = this.getFilteredData();
+
+                if (displayData.length === 0) {
+                    this.showState('<i class="fa-regular fa-folder-open text-vmuted/50 text-4xl mb-2"></i>', 'No records found.｜目前沒有資料');
+                    return;
+                }
+
+                let html = `
+                    <div class="overflow-x-auto custom-scrollbar w-full">
+                        <table class="w-full min-w-[1050px] text-left border-collapse">
+                            <thead>
+                                <tr class="bg-[#791B1B] text-white">
+                                    <th class="py-3.5 px-4 font-semibold text-[13px] w-[120px] text-center border-r border-[#962A2A] leading-tight align-middle">上架時間<br><span class="text-[11px] text-white/70 font-normal">Release Time</span></th>
+                                    <th class="py-3.5 px-4 font-semibold text-[13px] w-[140px] text-center border-r border-[#962A2A] leading-tight align-middle">類型<br><span class="text-[11px] text-white/70 font-normal">Type</span></th>
+                                    <th class="py-3.5 px-4 font-semibold text-[13px] w-[70px] text-center border-r border-[#962A2A] leading-tight align-middle">連結<br><span class="text-[11px] text-white/70 font-normal">Link</span></th>
+                                    <th class="py-3.5 px-4 font-semibold text-[13px] w-[100px] text-center border-r border-[#962A2A] leading-tight align-middle">翻譯記錄<br><span class="text-[11px] text-white/70 font-normal">Translation</span></th>
+                                    <th class="py-3.5 px-4 font-semibold text-[13px] border-r border-[#962A2A] leading-tight align-middle w-auto">內容<br><span class="text-[11px] text-white/70 font-normal">Content</span></th>
+                                    <th class="py-3.5 px-4 font-semibold text-[13px] leading-tight align-middle w-auto">內容中譯<br><span class="text-[11px] text-white/70 font-normal">Content (Mandarin Translation)</span></th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-vborder/60 dark:divide-[#3F3F46] bg-vcard dark:dark-mode-card">
+                `;
+
+                const getTypeBadge = (type) => {
+                    if (!type) return '';
+                    const t = type.toLowerCase();
+                    let colorClass = 'bg-gray-200 text-gray-700 dark:bg-gray-700 dark:text-gray-300'; 
+                    
+                    if (t.includes('18+')) {
+                        colorClass = 'bg-[#B01818] text-white';
+                    } else if (t.includes('asmr')) {
+                        colorClass = 'bg-[#CDE9C1] text-[#366A23] border border-[#A4D88F]';
+                    } else if (t.includes('bts') || t.includes('幕後')) {
+                        colorClass = 'bg-[#C2E3FB] text-[#296D9E] border border-[#9ACFF5]';
+                    } else if (t.includes('art') || t.includes('nsfw')) {
+                        colorClass = 'bg-[#6F3A96] text-white';
+                    }
+                    
+                    return `<span class="inline-flex items-center justify-center px-4 py-[5px] rounded-full text-[12px] font-bold tracking-wider w-[110px] shadow-sm ${colorClass}">${type}</span>`;
+                };
+
+                const getTransBadge = (trans) => {
+                    if (!trans) return '';
+                    const t = trans.toLowerCase();
+                    let colorClass = 'bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-600';
+                    
+                    if (t.includes('有') || t.includes('yes')) {
+                        colorClass = 'bg-[#FBE9B6] text-[#93631A] border border-[#F1D791]';
+                    } else if (t.includes('無') || t.includes
