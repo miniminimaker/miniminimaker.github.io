@@ -6,7 +6,7 @@
     <link rel="preconnect" href="https://cdnjs.cloudflare.com">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>📁 Kyrio Cifer's Content Archive</title>
+    <title>🎙️Kyrio Cifer's Content Archive</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -67,7 +67,7 @@
             </a>
             <div class="flex flex-col">
                 <h1 class="text-[18px] sm:text-[20px] font-bold vtext dark:dark-mode-text leading-[1.25] flex items-center">
-                    <span class="mr-2 whitespace-nowrap text-[20px]">📁</span>
+                    <span class="mr-2 whitespace-nowrap text-[20px]">🎙️</span>
                     <span>Kyrio Cifer's Content Archive</span>
                 </h1>
                 <p class="text-[12px] font-normal vmuted dark:dark-mode-muted mt-[4px] leading-[1.4]">
@@ -88,16 +88,14 @@
                 <p class="text-[15px] font-normal vtext dark:dark-mode-text leading-[1.6]">
                     收錄 Kyrio Cifer 歷來的 ASMR 與各類內容作品。
                 </p>
+           </div>
+            <div class="space-y-0.5">
+                <p class="text-[12px] font-normal vmuted dark:dark-mode-muted leading-[1.5]">This is an unofficial website for reference only.</p>
+                <p class="text-[12px] font-normal vmuted dark:dark-mode-muted leading-[1.5]">本網站為非官方網站，僅供參考。</p>
             </div>
             <div class="space-y-0.5">
-                <p class="text-[12px] font-normal vmuted dark:dark-mode-muted leading-[1.5]">
-                    This is an unofficial website for reference only. / 本網站為非官方網站，僅供參考。
-                </p>
-            </div>
-            <div class="space-y-0.5">
-                <p class="text-[12px] font-normal vmuted dark:dark-mode-muted leading-[1.5]">
-                    Please let me know if you spot any errors or incorrect information. / 如發現資料錯誤或需要更正，歡迎聯繫通知。
-                </p>
+                <p class="text-[12px] font-normal vmuted dark:dark-mode-muted leading-[1.5]">Please let me know if you spot any errors or incorrect information.</p>
+                <p class="text-[12px] font-normal vmuted dark:dark-mode-muted leading-[1.5]">如發現資料錯誤或需要更正，歡迎聯繫通知。</p>
             </div>
         </section>
 
@@ -130,10 +128,9 @@
         
     <script>
         const CONFIG = {
-            // 已套用您的 Google Apps Script 網址
             API_URL: "https://script.google.com/macros/s/AKfycbzIYzXXkcKvRKjYnIcIu0zWBMk22AUjov5muYFxOnIOJN4Xn2bgFhSyLNWfv3mdrrc/exec",
             TIMEZONE: "Asia/Taipei",
-            REFRESH_INTERVAL: 5 * 60 * 1000 // 5 分鐘自動刷新
+            REFRESH_INTERVAL: 5 * 60 * 1000 
         };
 
         const app = {
@@ -217,13 +214,11 @@
                 this.data = rawEvents.map(event => {
                     const keys = Object.keys(event);
                     
-                    // 智慧匹配欄位名稱，避免空格或換行導致找不到
                     const findKey = (keywords) => keys.find(k => keywords.some(kw => k.toLowerCase().includes(kw.toLowerCase())));
                     
                     const kDate = findKey(['上架時間', 'release', 'date']);
                     const kType = findKey(['類型', 'type']);
                     const kLink = findKey(['連結', 'link']);
-                    const kTrans = findKey(['翻譯記錄', 'translation']);
                     
                     const kZh = findKey(['內容中譯', 'mandarin']);
                     const kEn = keys.find(k => k.includes('內容') && !k.includes('中譯')) || findKey(['content']);
@@ -231,7 +226,6 @@
                     const dateRaw = kDate ? event[kDate] : '';
                     const typeRaw = kType ? event[kType] : '';
                     const linkRaw = kLink ? event[kLink] : '';
-                    const transRaw = kTrans ? event[kTrans] : '';
                     const contentEn = kEn ? event[kEn] : '';
                     const contentZh = kZh ? event[kZh] : '';
                     
@@ -244,10 +238,9 @@
                     let dateDisplay = '';
                     let dayDisplay = '';
 
-                    // 處理日期格式
                     if (dateRaw) {
                         let parsedDateString = String(dateRaw);
-                        // 處理表格中常見的 YYYY.MM.DD 格式
+                        // Handle YYYY.MM.DD format common in sheets
                         if (parsedDateString.match(/^\d{4}\.\d{2}\.\d{2}$/)) {
                             parsedDateString = parsedDateString.replace(/\./g, '-');
                         }
@@ -267,7 +260,6 @@
                         }
                     }
 
-                    // 判斷是否為今天或未來 (以 UTC+8 基準)
                     let isToday = false;
                     let isFuture = false;
                     if (eventDate && !isNaN(eventDate)) {
@@ -279,26 +271,12 @@
                         isFuture = (eventTaipeiStr > todayTaipeiStr);
                     }
 
-                    const isValidUrl = (url) => {
-                        if (!url || typeof url !== 'string') return false;
-                        const trimmed = url.trim();
-                        return (trimmed.startsWith('http://') || trimmed.startsWith('https://'));
-                    };
-
-                    let finalLink = '';
-                    if (isValidUrl(linkRaw)) {
-                        finalLink = linkRaw;
-                    } else {
-                        finalLink = linkRaw; 
-                    }
-
                     return {
                         originalDate: eventDate,
                         dateDisplay: dateDisplay,
                         dayDisplay: dayDisplay,
                         type: typeRaw,
-                        link: finalLink,
-                        translation: transRaw,
+                        link: linkRaw,
                         contentEn: contentEn,
                         contentZh: contentZh,
                         sheetName: sheetName,
@@ -347,7 +325,7 @@
                     filtered = filtered.filter(e => e.sheetName === this.currentSheetFilter);
                 }
 
-                // 照日期排序 (舊 -> 新)
+                // Ensure it sorts by date, just like the schedule
                 filtered.sort((a, b) => {
                     if (!a.originalDate) return 1;
                     if (!b.originalDate) return -1;
@@ -384,26 +362,11 @@
                         colorClass = 'bg-[#C2E3FB] text-[#296D9E] border border-[#9ACFF5]';
                     } else if (t.includes('art') || t.includes('nsfw')) {
                         colorClass = 'bg-[#6F3A96] text-white';
+                    } else if (t === 'art') {
+                        colorClass = 'bg-[#FDF4D6] text-[#A67C00] border border-[#FBE6A0]';
                     }
                     
                     return `<span class="inline-flex items-center justify-center px-3 py-[3px] rounded-full text-[11px] font-bold tracking-wider shadow-sm ${colorClass}">${type}</span>`;
-                };
-
-                const getTransBadge = (trans) => {
-                    if (!trans) return '';
-                    const t = trans.toLowerCase();
-                    let colorClass = 'bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-600';
-                    let iconHtml = '';
-                    
-                    if (t.includes('有') || t.includes('yes')) {
-                        colorClass = 'bg-[#FBE9B6] text-[#93631A] border border-[#F1D791]';
-                        iconHtml = '<i class="fa-solid fa-check text-[10px] mr-1 opacity-70"></i>';
-                    } else if (t.includes('無') || t.includes('no')) {
-                        colorClass = 'bg-[#E3D4F5] text-[#784BAF] border border-[#D1BCEB]';
-                        iconHtml = '<i class="fa-solid fa-xmark text-[10px] mr-1 opacity-70"></i>';
-                    }
-                    
-                    return `<div class="inline-flex items-center px-2 py-[2px] rounded shadow-sm text-[11px] font-bold ${colorClass}">${iconHtml}${trans}</div>`;
                 };
 
                 displayData.forEach((event, index) => {
@@ -431,25 +394,15 @@
                         const isUrl = event.link.startsWith('http');
                         if (isUrl) {
                             linkHtml = `
-                            <a href="${event.link}" target="_blank" class="px-2.5 py-1.5 rounded-md bg-blue-50 dark:bg-blue-950/30 text-blue-600 dark:text-blue-400 text-[11px] font-semibold hover:bg-blue-100 dark:hover:bg-blue-900/50 transition-colors inline-flex justify-center items-center gap-1.5 border border-blue-200/60 dark:border-blue-900/30 mt-3 md:mt-4 w-[110px]">
+                            <a href="${event.link}" target="_blank" class="px-2.5 py-1.5 rounded-md bg-blue-50 dark:bg-blue-950/30 text-blue-600 dark:text-blue-400 text-[11px] font-semibold hover:bg-blue-100 dark:hover:bg-blue-900/50 transition-colors inline-flex justify-center items-center gap-1.5 border border-blue-200/60 dark:border-blue-900/30 mt-3 md:mt-4">
                                 <i class="fa-solid fa-link"></i> Link
                             </a>`;
                         } else {
-                            linkHtml = `<div class="mt-3 text-blue-600 dark:text-blue-400 text-[11px] font-medium p-1.5 bg-blue-50 dark:bg-blue-900/20 rounded-md break-all border border-blue-100 dark:border-blue-800/30 text-center w-[110px]">${event.link}</div>`;
+                            linkHtml = `<div class="mt-3 text-blue-600 dark:text-blue-400 text-[11px] font-medium p-1.5 bg-blue-50 dark:bg-blue-900/20 rounded-md break-all border border-blue-100 dark:border-blue-800/30 text-center">${event.link}</div>`;
                         }
                     }
 
-                    // 處理字串高亮 【 】
-                    let formattedContentEn = event.contentEn;
-                    if(formattedContentEn) {
-                       formattedContentEn = formattedContentEn.replace(/【(.*?)】/g, '<span class="font-bold text-vaccent dark:text-orange-400">【$1】</span>');
-                    }
-                    
-                    let formattedContentZh = event.contentZh;
-                    if(formattedContentZh) {
-                       formattedContentZh = formattedContentZh.replace(/【(.*?)】/g, '<span class="font-bold text-vaccent dark:text-orange-400">【$1】</span>');
-                    }
-
+                    // 這裡改用直播網頁的文字樣式 (text-[13px] md:text-[14px] font-bold vtext leading-snug)
                     card.innerHTML = `
                         <div class="flex-shrink-0 w-full md:w-[185px] flex flex-col justify-center items-center p-4 md:border-r border-vborder/50 dark:border-[#3F3F46] bg-vbg/40 dark:bg-black/10">
                             <div class="flex flex-col items-center text-center">
@@ -457,9 +410,8 @@
                                 <div class="text-[11px] font-medium vmuted dark:dark-mode-muted mt-0.5">${event.dayDisplay || '-'}</div>
                             </div>
                             
-                            <div class="flex flex-col items-center justify-center gap-2 mt-3">
+                            <div class="flex flex-col items-center justify-center gap-2 mt-3 w-full px-2">
                                 ${getTypeBadge(event.type)}
-                                ${getTransBadge(event.translation)}
                             </div>
                             
                             ${linkHtml}
@@ -467,16 +419,14 @@
                         
                         <div class="flex-grow p-4 md:px-6 flex flex-col justify-center">
                             <div class="flex flex-col gap-3">
-                                <div class="flex flex-col w-full gap-2">
+                                <div class="flex flex-col w-full">
                                     <div class="flex flex-col gap-1">
-                                        <div class="text-[10px] font-bold uppercase tracking-wider vmuted dark:dark-mode-muted mb-0.5 flex items-center gap-1.5"><i class="fa-regular fa-file-lines opacity-70"></i> Content</div>
-                                        <p class="text-[13px] md:text-[14px] vtext dark:dark-mode-text leading-[1.65] whitespace-pre-wrap break-words">${formattedContentEn || '<span class="italic opacity-50">N/A</span>'}</p>
+                                        <h3 class="text-[13px] md:text-[14px] font-bold vtext dark:dark-mode-text leading-snug break-words whitespace-pre-wrap">${event.contentEn || '<span class="italic opacity-50">N/A</span>'}</h3>
                                     </div>
                                     
                                     ${event.contentZh ? `
-                                    <div class="border-t border-vborder/30 dark:border-[#3F3F46] pt-2 mt-1">
-                                        <div class="text-[10px] font-bold uppercase tracking-wider vmuted dark:dark-mode-muted mb-0.5 flex items-center gap-1.5"><i class="fa-solid fa-language opacity-70"></i> Mandarin</div>
-                                        <p class="text-[13px] md:text-[14px] vtext dark:dark-mode-text leading-[1.65] whitespace-pre-wrap break-words">${formattedContentZh}</p>
+                                    <div class="mt-2 text-[12px] vmuted dark:dark-mode-muted">
+                                        <span class="flex items-start gap-1"><i class="fa-solid fa-language opacity-70 mt-[3px]"></i> <span class="break-words whitespace-pre-wrap leading-relaxed">${event.contentZh}</span></span>
                                     </div>
                                     ` : ''}
                                 </div>
@@ -484,7 +434,11 @@
                         </div>
                     `;
 
-                    cardWrapper.innerHTML = indicatorHtml;
+                    cardWrapper.appendChild(indicatorHtml ? Object.assign(document.createElement('div'),{innerHTML:indicatorHtml}).firstElementChild : null);
+                    if(indicatorHtml){
+                         cardWrapper.innerHTML = indicatorHtml;
+                    }
+                    
                     cardWrapper.appendChild(card);
                     fragment.appendChild(cardWrapper);
                 });
