@@ -100,6 +100,13 @@
         </section>
 
         <div class="flex flex-col gap-6">
+            <!-- Added Search Bar -->
+            <div class="relative group w-full">
+                <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-vmuted opacity-40 group-focus-within:text-vaccent transition-colors"></i>
+                <input type="text" id="input-search" placeholder="Search ASMR/Patreon titles, content, or types..." 
+                    class="w-full bg-vcard dark:dark-mode-card border border-vborder dark:dark-mode-border rounded-xl pl-11 pr-4 py-3.5 text-sm focus:outline-none focus:ring-1 focus:ring-vaccent/30 focus:border-vaccent/40 transition-all placeholder-vmuted/50 vtext dark:dark-mode-text shadow-sm/30">
+            </div>
+
             <div class="flex flex-wrap items-center justify-between gap-3 text-xs vmuted dark:dark-mode-muted px-1">
                 <div id="sheet-filters" class="flex flex-wrap items-center gap-2"></div>
                 <div id="sync-status" class="font-medium whitespace-nowrap ml-auto"></div>
@@ -137,11 +144,19 @@
             data: [],
             sheets: new Set(),
             currentSheetFilter: null,
+            searchQuery: "",
             refreshTimer: null,
             hasScrolledToToday: false,
 
             init: function() {
-                // Check localStorage cache for instant initial render
+                const searchInput = document.getElementById('input-search');
+                if (searchInput) {
+                    searchInput.addEventListener('input', (e) => {
+                        this.searchQuery = e.target.value.toLowerCase().trim();
+                        this.render();
+                    });
+                }
+
                 const cached = localStorage.getItem('kyrio_asmr_cache');
                 if (cached) {
                     try {
@@ -186,7 +201,6 @@
                     
                     if (result.success) {
                         const rawEvents = result.events || [];
-                        // Save to cache
                         try {
                             localStorage.setItem('kyrio_asmr_cache', JSON.stringify(rawEvents));
                         } catch (err) {
@@ -208,7 +222,7 @@
                             statusText.innerHTML = `▸ <span style="font-weight: 600;">Last Updated</span>: ${dateStr}, ${timeStr}`;
                         }
 
-                        if (!this.hasScrolledToToday) {
+                        if (!this.hasScrolledToToday && !this.searchQuery) {
                             setTimeout(() => {
                                 this.scrollToToday();
                             }, 200);
@@ -314,6 +328,8 @@
                         isFuture = (eventTaipeiStr > todayTaipeiStr);
                     }
 
+                    const rawString = `${dateDisplay} ${typeRaw} ${contentEn} ${contentZh}`.toLowerCase();
+
                     return {
                         originalDate: eventDate,
                         dateDisplay: dateDisplay,
@@ -324,7 +340,8 @@
                         contentZh: contentZh,
                         sheetName: sheetName,
                         isToday: isToday,
-                        isFuture: isFuture
+                        isFuture: isFuture,
+                        rawString: rawString
                     };
                 });
                 
@@ -368,6 +385,10 @@
                     filtered = filtered.filter(e => e.sheetName === this.currentSheetFilter);
                 }
 
+                if (this.searchQuery) {
+                    filtered = filtered.filter(e => e.rawString.includes(this.searchQuery));
+                }
+
                 filtered.sort((a, b) => {
                     if (!a.originalDate) return 1;
                     if (!b.originalDate) return -1;
@@ -384,7 +405,7 @@
                 const displayData = this.getFilteredData();
 
                 if (displayData.length === 0) {
-                    this.showState('<i class="fa-regular fa-folder-open text-vmuted/50 text-4xl mb-2"></i>', 'No records found.｜目前沒有資料');
+                    this.showState('<i class="fa-regular fa-folder-open text-vmuted/50 text-4xl mb-2"></i>', 'No matching records found.｜沒有找到相符的資料');
                     return;
                 }
 
@@ -517,3 +538,4 @@
     </script>
 </body>
 </html>
+```eof
