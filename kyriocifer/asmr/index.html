@@ -141,6 +141,25 @@
             hasScrolledToToday: false,
 
             init: function() {
+                // Check localStorage cache for instant initial render
+                const cached = localStorage.getItem('kyrio_asmr_cache');
+                if (cached) {
+                    try {
+                        const parsedCache = JSON.parse(cached);
+                        if (parsedCache && parsedCache.length > 0) {
+                            this.processData(parsedCache);
+                            if (this.sheets.size > 0) {
+                                this.currentSheetFilter = Array.from(this.sheets)[0];
+                            }
+                            this.renderSheetFilters();
+                            this.render();
+                            setTimeout(() => { this.scrollToToday(); }, 150);
+                        }
+                    } catch (e) {
+                        console.error("Cache load error:", e);
+                    }
+                }
+
                 this.fetchData();
                 this.startAutoRefresh();
             },
@@ -150,7 +169,7 @@
                 if (statusText) statusText.innerText = 'Syncing database...';
 
                 if (this.data.length === 0) {
-                    this.showState('<i class="fa-solid fa-circle-notch fa-spin text-2xl text-vaccent"></i>', 'Loading schedule database...｜讀取行程資料中...');
+                    this.showState('<i class="fa-solid fa-circle-notch fa-spin text-2xl text-vaccent"></i>', 'Loading data, please wait...｜讀取資料中...');
                 }
 
                 try {
@@ -166,7 +185,15 @@
                     }
                     
                     if (result.success) {
-                        this.processData(result.events || []);
+                        const rawEvents = result.events || [];
+                        // Save to cache
+                        try {
+                            localStorage.setItem('kyrio_asmr_cache', JSON.stringify(rawEvents));
+                        } catch (err) {
+                            console.error("Cache save error:", err);
+                        }
+
+                        this.processData(rawEvents);
                         
                         if (!this.currentSheetFilter && this.sheets.size > 0) {
                             this.currentSheetFilter = Array.from(this.sheets)[0];
