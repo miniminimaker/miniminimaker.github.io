@@ -83,7 +83,7 @@
         <section class="flex flex-col gap-4">
             <div class="space-y-0.5">
                 <p class="text-[17px] font-medium vtext dark:dark-mode-text leading-[1.55]">
-                    Archive of Kyrio Cifer’s ASMR/Patreon.
+                    Archive of Kyrio Cifer’s ASMR & Content.
                 </p>
                 <p class="text-[15px] font-normal vtext dark:dark-mode-text leading-[1.6]">
                     收錄Kyrio Cifer的ASMR內容作品。
@@ -128,7 +128,7 @@
         
     <script>
         const CONFIG = {
-            API_URL: "https://script.google.com/macros/s/AKfycbzIYzXXkcKvRKjYnIcIu0zWBMk22AUjov5muYFxOnIOJN4Xn2bgFhSyLNWfv3mdrrc/exec",
+            API_URL: "https://script.google.com/macros/s/AKfycbyfY8c1v349IzpCY-3Wo19iY_UkRVGVZ5vC7nTyejNaSZZ8wa6y-3A1t7iOa82oZMM/exec",
             TIMEZONE: "Asia/Taipei",
             REFRESH_INTERVAL: 5 * 60 * 1000 
         };
@@ -218,7 +218,7 @@
                     
                     const kDate = findKey(['上架時間', 'release', 'date']);
                     const kType = findKey(['類型', 'type']);
-                    const kLink = findKey(['連結', 'link']);
+                    const kLink = findKey(['link', '連結', '網址', 'url']);
                     
                     const kZh = findKey(['內容中譯', 'mandarin']);
                     const kEn = keys.find(k => k.includes('內容') && !k.includes('中譯')) || findKey(['content']);
@@ -275,7 +275,7 @@
                         dateDisplay: dateDisplay,
                         dayDisplay: dayDisplay,
                         type: typeRaw,
-                        link: linkRaw,
+                        link: typeof linkRaw === 'string' ? linkRaw.trim() : '',
                         contentEn: contentEn,
                         contentZh: contentZh,
                         sheetName: sheetName,
@@ -389,10 +389,10 @@
                     
                     let linkHtml = '';
                     if (event.link) {
-                        const isUrl = event.link.startsWith('http');
+                        const isUrl = event.link.startsWith('http://') || event.link.startsWith('https://');
                         if (isUrl) {
                             linkHtml = `
-                            <a href="${event.link}" target="_blank" class="px-2.5 py-1.5 rounded-md bg-blue-50 dark:bg-blue-950/30 text-blue-600 dark:text-blue-400 text-[11px] font-semibold hover:bg-blue-100 dark:hover:bg-blue-900/50 transition-colors inline-flex justify-center items-center gap-1.5 border border-blue-200/60 dark:border-blue-900/30 mt-3 md:mt-4">
+                            <a href="${event.link}" target="_blank" rel="noopener noreferrer" class="px-2.5 py-1.5 rounded-md bg-blue-50 dark:bg-blue-950/30 text-blue-600 dark:text-blue-400 text-[11px] font-semibold hover:bg-blue-100 dark:hover:bg-blue-900/50 transition-colors inline-flex justify-center items-center gap-1.5 border border-blue-200/60 dark:border-blue-900/30 mt-3 md:mt-4">
                                 <i class="fa-solid fa-link"></i> Link
                             </a>`;
                         } else {
@@ -430,11 +430,7 @@
                         </div>
                     `;
 
-                    cardWrapper.appendChild(indicatorHtml ? Object.assign(document.createElement('div'),{innerHTML:indicatorHtml}).firstElementChild : null);
-                    if(indicatorHtml){
-                         cardWrapper.innerHTML = indicatorHtml;
-                    }
-                    
+                    cardWrapper.innerHTML = indicatorHtml;
                     cardWrapper.appendChild(card);
                     fragment.appendChild(cardWrapper);
                 });
