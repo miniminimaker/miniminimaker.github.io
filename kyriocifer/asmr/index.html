@@ -6,7 +6,7 @@
     <link rel="preconnect" href="https://cdnjs.cloudflare.com">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🎙️Kyrio Cifer's Content Archive</title>
+    <title>🎙️Kyrio Cifer's ASMR/Patreon</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -68,7 +68,7 @@
             <div class="flex flex-col">
                 <h1 class="text-[18px] sm:text-[20px] font-bold vtext dark:dark-mode-text leading-[1.25] flex items-center">
                     <span class="mr-2 whitespace-nowrap text-[20px]">🎙️</span>
-                    <span>Kyrio Cifer's Content Archive</span>
+                    <span>Kyrio Cifer's ASMR/Patreon</span>
                 </h1>
                 <p class="text-[12px] font-normal vmuted dark:dark-mode-muted mt-[4px] leading-[1.4]">
                     ‒‒‒‒‒ Made with ♡ by <a href="https://x.com/miniminimaker" target="_blank" class="text-vaccent hover:opacity-80 transition-opacity">miniminimaker</a>
@@ -86,7 +86,7 @@
                     Archive of Kyrio Cifer’s ASMR & Content.
                 </p>
                 <p class="text-[15px] font-normal vtext dark:dark-mode-text leading-[1.6]">
-                    收錄 Kyrio Cifer 歷來的 ASMR 與各類內容作品。
+                    收錄Kyrio Cifer的ASMR內容作品。
                 </p>
            </div>
             <div class="space-y-0.5">
@@ -240,7 +240,6 @@
 
                     if (dateRaw) {
                         let parsedDateString = String(dateRaw);
-                        // Handle YYYY.MM.DD format common in sheets
                         if (parsedDateString.match(/^\d{4}\.\d{2}\.\d{2}$/)) {
                             parsedDateString = parsedDateString.replace(/\./g, '-');
                         }
@@ -304,7 +303,7 @@
                     const activeClass = isActive ? 'bg-vtext dark:bg-white text-vbg dark:text-black shadow-sm' : 'text-vmuted hover:bg-vborder/30 dark:hover:bg-white/5';
                     html += `<button class="filter-btn px-3 py-1.5 rounded-lg text-sm font-semibold transition-colors flex items-center gap-1.5 ${activeClass}" data-sheet="${sheet}">
                                 <i class="fa-regular fa-folder text-xs"></i> ${sheet}
-                             </button>`;
+                           </button>`;
                 });
                 
                 container.innerHTML = html;
@@ -325,7 +324,6 @@
                     filtered = filtered.filter(e => e.sheetName === this.currentSheetFilter);
                 }
 
-                // Ensure it sorts by date, just like the schedule
                 filtered.sort((a, b) => {
                     if (!a.originalDate) return 1;
                     if (!b.originalDate) return -1;
@@ -402,16 +400,11 @@
                         }
                     }
 
-                    // 這裡改用直播網頁的文字樣式 (text-[13px] md:text-[14px] font-bold vtext leading-snug)
                     card.innerHTML = `
                         <div class="flex-shrink-0 w-full md:w-[185px] flex flex-col justify-center items-center p-4 md:border-r border-vborder/50 dark:border-[#3F3F46] bg-vbg/40 dark:bg-black/10">
                             <div class="flex flex-col items-center text-center">
                                 <div class="text-[14px] md:text-[16px] font-bold text-vaccent dark:text-orange-400 tracking-wide">${event.dateDisplay || '-'}</div>
                                 <div class="text-[11px] font-medium vmuted dark:dark-mode-muted mt-0.5">${event.dayDisplay || '-'}</div>
-                            </div>
-                            
-                            <div class="flex flex-col items-center justify-center gap-2 mt-3 w-full px-2">
-                                ${getTypeBadge(event.type)}
                             </div>
                             
                             ${linkHtml}
@@ -420,13 +413,16 @@
                         <div class="flex-grow p-4 md:px-6 flex flex-col justify-center">
                             <div class="flex flex-col gap-3">
                                 <div class="flex flex-col w-full">
-                                    <div class="flex flex-col gap-1">
+                                    <div class="flex flex-col gap-1.5">
+                                        <div class="flex flex-wrap items-center gap-2">
+                                            ${getTypeBadge(event.type)}
+                                        </div>
                                         <h3 class="text-[13px] md:text-[14px] font-bold vtext dark:dark-mode-text leading-snug break-words whitespace-pre-wrap">${event.contentEn || '<span class="italic opacity-50">N/A</span>'}</h3>
                                     </div>
                                     
                                     ${event.contentZh ? `
-                                    <div class="mt-2 text-[12px] vmuted dark:dark-mode-muted">
-                                        <span class="flex items-start gap-1"><i class="fa-solid fa-language opacity-70 mt-[3px]"></i> <span class="break-words whitespace-pre-wrap leading-relaxed">${event.contentZh}</span></span>
+                                    <div class="mt-2 text-[13px] md:text-[14px] font-normal vtext dark:dark-mode-text">
+                                        <span class="flex items-start gap-1.5"><i class="fa-solid fa-language opacity-70 mt-[3px] text-xs"></i> <span class="break-words whitespace-pre-wrap leading-snug">${event.contentZh}</span></span>
                                     </div>
                                     ` : ''}
                                 </div>
