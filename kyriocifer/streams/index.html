@@ -330,7 +330,7 @@
                     const activeClass = isActive ? 'bg-vtext dark:bg-white text-vbg dark:text-black shadow-sm' : 'text-vmuted hover:bg-vborder/30 dark:hover:bg-white/5';
                     html += `<button class="filter-btn px-3 py-1.5 rounded-lg text-sm font-semibold transition-colors flex items-center gap-1.5 ${activeClass}" data-sheet="${sheet}">
                                 <i class="fa-regular fa-folder text-xs"></i> ${sheet}
-                             </button>`;
+                           </button>`;
                 });
                 
                 container.innerHTML = html;
@@ -424,8 +424,10 @@
                     card.innerHTML = `
                         <div class="flex-shrink-0 w-full md:w-[185px] flex flex-col justify-center items-center p-4 md:border-r border-vborder/50 dark:border-[#3F3F46] bg-vbg/40 dark:bg-black/10">
                             <div class="flex flex-col items-center text-center">
-                                <div class="text-[14px] md:text-[16px] font-bold text-vaccent dark:text-orange-400 tracking-wide">${event.dateDisplay || '-'}</div>
-                                <div class="text-[11px] font-medium vmuted dark:dark-mode-muted mt-0.5">${event.dayDisplay || '-'}</div>
+                                <div class="text-[14px] md:text-[16px] font-bold text-vaccent dark:text-orange-400 tracking-wide flex items-center gap-1.5">
+                                    <span>${event.dateDisplay || '-'}</span>
+                                    <span class="text-[11px] font-medium vmuted dark:dark-mode-muted">${event.dayDisplay || '-'}</span>
+                                </div>
                                 ${event.timeDisplay ? `<div class="text-[12px] md:text-[14px] font-bold vtext dark:dark-mode-text mt-2 md:mt-3 bg-vborder/30 dark:bg-white/10 px-2 py-0.5 rounded">${event.timeDisplay}</div>` : ''}
                             </div>
                             
