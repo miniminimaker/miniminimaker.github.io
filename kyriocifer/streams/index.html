@@ -24,7 +24,7 @@
                         vtext: '#4F4538',
                         vmuted: '#8C8273',
                         vaccent: '#B45309',
-                        vlink: '#B45309', // Warm bronze/amber link/accent
+                        vlink: '#B45309',
                         vtranslate: '#658C59',
                     }
                 } 
@@ -81,7 +81,6 @@
 
     <!-- STREAMING_CHUNK:Rendering main container... -->
     <main class="flex-1 max-w-[1400px] w-full mx-auto p-6 md:p-12 flex flex-col gap-12">
-        
         <section class="flex flex-col gap-4">
             <div class="space-y-0.5">
                 <p class="text-[17px] font-medium vtext dark:dark-mode-text leading-[1.55]">
@@ -124,9 +123,9 @@
                 </div>
             </div>
         </div>
-
     </main>
 
+    <!-- STREAMING_CHUNK:Rendering footer section... -->
     <footer class="py-10 px-6 border-t border-vborder/50 dark:dark-mode-border text-center mt-auto">
         <p class="text-[12px] font-normal vmuted dark:dark-mode-muted mt-[4px] leading-[1.4]">
             &copy; 
@@ -136,6 +135,7 @@
         </p>
     </footer>
         
+    <!-- STREAMING_CHUNK:Initializing application logic... -->
     <script>
         const CONFIG = {
             API_URL: "https://script.google.com/macros/s/AKfycbyPCf9bam7EYO5aq6ZXh7YfyvYeV5fleJJK63gQ-kRv5mCcus25mpsat9y5zXISo6ciHg/exec",
@@ -271,7 +271,6 @@
                         };
                     }
 
-                    // Standard Stream Schedule tab logic
                     const dateRaw = event['Date\n日期'] || event['Date 日期'] || event.date || event['日期'] || '';
                     const timeRaw = event['Time(GMT+8)\n時間GMT+8'] || event['Time(GMT+8) 時間GMT+8'] || event.time || event['時間'] || '';
                     
@@ -429,7 +428,6 @@
                     return;
                 }
 
-                // Standard Schedule Layout
                 const fragment = document.createDocumentFragment();
 
                 displayData.forEach(event => {
@@ -533,7 +531,6 @@
 
                 let html = `
                     <div class="flex flex-col gap-8 fade-in">
-                        <!-- Hero Stat Card -->
                         <div class="bg-vcard dark:dark-mode-card border border-vborder/70 dark:dark-mode-border rounded-2xl p-6 md:p-8 shadow-sm flex flex-col md:flex-row items-center justify-between gap-6">
                             <div class="flex items-center gap-4">
                                 <div class="w-14 h-14 rounded-xl bg-vaccent/10 text-vaccent flex items-center justify-center text-2xl font-bold shrink-0">
@@ -562,7 +559,6 @@
                             </div>
                         </div>
 
-                        <!-- Milestone Goals Section -->
                         <div class="flex flex-col gap-4">
                             <div class="flex items-center justify-between px-1">
                                 <h3 class="text-[16px] font-bold vtext dark:dark-mode-text flex items-center gap-2">
@@ -576,9 +572,8 @@
 
                 goals.forEach(r => {
                     const isChecked = r.completed;
-                    // Changed to warm amber/bronze tone (harmonious with site theme)
                     const cardBg = isChecked ? 'bg-amber-50/50 dark:bg-amber-950/20 border-amber-300/70 dark:border-amber-900/40' : 'bg-vcard dark:dark-mode-card border-vborder/70 dark:dark-mode-border';
-                    const checkIcon = isChecked ? '<i class="fa-solid fa-circle-check text-amber-700 dark:text-amber-400"></i>' : '<i class="fa-regular fa-circle text-vmuted/40"></i>';
+                    const checkIcon = isChecked ? '<i class="fa-solid fa-circle-check text-amber-700 dark:text-amber-400"></i>' : '';
                     
                     const daysReachedHtml = r.daysReached ? `<span><i class="fa-solid fa-flag-checkered text-vaccent mr-1"></i> ${r.daysReached}</span>` : '';
 
@@ -613,7 +608,6 @@
                         </div>
                 `;
 
-                // Top Gifters Section
                 if (topGifters.length > 0) {
                     html += `
                         <div class="flex flex-col gap-4 mt-2">
@@ -663,7 +657,6 @@
                     `;
                 }
 
-                // Daily Progress Log Section
                 html += `
                         <div class="flex flex-col gap-4 mt-2">
                             <div class="flex items-center justify-between px-1">
@@ -690,8 +683,8 @@
                     html += `
                         <tr class="hover:bg-vbg/30 dark:hover:bg-white/5 transition-colors">
                             <td class="py-3.5 px-5 font-medium vtext dark:dark-mode-text text-center">${row.dateRaw || '-'}</td>
-                            <td class="py-3.5 px-5 font-semibold text-vaccent text-center">${row.days || '-'}</td>
-                            <td class="py-3.5 px-5 font-bold vtext dark:dark-mode-text text-center">${row.totalSubs ? Number(String(row.totalSubs).replace(/,/g, '')).toLocaleString() : '-'}</td>
+                            <td class="py-3.5 px-5 font-normal text-vaccent text-center">${row.days || '-'}</td>
+                            <td class="py-3.5 px-5 font-normal vtext dark:dark-mode-text text-center">${row.totalSubs ? Number(String(row.totalSubs).replace(/,/g, '')).toLocaleString() : '-'}</td>
                             <td class="py-3.5 px-5 vmuted dark:dark-mode-muted text-center">${row.streamHours || '-'}</td>
                         </tr>
                     `;
