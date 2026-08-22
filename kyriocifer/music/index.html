@@ -61,7 +61,6 @@
                 <img src="logo.png" alt="Logo" class="w-9 h-9 object-contain">
             </a>
             <div class="flex flex-col">
-            <div class="flex flex-col">
                 <h1 class="text-[18px] sm:text-[20px] font-bold vtext dark:dark-mode-text leading-[1.25] flex items-center">
                     <span class="mr-2 whitespace-nowrap text-[20px]">🎵</span>
                     <span>Kyrio Cifer's Stream Music Playlist</span>
@@ -167,6 +166,10 @@
         window.currentLetterFilter = 'ALL';
         window.songsData = [];
 
+        const DOM = {
+            updatedText: document.getElementById('last-sync-time')
+        };
+
         window.onload = function() {
             window.fetchSongsFromBackend();
         };
@@ -210,13 +213,16 @@
 
                     window.songsData = window.sortSongs(normalizedSongs);
                     
-                    if (syncTimeEl && result.lastSynced) {
-                        const d = new Date(result.lastSynced);
-                        const dateStr = d.toLocaleDateString('en-US', { month: '2-digit', day: '2-digit' });
-                        const timeStr = d.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
-                        syncTimeEl.innerHTML = `▸ Last Updated: ${dateStr}, ${timeStr}`;
-                    } else if (syncTimeEl) {
-                        syncTimeEl.innerHTML = `▸ Last Updated: Just now`;
+                    if (DOM.updatedText) {
+                        if (result.lastSynced) {
+                            const dateObj = new Date(result.lastSynced);
+                            const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+                            const day = String(dateObj.getDate()).padStart(2, '0');
+                            const time = dateObj.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
+                            DOM.updatedText.innerText = `▸ Last Updated: ${month}/${day}, ${time}`;
+                        } else {
+                            DOM.updatedText.innerText = `▸ Last Updated: Just now`;
+                        }
                     }
                     
                     window.buildAlphabetNav();
@@ -369,4 +375,3 @@
     </script>
 </body>
 </html>
-```eof
