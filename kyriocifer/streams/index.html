@@ -115,7 +115,7 @@
 
             <div class="flex flex-wrap items-center justify-between gap-3 text-xs vmuted dark:dark-mode-muted px-1">
                 <div id="sheet-filters" class="flex flex-wrap items-center gap-2"></div>
-                <div id="sync-status" class="font-medium"></div>
+                <div id="sync-status" class="font-medium hidden"></div>
             </div>
         </div>
 
@@ -145,10 +145,6 @@
             REFRESH_INTERVAL: 5 * 60 * 1000 
         };
 
-        const DOM = {
-            updatedText: document.getElementById('sync-status')
-        };
-
         const app = {
             data: [],
             sheets: new Set(),
@@ -171,8 +167,6 @@
             },
 
             fetchData: async function(isManual = false) {
-                if (DOM.updatedText) DOM.updatedText.innerText = 'Syncing database...';
-
                 if (this.data.length === 0) {
                     this.showState('<i class="fa-solid fa-circle-notch fa-spin text-2xl text-vaccent"></i>', 'Loading data, please wait…｜讀取資料請稍後...');
                 }
@@ -191,14 +185,6 @@
                         this.renderSheetFilters();
                         this.render();
 
-                        if (DOM.updatedText) {
-                            const d = result.lastSynced ? new Date(result.lastSynced) : new Date();
-                            const month = String(d.getMonth() + 1).padStart(2, '0');
-                            const day = String(d.getDate()).padStart(2, '0');
-                            const timeStr = d.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
-                            DOM.updatedText.innerText = `▸ Last Updated: ${month}/${day}, ${timeStr}`;
-                        }
-
                         if (!this.hasScrolledToToday && !this.isSubathonTab(this.currentSheetFilter) && !this.searchQuery) {
                             setTimeout(() => {
                                 this.scrollToToday();
@@ -212,7 +198,6 @@
                     if (this.data.length === 0) {
                         this.showState('<i class="fa-solid fa-triangle-exclamation text-rose-600 dark:text-rose-400 text-3xl"></i>', 'Unable to load schedule.<br>Please try again later.');
                     }
-                    if (DOM.updatedText) DOM.updatedText.innerText = 'Sync failed';
                 }
             },
 
@@ -399,7 +384,7 @@
                     const activeClass = isActive ? 'bg-vtext dark:bg-white text-vbg dark:text-black shadow-sm' : 'text-vmuted hover:bg-vborder/30 dark:hover:bg-white/5';
                     const iconClass = this.isSubathonTab(sheet) ? 'fa-solid fa-fire-flame-curved' : 'fa-regular fa-folder';
                     
-                    html += `<button class="filter-btn px-3 py-1.5 rounded-lg text-sm font-semibold transition-colors flex items-center gap-1.5 ${activeClass}" data-sheet="${sheet}">
+                    html += `<button class="filter-btn px-3.5 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-colors flex items-center gap-1.5 ${activeClass}" data-sheet="${sheet}">
                                 <i class="${iconClass} text-xs"></i> ${sheet}
                            </button>`;
                 });
