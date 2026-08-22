@@ -42,8 +42,6 @@
             line-height: 1.6;
             vertical-align: middle;
         }
-        .data-text { font-size: 12px; font-weight: 400; color: #4F4538; font-style: normal; }
-        .table-header-text { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: #8C8273; }
 
         @media (prefers-color-scheme: dark) {
             .dark-mode-bg { background-color: #1C1917 !important; }
@@ -67,7 +65,7 @@
     <header class="border-b border-vborder/50 dark:dark-mode-border glass-panel sticky top-0 z-30 px-6 py-[18px] flex flex-wrap gap-4 items-center justify-between shadow-sm/5">
         <div class="flex items-center space-x-4">
             <a href="https://miniminimaker.github.io/kyriocifer/" class="w-11 h-11 rounded-xl bg-[#F8F5EF] border border-[#E5DED3] flex items-center justify-center overflow-hidden hover:opacity-90 transition-opacity">
-                <img src="logo.png" alt="Logo" class="w-9 h-9 object-contain">
+                <img src="logo.png" alt="Logo" class="w-9 h-9 object-contain" onerror="this.src='https://placehold.co/36x36/F0EBE3/4F4538?text=KC'">
             </a>
             <div class="flex flex-col">
                 <h1 class="text-[18px] sm:text-[20px] font-bold vtext dark:dark-mode-text leading-[1.25] flex items-center">
@@ -130,12 +128,12 @@
                 <table class="table-fixed-layout text-left min-w-[950px]">
                     <thead id="table-head">
                         <tr class="h-[72px] bg-vbg/40 dark:bg-black/20 border-b border-vborder/50 dark:dark-mode-border">
-                            <th class="px-4 table-header-text w-[35%] text-center">Game</th>
-                            <th class="px-4 table-header-text w-[32%] text-center">遊戲</th>
-                            <th class="px-4 table-header-text w-[10%] text-center">Collab｜連動</th>
-                            <th class="px-3 table-header-text w-[8%] text-center">Kyrio Cifer 2.0</th>
-                            <th class="px-3 table-header-text w-[8%] text-center">Hex Haywire</th>
-                            <th class="px-3 table-header-text w-[7%] text-center">Kyrio Cifer 1.0</th>
+                            <th class="px-4 text-[12px] font-semibold text-vmuted uppercase tracking-wide w-[35%] text-center">Game</th>
+                            <th class="px-4 text-[12px] font-semibold text-vmuted uppercase tracking-wide w-[32%] text-center">遊戲</th>
+                            <th class="px-4 text-[12px] font-semibold text-vmuted uppercase tracking-wide w-[10%] text-center">Collab｜連動</th>
+                            <th class="px-3 text-[12px] font-semibold text-vmuted uppercase tracking-wide w-[8%] text-center">Kyrio Cifer 2.0</th>
+                            <th class="px-3 text-[12px] font-semibold text-vmuted uppercase tracking-wide w-[8%] text-center">Hex Haywire</th>
+                            <th class="px-3 text-[12px] font-semibold text-vmuted uppercase tracking-wide w-[7%] text-center">Kyrio Cifer 1.0</th>
                         </tr>
                     </thead>
                     <tbody id="table-body">
@@ -143,7 +141,7 @@
                             <td colspan="6" class="py-24 text-center">
                                 <div class="flex flex-col items-center justify-center gap-3">
                                     <i class="fa-solid fa-circle-notch fa-spin text-2xl text-vaccent"></i>
-                                    <span class="text-sm font-medium vtext dark:dark-mode-text">Loading data, please wait…｜讀取資料請稍後...</span>
+                                    <span class="text-[12px] font-medium vtext dark:dark-mode-text">Loading data, please wait…｜讀取資料請稍後...</span>
                                 </div>
                             </td>
                         </tr>
@@ -281,12 +279,12 @@
             if (DOM.tableHead && AppState.dynamicEras.length >= 3) {
                 DOM.tableHead.innerHTML = `
                     <tr class="h-[72px] bg-vbg/40 dark:bg-black/20 border-b border-vborder/50 dark:dark-mode-border">
-                        <th class="py-5 px-4 table-header-text w-[35%] text-center">Game</th>
-                        <th class="py-5 px-4 table-header-text w-[32%] text-center">遊戲</th>
-                        <th class="py-5 px-4 table-header-text w-[10%] text-center">Collab｜連動</th>
-                        <th class="py-5 px-3 table-header-text w-[8%] text-center">${AppState.dynamicEras[0].name}</th>
-                        <th class="py-5 px-3 table-header-text w-[8%] text-center">${AppState.dynamicEras[1].name}</th>
-                        <th class="py-5 px-3 table-header-text w-[7%] text-center">${AppState.dynamicEras[2].name}</th>
+                        <th class="py-5 px-4 text-[12px] font-semibold text-vmuted uppercase tracking-wide w-[35%] text-center">Game</th>
+                        <th class="py-5 px-4 text-[12px] font-semibold text-vmuted uppercase tracking-wide w-[32%] text-center">遊戲</th>
+                        <th class="py-5 px-4 text-[12px] font-semibold text-vmuted uppercase tracking-wide w-[10%] text-center">Collab｜連動</th>
+                        <th class="py-5 px-3 text-[12px] font-semibold text-vmuted uppercase tracking-wide w-[8%] text-center">${AppState.dynamicEras[0].name}</th>
+                        <th class="py-5 px-3 text-[12px] font-semibold text-vmuted uppercase tracking-wide w-[8%] text-center">${AppState.dynamicEras[1].name}</th>
+                        <th class="py-5 px-3 text-[12px] font-semibold text-vmuted uppercase tracking-wide w-[7%] text-center">${AppState.dynamicEras[2].name}</th>
                     </tr>
                 `;
             }
@@ -347,8 +345,9 @@
                 const tr = document.createElement('tr');
                 tr.className = 'hover:bg-vcard/60 dark:hover:bg-[#2C2C30] transition-colors border-b border-vborder/30 dark:border-[#3F3F46] group';
                 
+                // 這裡也加入 justify-center，讓連動圖示置中對齊標題
                 const collabHtml = game.collab !== '—'
-                    ? `<div class="flex items-center gap-2"><i class="fa-solid fa-user-group text-[10px] text-vmuted/60"></i><span class="opacity-90">${game.collab}</span></div>`
+                    ? `<div class="flex items-center justify-center gap-1.5"><i class="fa-solid fa-user-group text-[10px] text-vmuted/60"></i><span class="opacity-90">${game.collab}</span></div>`
                     : `<span class="text-vmuted/40">—</span>`;
 
                 let personaCellsHtml = '';
@@ -362,18 +361,20 @@
                         };
 
                         const markHtml = isChecked
-                            ? `<i class="fa-solid fa-check font-bold text-sm" style="color: ${eraColors[era.name] || '#B45309'};"></i>`
+                            ? `<i class="fa-solid fa-check font-bold text-[14px]" style="color: ${eraColors[era.name] || '#B45309'};"></i>`
                             : `<span class="text-vmuted/20">—</span>`;
-                        personaCellsHtml += `<td class="py-4 px-3 text-center data-text">${markHtml}</td>`;
+                        // 統一使用 text-[12px]
+                        personaCellsHtml += `<td class="py-4 px-3 text-[12px] text-center">${markHtml}</td>`;
                     });
                 } else {
-                    personaCellsHtml = `<td colspan="3" class="py-4 px-3 text-center text-vmuted/40">—</td>`;
+                    personaCellsHtml = `<td colspan="3" class="py-4 px-3 text-[12px] text-center text-vmuted/40">—</td>`;
                 }
 
+                // 將所有 td 強制加上 text-[12px] 以覆寫任何預設值
                 tr.innerHTML = `
-                    <td class="py-4 px-4 data-text cell-wrap-text dark:dark-mode-text text-center">${game.name}</td>
-                    <td class="py-4 px-4 data-text cell-wrap-text dark:dark-mode-text text-center">${game.chineseName !== '—' ? `<span class="opacity-90">${game.chineseName}</span>` : `<span class="text-vmuted/40">—</span>`}</td>
-                    <td class="py-4 px-4 data-text cell-wrap-text dark:dark-mode-text ">${collabHtml}</td>
+                    <td class="py-4 px-4 text-[12px] font-normal vtext cell-wrap-text dark:dark-mode-text text-center">${game.name}</td>
+                    <td class="py-4 px-4 text-[12px] font-normal vtext cell-wrap-text dark:dark-mode-text text-center">${game.chineseName !== '—' ? `<span class="opacity-90">${game.chineseName}</span>` : `<span class="text-vmuted/40">—</span>`}</td>
+                    <td class="py-4 px-4 text-[12px] font-normal vtext cell-wrap-text dark:dark-mode-text text-center">${collabHtml}</td>
                     ${personaCellsHtml}
                 `;
                 fragment.appendChild(tr);
