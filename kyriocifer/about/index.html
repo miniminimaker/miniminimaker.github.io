@@ -6,7 +6,7 @@
     <link rel="preconnect" href="https://cdnjs.cloudflare.com">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>📅 Kyrio Cifer's stream schedule & notes</title>
+    <title>✨ Get to Know Kyrio Cifer</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -67,18 +67,13 @@
             </a>
             <div class="flex flex-col">
                 <h1 class="text-[18px] sm:text-[20px] font-bold vtext dark:dark-mode-text leading-[1.25] flex items-center">
-                    <span class="mr-2 whitespace-nowrap text-[20px]">📅</span>
-                    <span>Kyrio Cifer's Stream Schedule & Notes</span>
+                    <span class="mr-2 whitespace-nowrap text-[20px]">✨</span>
+                    <span>Get to Know Kyrio Cifer</span>
                 </h1>
                 <p class="text-[12px] font-normal vmuted dark:dark-mode-muted mt-[4px] leading-[1.4]">
                     ‒‒‒‒‒ Made with ♡ by <a href="https://x.com/miniminimaker" target="_blank" class="text-vaccent hover:opacity-80 transition-opacity">miniminimaker</a>
                 </p>
             </div>
-        </div>
-        <div class="flex items-center gap-2">
-            <button onclick="app.fetchData(true)" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-vcard dark:dark-mode-card border border-vborder dark:dark-mode-border vtext dark:dark-mode-text hover:bg-vborder/30 transition-all flex items-center gap-1.5 shadow-sm">
-                <i class="fa-solid fa-rotate"></i> 更新資料
-            </button>
         </div>
     </header>
 
@@ -86,23 +81,26 @@
         <section class="flex flex-col gap-4">
             <div class="space-y-0.5">
                 <p class="text-[17px] font-medium vtext dark:dark-mode-text leading-[1.55]">
-                    Archive of Kyrio Cifer’s stream schedule and notes, with all times displayed in UTC+8.
+                    Channel information, stream guidelines, notes, and milestones about Kyrio Cifer.
                 </p>
                 <p class="text-[15px] font-normal vtext dark:dark-mode-text leading-[1.6]">
-                    收錄Kyrio Cifer歷來的直播行程與重要記事，時間顯示為UTC+8。
+                    關於Kyrio Cifer的頻道資訊、直播規範、重要記事與里程碑。
                 </p>
             </div>
             <div class="space-y-0.5">
-                <p class="text-[12px] font-normal vmuted dark:dark-mode-muted leading-[1.5]">
-                    This is an unofficial website for reference only. | 本網站為非官方網站，僅供參考。
-                </p>
+                <p class="text-[12px] font-normal vmuted dark:dark-mode-muted leading-[1.5]">This is an unofficial website for reference only.</p>
+                <p class="text-[12px] font-normal vmuted dark:dark-mode-muted leading-[1.5]">本網站為非官方網站，僅供參考。</p>
+            </div>
+            <div class="space-y-0.5">
+                <p class="text-[12px] font-normal vmuted dark:dark-mode-muted leading-[1.5]">Please let me know if you spot any errors or incorrect information.</p>
+                <p class="text-[12px] font-normal vmuted dark:dark-mode-muted leading-[1.5]">如發現資料錯誤或需要更正，歡迎聯繫通知。</p>
             </div>
         </section>
 
         <div class="flex flex-col gap-6">
             <div class="relative group w-full" id="search-bar-wrapper">
                 <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-vmuted opacity-40 group-focus-within:text-vaccent transition-colors"></i>
-                <input type="text" id="input-search" placeholder="Search streams, titles, notes, or milestones..." 
+                <input type="text" id="input-search" placeholder="Search info, rules, guidelines, notes, or milestones..." 
                     class="w-full bg-vcard dark:dark-mode-card border border-vborder dark:dark-mode-border rounded-xl pl-11 pr-4 py-3.5 text-sm focus:outline-none focus:ring-1 focus:ring-vaccent/30 focus:border-vaccent/40 transition-all placeholder-vmuted/50 vtext dark:dark-mode-text shadow-sm/30">
             </div>
 
@@ -116,7 +114,7 @@
             <div id="state-message" class="py-24 text-center bg-vcard dark:dark-mode-card rounded-xl border border-vborder/70 dark:dark-mode-border shadow-sm">
                 <div class="flex flex-col items-center justify-center gap-3">
                     <i class="fa-solid fa-circle-notch fa-spin text-2xl text-vaccent"></i>
-                    <span class="text-sm font-medium vtext dark:dark-mode-text">Loading data, please wait...｜讀取資料中...</span>
+                    <span class="text-sm font-medium vtext dark:dark-mode-text">Loading data, please wait…｜讀取資料請稍後...</span>
                 </div>
             </div>
         </div>
@@ -189,9 +187,9 @@
                         throw new Error("API returned failure status.");
                     }
                 } catch (err) {
-                    console.error("Schedule Fetch Error:", err);
+                    console.error("Data Fetch Error:", err);
                     if (this.data.length === 0) {
-                        this.showState('<i class="fa-solid fa-triangle-exclamation text-rose-600 dark:text-rose-400 text-3xl"></i>', 'Unable to load schedule.<br>Please try again later.');
+                        this.showState('<i class="fa-solid fa-triangle-exclamation text-rose-600 dark:text-rose-400 text-3xl"></i>', 'Unable to load data.<br>Please try again later.');
                     }
                     if (statusText) statusText.innerText = 'Sync failed';
                 }
@@ -222,10 +220,12 @@
                         return {
                             sheetName,
                             isStreamInfo: true,
+                            isSectionHeader: event.isSectionHeader || false,
                             sectionTitle: event.sectionTitle || '',
+                            sectionTitleZh: event.sectionTitleZh || '',
                             contentEn: event.contentEn || '',
                             contentZh: event.contentZh || '',
-                            rawString: `${event.sectionTitle} ${event.contentEn} ${event.contentZh}`.toLowerCase()
+                            rawString: `${event.sectionTitle} ${event.sectionTitleZh} ${event.contentEn} ${event.contentZh}`.toLowerCase()
                         };
                     }
 
@@ -247,7 +247,7 @@
 
                     const dateRaw = event['Date\n日期'] || event['Date 日期'] || event.date || event['日期'] || '';
                     const timeRaw = event['Time(GMT+8)\n時間GMT+8'] || event['Time(GMT+8) 時間GMT+8'] || event.time || event['時間'] || '';
-                    let title = event['Stream title\n直播標題'] || event['Stream title 直播標題'] || event['Content'] || event['內容'] || 'Untitled Stream';
+                    let title = event['Stream title\n直播標題'] || event['Stream title 直播標題'] || event['Content'] || event['內容'] || 'Untitled';
                     const contentEn = event['Content'] || '';
                     const contentZh = event['內容'] || '';
                     const game = [contentEn, contentZh].filter(Boolean).join(' | ');
@@ -330,7 +330,7 @@
                     if (this.isNotesTab(sheet)) iconClass = 'fa-solid fa-note-sticky';
                     if (this.isStreamInfoTab(sheet)) iconClass = 'fa-solid fa-circle-info';
                     
-                    html += `<button class="filter-btn px-3 py-1.5 rounded-lg text-sm font-semibold transition-colors flex items-center gap-1.5 ${activeClass}" data-sheet="${sheet}">
+                    html += `<button class="filter-btn px-3.5 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-colors flex items-center gap-1.5 ${activeClass}" data-sheet="${sheet}">
                                 <i class="${iconClass} text-xs"></i> ${sheet}
                            </button>`;
                 });
@@ -362,14 +362,7 @@
 
             render: function() {
                 const container = document.getElementById('schedule-container');
-                const searchWrapper = document.getElementById('search-bar-wrapper');
                 if (!container) return;
-
-                if (this.isStreamInfoTab(this.currentSheetFilter)) {
-                    if (searchWrapper) searchWrapper.style.display = 'none';
-                } else {
-                    if (searchWrapper) searchWrapper.style.display = 'block';
-                }
 
                 const displayData = this.getFilteredData();
 
@@ -433,33 +426,35 @@
             },
 
             renderStreamInfoView: function(container, data) {
-                let html = `
-                    <div class="flex flex-col gap-8 fade-in">
-                        <div class="bg-vcard dark:dark-mode-card border border-vborder/70 dark:dark-mode-border rounded-2xl p-6 md:p-8 shadow-sm flex items-center gap-4">
-                            <div class="w-12 h-12 rounded-xl bg-vaccent/10 text-vaccent flex items-center justify-center text-xl font-bold shrink-0">
-                                <i class="fa-solid fa-circle-info"></i>
-                            </div>
-                            <div class="flex flex-col">
-                                <h2 class="text-[20px] font-bold vtext dark:dark-mode-text">Stream Info & Guidelines｜直播資訊與規範</h2>
-                                <p class="text-[13px] vmuted dark:dark-mode-muted mt-0.5">Essential channel information, rules, and support links.</p>
-                            </div>
-                        </div>
-                        <div class="flex flex-col gap-6">
-                `;
+                let html = `<div class="flex flex-col gap-6 fade-in">`;
 
                 data.forEach(item => {
-                    html += `
-                        <div class="bg-vcard dark:dark-mode-card border border-vborder/70 dark:dark-mode-border rounded-2xl p-6 md:p-8 flex flex-col gap-4 shadow-sm hover:shadow transition-all">
-                            ${item.sectionTitle ? `<div class="text-[15px] font-bold text-vaccent dark:text-orange-400 bg-vaccent/10 px-3.5 py-1.5 rounded-lg w-fit tracking-wide">${item.sectionTitle}</div>` : ''}
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
-                                <div class="text-[14px] vtext dark:dark-mode-text cell-wrap-text font-medium pr-0 md:pr-4">${item.contentEn || ''}</div>
-                                <div class="text-[14px] vmuted dark:dark-mode-muted cell-wrap-text border-t md:border-t-0 md:border-l border-vborder/60 dark:border-white/10 pt-4 md:pt-0 md:pl-6">${item.contentZh || ''}</div>
+                    if (item.isSectionHeader) {
+                        html += `
+                            <div class="bg-vcard dark:dark-mode-card border border-vborder/70 dark:dark-mode-border rounded-2xl p-6 md:p-8 shadow-sm flex items-center gap-4 mt-6 first:mt-0">
+                                <div class="w-12 h-12 rounded-xl bg-vaccent/10 text-vaccent flex items-center justify-center text-xl font-bold shrink-0">
+                                    <i class="fa-solid fa-circle-info"></i>
+                                </div>
+                                <div class="flex flex-col">
+                                    <h2 class="text-[20px] font-bold vtext dark:dark-mode-text">${item.sectionTitle || ''}</h2>
+                                    ${item.sectionTitleZh ? `<p class="text-[13px] vmuted dark:dark-mode-muted mt-0.5">${item.sectionTitleZh}</p>` : ''}
+                                </div>
                             </div>
-                        </div>
-                    `;
+                        `;
+                    } else {
+                        html += `
+                            <div class="bg-vcard dark:dark-mode-card border border-vborder/70 dark:dark-mode-border rounded-2xl p-6 md:p-8 flex flex-col gap-4 shadow-sm hover:shadow transition-all">
+                                ${item.sectionTitle ? `<div class="text-[14px] font-bold text-vaccent dark:text-orange-400 bg-vaccent/10 px-3 py-1 rounded-lg w-fit tracking-wide">${item.sectionTitle}</div>` : ''}
+                                <div class="flex flex-col gap-3 pt-1">
+                                    <div class="text-[14px] vtext dark:dark-mode-text cell-wrap-text font-semibold">${item.contentEn || ''}</div>
+                                    ${item.contentZh ? `<div class="text-[13px] vmuted dark:dark-mode-muted cell-wrap-text font-normal pt-2 border-t border-vborder/40 dark:border-white/5">${item.contentZh}</div>` : ''}
+                                </div>
+                            </div>
+                        `;
+                    }
                 });
 
-                html += `</div></div>`;
+                html += `</div>`;
                 container.innerHTML = html;
             },
 
