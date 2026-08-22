@@ -184,6 +184,18 @@
                 }
             },
 
+            isNotesTab: function(sheetName) {
+                if (!sheetName) return false;
+                const lower = sheetName.toLowerCase();
+                return lower.includes('notes') || lower.includes('記事');
+            },
+
+            isStreamInfoTab: function(sheetName) {
+                if (!sheetName) return false;
+                const lower = sheetName.toLowerCase();
+                return lower.includes('stream info') || lower.includes('直播資訊');
+            },
+
             processData: function(rawEvents) {
                 this.sheets.clear();
                 this.data = rawEvents.map(event => {
@@ -212,9 +224,9 @@
                     
                     let iconClass = 'fa-regular fa-folder';
                     const lower = sheet.toLowerCase();
-                    if (lower.includes('about') || lower.includes('關於')) iconClass = 'fa-solid fa-circle-info';
-                    else if (lower.includes('link') || lower.includes('相關連結')) iconClass = 'fa-solid fa-link';
-                    else if (lower.includes('tag') || lower.includes('標籤')) iconClass = 'fa-solid fa-hashtag';
+                    if (lower.includes('about') || lower.includes('links') || lower.includes('tag')) iconClass = 'fa-solid fa-circle-info';
+                    else if (this.isNotesTab(sheet)) iconClass = 'fa-solid fa-note-sticky';
+                    else if (this.isStreamInfoTab(sheet)) iconClass = 'fa-solid fa-circle-info';
                     
                     html += `<button class="filter-btn px-3.5 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-colors flex items-center gap-1.5 ${activeClass}" data-sheet="${sheet}">
                                 <i class="${iconClass} text-xs"></i> ${sheet}
@@ -241,7 +253,7 @@
 
                 if (this.searchQuery) {
                     filtered = filtered.filter(e => {
-                        const str = `${e.sectionTitle || ''} ${e.labelLeftEn || ''} ${e.valueLeft || ''} ${e.labelRightEn || ''} ${e.valueRight || ''}`.toLowerCase();
+                        const str = `${e.sectionTitle || ''} ${e.labelLeftEn || ''} ${e.valueLeft || ''} ${e.labelRightEn || ''} ${e.valueRight || ''} ${e.contentEn || ''} ${e.contentZh || ''}`.toLowerCase();
                         return str.includes(this.searchQuery);
                     });
                 }
@@ -261,17 +273,87 @@
                 }
 
                 container.innerHTML = '';
+
+                if (this.isStreamInfoTab(this.currentSheetFilter)) {
+                    this.renderStreamInfoView(container, displayData);
+                    return;
+                }
+
+                if (this.isNotesTab(this.currentSheetFilter)) {
+                    this.renderNotesView(container, displayData);
+                    return;
+                }
+
                 let html = `<div class="flex flex-col gap-6 fade-in">`;
-                
-                let currentHeader = '';
+                let isGridStarted = false;
 
                 displayData.forEach(item => {
                     if (item.isMultiSectionHeader) {
-                        currentHeader = item.sectionTitle;
+                        if (isGridStarted) {
+                            html += `</div>`;
+                            isGridStarted = false;
+                        }
+                        html += `
+                            <div class="bg-vcard dark:dark-mode-card border border-vborder/70 dark:dark-mode-border rounded-2xl p-5 md:p-6 shadow-sm flex items-center gap-4 mt-6 first:mt-0">
+                                <div class="w-10 h-10 rounded-xl bg-vaccent/10 text-vaccent flex items-center justify-center text-lg font-bold shrink-0">
+                                    <i class="fa-solid fa-folder-open"></i>
+                                </div>
+                                <div class="flex flex-col">
+                                    <h2 class="text-[18px] font-bold vtext dark:dark-mode-text">${item.sectionTitle || ''}</h2>
+                                    ${item.sectionTitleZh ? `<p class="text-[12px] vmuted dark:dark-mode-muted mt-0.5">${item.sectionTitleZh}</p>` : ''}
+                                </div>
+                            </div>
+                        `;
+                    } else if (item.isMultiSectionItem) {
+                        if (!isGridStarted) {
+                            html += `<div class="grid grid-cols-1 md:grid-cols-2 gap-3.5">`;
+                            isGridStarted = true;
+                        }
+
+                        const renderCell = (label, val) => {
+                            if (!label && !val) return '';
+                            const isUrl = String(val).trim().startsWith('http');
+                            const isEmail = String(val).trim().includes('@');
+                            let valHtml = val || '';
+                            if (isUrl) {
+                                valHtml = `<a href="${val}" target="_blank" class="text-vaccent hover:underline break-all inline-flex items-center gap-1.5"><i class="fa-solid fa-link text-xs"></i> ${val}</a>`;
+                            } else if (isEmail) {
+                                valHtml = `<a href="mailto:${val}" class="text-vaccent hover:underline break-all inline-flex items-center gap-1.5"><i class="fa-solid fa-envelope text-xs"></i> ${val}</a>`;
+                            }
+
+                            return `
+                                <div class="bg-vcard dark:dark-mode-card border border-vborder/70 dark:dark-mode-border rounded-xl p-4 flex flex-col justify-center gap-1.5 shadow-sm hover:shadow transition-all">
+                                    ${label ? `<div class="text-[11px] font-bold text-vaccent dark:text-orange-400 bg-vaccent/10 px-2.5 py-0.5 rounded-md w-fit tracking-wide">${label}</div>` : ''}
+                                    <div class="text-[13px] vtext dark:dark-mode-text cell-wrap-text font-semibold">${valHtml}</div>
+                                </div>
+                            `;
+                        };
+
+                        if (item.labelLeftEn || item.valueLeft) {
+                            html += renderCell(item.labelLeftEn, item.valueLeft);
+                        }
+                        if (item.labelRightEn || item.valueRight) {
+                            html += renderCell(item.labelRightEn, item.valueRight);
+                        }
+                    }
+                });
+
+                if (isGridStarted) {
+                    html += `</div>`;
+                }
+
+                html += `</div>`;
+                container.innerHTML = html;
+            },
+
+            renderStreamInfoView: function(container, data) {
+                let html = `<div class="flex flex-col gap-6 fade-in">`;
+                data.forEach(item => {
+                    if (item.isSectionHeader) {
                         html += `
                             <div class="bg-vcard dark:dark-mode-card border border-vborder/70 dark:dark-mode-border rounded-2xl p-6 md:p-8 shadow-sm flex items-center gap-4 mt-6 first:mt-0">
                                 <div class="w-12 h-12 rounded-xl bg-vaccent/10 text-vaccent flex items-center justify-center text-xl font-bold shrink-0">
-                                    <i class="fa-solid fa-folder-open"></i>
+                                    <i class="fa-solid fa-circle-info"></i>
                                 </div>
                                 <div class="flex flex-col">
                                     <h2 class="text-[20px] font-bold vtext dark:dark-mode-text">${item.sectionTitle || ''}</h2>
@@ -279,53 +361,60 @@
                                 </div>
                             </div>
                         `;
-                    } else if (item.isMultiSectionItem) {
-                        const hasLeft = item.labelLeftEn || item.valueLeft;
-                        const hasRight = item.labelRightEn || item.valueRight;
-
-                        html += `<div class="grid grid-cols-1 md:grid-cols-2 gap-4">`;
-
-                        if (hasLeft) {
-                            const isUrl = String(item.valueLeft).trim().startsWith('http');
-                            const isEmail = String(item.valueLeft).trim().includes('@');
-                            let valHtml = item.valueLeft || '';
-                            if (isUrl) {
-                                valHtml = `<a href="${item.valueLeft}" target="_blank" class="text-vaccent hover:underline break-all flex items-center gap-1.5"><i class="fa-solid fa-link text-xs"></i> ${item.valueLeft}</a>`;
-                            } else if (isEmail) {
-                                valHtml = `<a href="mailto:${item.valueLeft}" class="text-vaccent hover:underline break-all flex items-center gap-1.5"><i class="fa-solid fa-envelope text-xs"></i> ${item.valueLeft}</a>`;
-                            }
-
-                            html += `
-                                <div class="bg-vcard dark:dark-mode-card border border-vborder/70 dark:dark-mode-border rounded-xl p-5 flex flex-col justify-between gap-2 shadow-sm hover:shadow transition-all">
-                                    ${item.labelLeftEn ? `<div class="text-[13px] font-bold text-vaccent dark:text-orange-400 bg-vaccent/10 px-3 py-1 rounded-lg w-fit tracking-wide">${item.labelLeftEn}</div>` : ''}
-                                    <div class="text-[14px] vtext dark:dark-mode-text cell-wrap-text font-semibold pt-1">${valHtml}</div>
+                    } else {
+                        html += `
+                            <div class="bg-vcard dark:dark-mode-card border border-vborder/70 dark:dark-mode-border rounded-2xl p-6 md:p-8 flex flex-col gap-4 shadow-sm hover:shadow transition-all">
+                                ${item.sectionTitle ? `<div class="text-[14px] font-bold text-vaccent dark:text-orange-400 bg-vaccent/10 px-3 py-1 rounded-lg w-fit tracking-wide">${item.sectionTitle}</div>` : ''}
+                                <div class="flex flex-col gap-3 pt-1">
+                                    <div class="text-[14px] vtext dark:dark-mode-text cell-wrap-text font-semibold">${item.contentEn || ''}</div>
+                                    ${item.contentZh ? `<div class="text-[13px] vmuted dark:dark-mode-muted cell-wrap-text font-normal pt-2 border-t border-vborder/40 dark:border-white/5">${item.contentZh}</div>` : ''}
                                 </div>
-                            `;
-                        }
-
-                        if (hasRight) {
-                            const isUrl = String(item.valueRight).trim().startsWith('http');
-                            const isEmail = String(item.valueRight).trim().includes('@');
-                            let valHtml = item.valueRight || '';
-                            if (isUrl) {
-                                valHtml = `<a href="${item.valueRight}" target="_blank" class="text-vaccent hover:underline break-all flex items-center gap-1.5"><i class="fa-solid fa-link text-xs"></i> ${item.valueRight}</a>`;
-                            } else if (isEmail) {
-                                valHtml = `<a href="mailto:${item.valueRight}" class="text-vaccent hover:underline break-all flex items-center gap-1.5"><i class="fa-solid fa-envelope text-xs"></i> ${item.valueRight}</a>`;
-                            }
-
-                            html += `
-                                <div class="bg-vcard dark:dark-mode-card border border-vborder/70 dark:dark-mode-border rounded-xl p-5 flex flex-col justify-between gap-2 shadow-sm hover:shadow transition-all">
-                                    ${item.labelRightEn ? `<div class="text-[13px] font-bold text-vaccent dark:text-orange-400 bg-vaccent/10 px-3 py-1 rounded-lg w-fit tracking-wide">${item.labelRightEn}</div>` : ''}
-                                    <div class="text-[14px] vtext dark:dark-mode-text cell-wrap-text font-semibold pt-1">${valHtml}</div>
-                                </div>
-                            `;
-                        }
-
-                        html += `</div>`;
+                            </div>
+                        `;
                     }
                 });
-
                 html += `</div>`;
+                container.innerHTML = html;
+            },
+
+            renderNotesView: function(container, data) {
+                let html = `
+                    <div class="flex flex-col gap-6 fade-in">
+                        <div class="bg-vcard dark:dark-mode-card border border-vborder/70 dark:dark-mode-border rounded-2xl p-6 md:p-8 shadow-sm flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-xl bg-vaccent/10 text-vaccent flex items-center justify-center text-xl font-bold shrink-0">
+                                <i class="fa-solid fa-note-sticky"></i>
+                            </div>
+                            <div class="flex flex-col">
+                                <h2 class="text-[20px] font-bold vtext dark:dark-mode-text">Notes & Milestones｜記事與里程碑</h2>
+                                <p class="text-[13px] vmuted dark:dark-mode-muted mt-0.5">Important milestones, debuts, and special events history.</p>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                `;
+
+                data.forEach(item => {
+                    const isBirthday = (item.contentEn && item.contentEn.toLowerCase().includes('birthday')) || 
+                                       (item.contentZh && item.contentZh.includes('生日'));
+                    const cardBg = isBirthday ? 'bg-amber-50/60 dark:bg-amber-950/20 border-amber-300/80 dark:border-amber-900/50' : 'bg-vcard dark:dark-mode-card border-vborder/70 dark:dark-mode-border';
+                    const iconColor = isBirthday ? 'text-amber-600 dark:text-amber-400' : 'text-vaccent';
+
+                    html += `
+                        <div class="${cardBg} border rounded-xl p-5 flex flex-col justify-between gap-3 shadow-sm hover:shadow transition-all">
+                            <div class="flex items-center justify-between">
+                                <span class="text-[13px] font-bold ${iconColor} bg-vaccent/10 px-3 py-1 rounded-lg">
+                                    <i class="fa-regular fa-calendar-days mr-1.5"></i> ${item.dateDisplay || '-'}
+                                </span>
+                                ${isBirthday ? '<span class="text-xs bg-amber-200/60 text-amber-800 dark:bg-amber-900/60 dark:text-amber-300 px-2 py-0.5 rounded-full font-semibold">Special</span>' : ''}
+                            </div>
+                            <div class="flex flex-col gap-1 pt-1">
+                                <h4 class="text-[15px] font-bold vtext dark:dark-mode-text leading-snug">${item.contentEn || ''}</h4>
+                                ${item.contentZh ? `<p class="text-[13px] vmuted dark:dark-mode-muted leading-snug">${item.contentZh}</p>` : ''}
+                            </div>
+                        </div>
+                    `;
+                });
+
+                html += `</div></div>`;
                 container.innerHTML = html;
             },
 
@@ -353,4 +442,3 @@
     </script>
 </body>
 </html>
-```eof
