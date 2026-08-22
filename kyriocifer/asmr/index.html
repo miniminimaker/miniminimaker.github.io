@@ -108,7 +108,6 @@
 
             <div class="flex flex-wrap items-center justify-between gap-3 text-xs vmuted dark:dark-mode-muted px-1">
                 <div id="sheet-filters" class="flex flex-wrap items-center gap-2"></div>
-                <div id="sync-status" class="font-medium whitespace-nowrap ml-auto"></div>
             </div>
         </div>
 
@@ -137,10 +136,6 @@
             API_URL: "https://script.google.com/macros/s/AKfycbyMsfAieg6jUrgY3zoTjCKGiNaXSJu8eKA9hop60jpSeJbREeOQes0CG568iJLUnpw/exec",
             TIMEZONE: "Asia/Taipei",
             REFRESH_INTERVAL: 5 * 60 * 1000 
-        };
-
-        const DOM = {
-            updatedText: document.getElementById('sync-status')
         };
 
         const app = {
@@ -183,9 +178,6 @@
             },
 
             fetchData: async function(isManual = false) {
-                const statusText = DOM.updatedText;
-                if (statusText) statusText.innerText = 'Syncing database...';
-
                 if (this.data.length === 0) {
                     this.showState('<i class="fa-solid fa-circle-notch fa-spin text-2xl text-vaccent"></i>', 'Loading data, please wait…｜讀取資料請稍後...');
                 }
@@ -218,18 +210,6 @@
                         
                         this.renderSheetFilters();
                         this.render();
-                        
-                        if (DOM.updatedText) {
-                            if (result.lastSynced) {
-                                const dateObj = new Date(result.lastSynced);
-                                const month = String(dateObj.getMonth() + 1).padStart(2, '0');
-                                const day = String(dateObj.getDate()).padStart(2, '0');
-                                const time = dateObj.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
-                                DOM.updatedText.innerText = `▸ Last Updated: ${month}/${day}, ${time}`;
-                            } else {
-                                DOM.updatedText.innerText = `▸ Last Updated: Just now`;
-                            }
-                        }
 
                         if (!this.hasScrolledToToday && !this.searchQuery) {
                             setTimeout(() => {
@@ -244,7 +224,6 @@
                     if (this.data.length === 0) {
                         this.showState('<i class="fa-solid fa-triangle-exclamation text-rose-600 dark:text-rose-400 text-3xl mb-2"></i>', 'Unable to load data.<br>Please check console or try again later.');
                     }
-                    if (DOM.updatedText) DOM.updatedText.innerText = 'Sync failed';
                 }
             },
 
