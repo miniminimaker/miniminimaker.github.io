@@ -415,7 +415,7 @@
                         const isLastInSection = !nextItem || nextItem.isSectionHeader;
                         
                         html += `
-                            <div class="flex flex-col gap-4 ${isLastInSection ? '' : 'border-b border-vborder/50 dark:border-white/10 pb-[22px] mb-[22px]'}">
+                            <div class="flex flex-col gap-4 ${isLastInSection ? '' : 'border-b border-vborder/50 dark:border-white/10 pb-[44px] mb-[44px]'}">
                                 ${item.sectionTitle ? `<div class="text-[12px] font-bold text-vaccent dark:text-orange-400 bg-vaccent/10 px-3 py-1 rounded-lg w-fit tracking-wide">${item.sectionTitle}</div>` : ''}
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 relative md:divide-x md:divide-vborder/50 md:dark:divide-white/10 pt-1">
                                     <div class="text-[12px] font-normal vtext dark:dark-mode-text cell-wrap-text md:pr-6">${item.contentEn || ''}</div>
