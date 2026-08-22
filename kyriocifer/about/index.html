@@ -59,7 +59,6 @@
 </head>
 
 <body class="flex flex-col min-h-screen dark:dark-mode-bg transition-colors duration-300">
-
     <header class="border-b border-vborder/50 dark:dark-mode-border glass-panel sticky top-0 z-30 px-6 py-[18px] flex flex-wrap gap-4 items-center justify-between shadow-sm/5">
         <div class="flex items-center space-x-4">
             <a href="https://miniminimaker.github.io/kyriocifer/" class="w-11 h-11 rounded-xl bg-[#F8F5EF] border border-[#E5DED3] flex items-center justify-center overflow-hidden hover:opacity-90 transition-opacity">
@@ -261,6 +260,17 @@
                 return filtered;
             },
 
+            autoLink: function(text) {
+                if (!text) return '';
+                let str = String(text);
+                
+                str = str.replace(/\[([^\]]+)\]\((https?:\/\/[^\)]+)\)/g, '<a href="$2" target="_blank" class="text-vaccent dark:text-orange-400 hover:opacity-80 underline font-semibold transition-opacity">$1</a>');
+                str = str.replace(/([^\n(]+?)\s*\((https?:\/\/[^\s)]+)\)/g, '<a href="$2" target="_blank" class="text-vaccent dark:text-orange-400 hover:opacity-80 underline font-semibold transition-opacity">$1</a>');
+                str = str.replace(/(^|\s)(https?:\/\/[^\s<)"]+)/g, '$1<a href="$2" target="_blank" class="text-vaccent dark:text-orange-400 hover:opacity-80 underline font-semibold transition-opacity">$2</a>');
+                
+                return str;
+            },
+
             render: function() {
                 const container = document.getElementById('schedule-container');
                 if (!container) return;
@@ -319,7 +329,7 @@
                                 cardHtml = `
                                     <div class="flex flex-col gap-1.5 py-1 ${paddingClass}">
                                         ${label ? `<div class="text-[12px] font-bold text-vaccent dark:text-orange-400 bg-vaccent/10 px-2.5 py-1 rounded-md w-fit tracking-wide">${label}</div>` : ''}
-                                        ${val ? `<div class="text-[12px] font-normal vtext dark:dark-mode-text cell-wrap-text">${val}</div>` : ''}
+                                        ${val ? `<div class="text-[12px] font-normal vtext dark:dark-mode-text cell-wrap-text">${this.autoLink(val)}</div>` : ''}
                                     </div>
                                 `;
                             }
@@ -415,8 +425,8 @@
                             <div class="flex flex-col gap-4 ${isLastInSection ? '' : 'border-b border-vborder/50 dark:border-white/10 pb-[44px] mb-[44px]'}">
                                 ${item.sectionTitle ? `<div class="text-[12px] font-bold text-vaccent dark:text-orange-400 bg-vaccent/10 px-3 py-1 rounded-lg w-fit tracking-wide">${item.sectionTitle}</div>` : ''}
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 relative md:divide-x md:divide-vborder/50 md:dark:divide-white/10 pt-1">
-                                    <div class="text-[12px] font-normal vtext dark:dark-mode-text cell-wrap-text md:pr-6">${item.contentEn || ''}</div>
-                                    <div class="text-[12px] font-normal vmuted dark:dark-mode-muted cell-wrap-text md:pl-6">${item.contentZh || ''}</div>
+                                    <div class="text-[12px] font-normal vtext dark:dark-mode-text cell-wrap-text md:pr-6">${this.autoLink(item.contentEn || '')}</div>
+                                    <div class="text-[12px] font-normal vmuted dark:dark-mode-muted cell-wrap-text md:pl-6">${this.autoLink(item.contentZh || '')}</div>
                                 </div>
                             </div>
                         `;
@@ -462,9 +472,9 @@
                             </div>
                             <div class="flex-1 flex flex-col gap-1.5">
                                 <div class="flex items-start justify-between gap-4">
-                                    ${item.contentEn ? `<h4 class="text-[15px] font-bold vtext dark:dark-mode-text leading-[1.5]">${item.contentEn}</h4>` : ''}
+                                    ${item.contentEn ? `<h4 class="text-[15px] font-bold vtext dark:dark-mode-text leading-[1.5]">${this.autoLink(item.contentEn)}</h4>` : ''}
                                 </div>
-                                ${item.contentZh ? `<p class="text-[13px] vmuted dark:dark-mode-muted leading-[1.6]">${item.contentZh}</p>` : ''}
+                                ${item.contentZh ? `<p class="text-[13px] vmuted dark:dark-mode-muted leading-[1.6]">${this.autoLink(item.contentZh)}</p>` : ''}
                             </div>
                         </div>
                     `;
