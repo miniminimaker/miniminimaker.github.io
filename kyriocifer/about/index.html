@@ -329,7 +329,7 @@
                             else leftHtml += cardHtml;
                         }
 
-                        // 左右雙欄排列，並加上細灰分隔線 w-[1px] bg-vborder/50
+                        // 左右雙欄排列，並加上細灰分隔線
                         html += `
                             <div class="flex flex-col md:flex-row gap-6 md:gap-0 pt-2">
                                 <div class="flex-1 flex flex-col gap-6">${leftHtml}</div>
@@ -360,7 +360,7 @@
                                     </div>
                                 </div>
                                 <div class="border-b border-vborder/50 dark:border-white/10 w-full mb-1"></div>
-                                <div class="flex flex-col gap-[45px]">
+                                <div class="flex flex-col">
                         `;
                     } else if (item.isMultiSectionItem) {
                         sectionItems.push(item);
@@ -376,7 +376,6 @@
                 let html = `<div class="flex flex-col gap-6 fade-in">`;
                 let currentSectionBoxOpen = false;
 
-                // 用來關閉當前大外框的輔助函式
                 const flushSection = () => {
                     if (currentSectionBoxOpen) {
                         html += `</div></div>`;
@@ -384,7 +383,7 @@
                     }
                 };
 
-                data.forEach(item => {
+                data.forEach((item, index) => {
                     if (item.isSectionHeader) {
                         flushSection();
                         currentSectionBoxOpen = true;
@@ -400,20 +399,23 @@
                                     </div>
                                 </div>
                                 <div class="border-b border-vborder/50 dark:border-white/10 w-full mb-1"></div>
-                                <div class="flex flex-col gap-[45px]">
+                                <div class="flex flex-col">
                         `;
                     } else {
-                        // 如果資料裡沒有 Header 直接開始，也要幫它開個外框
                         if (!currentSectionBoxOpen) {
                             currentSectionBoxOpen = true;
                             html += `
                                 <div class="bg-vcard dark:dark-mode-card border border-vborder/70 dark:dark-mode-border rounded-2xl p-6 md:p-8 shadow-sm flex flex-col gap-5 mt-6 first:mt-0">
-                                    <div class="flex flex-col gap-[45px]">
+                                    <div class="flex flex-col">
                             `;
                         }
+
+                        // 判斷是否為區塊中的最後一個項目
+                        const nextItem = data[index + 1];
+                        const isLastInSection = !nextItem || nextItem.isSectionHeader;
                         
                         html += `
-                            <div class="flex flex-col gap-4">
+                            <div class="flex flex-col gap-4 ${isLastInSection ? '' : 'border-b border-vborder/50 dark:border-white/10 pb-[22px] mb-[22px]'}">
                                 ${item.sectionTitle ? `<div class="text-[12px] font-bold text-vaccent dark:text-orange-400 bg-vaccent/10 px-3 py-1 rounded-lg w-fit tracking-wide">${item.sectionTitle}</div>` : ''}
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 relative md:divide-x md:divide-vborder/50 md:dark:divide-white/10 pt-1">
                                     <div class="text-[12px] font-normal vtext dark:dark-mode-text cell-wrap-text md:pr-6">${item.contentEn || ''}</div>
