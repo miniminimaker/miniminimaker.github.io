@@ -145,6 +145,10 @@
             REFRESH_INTERVAL: 5 * 60 * 1000 
         };
 
+        const DOM = {
+            updatedText: document.getElementById('sync-status')
+        };
+
         const app = {
             data: [],
             sheets: new Set(),
@@ -167,8 +171,7 @@
             },
 
             fetchData: async function(isManual = false) {
-                const statusText = document.getElementById('sync-status');
-                if (statusText) statusText.innerText = 'Syncing database...';
+                if (DOM.updatedText) DOM.updatedText.innerText = 'Syncing database...';
 
                 if (this.data.length === 0) {
                     this.showState('<i class="fa-solid fa-circle-notch fa-spin text-2xl text-vaccent"></i>', 'Loading data, please wait…｜讀取資料請稍後...');
@@ -187,11 +190,13 @@
                         
                         this.renderSheetFilters();
                         this.render();
-                        if (statusText) {
-                            const d = new Date();
-                            const timeStr = d.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
-                            const dateStr = d.toLocaleDateString('en-US', { month: '2-digit', day: '2-digit' });
-                            statusText.innerHTML = `▸ <span style="font-weight: 600;">Last Updated</span>: ${dateStr}, ${timeStr}`;
+
+                        if (DOM.updatedText) {
+                            const d = result.lastSynced ? new Date(result.lastSynced) : new Date();
+                            const month = String(d.getMonth() + 1).padStart(2, '0');
+                            const day = String(d.getDate()).padStart(2, '0');
+                            const timeStr = d.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
+                            DOM.updatedText.innerText = `▸ Last Updated: ${month}/${day}, ${timeStr}`;
                         }
 
                         if (!this.hasScrolledToToday && !this.isSubathonTab(this.currentSheetFilter) && !this.searchQuery) {
@@ -207,7 +212,7 @@
                     if (this.data.length === 0) {
                         this.showState('<i class="fa-solid fa-triangle-exclamation text-rose-600 dark:text-rose-400 text-3xl"></i>', 'Unable to load schedule.<br>Please try again later.');
                     }
-                    if (statusText) statusText.innerText = 'Sync failed';
+                    if (DOM.updatedText) DOM.updatedText.innerText = 'Sync failed';
                 }
             },
 
@@ -679,25 +684,25 @@
                 }
 
                 html += `
-                        <div class="flex flex-col gap-4 mt-2">
-                            <div class="flex items-center justify-between px-1">
-                                <h3 class="text-[16px] font-bold vtext dark:dark-mode-text flex items-center gap-2">
-                                    <i class="fa-solid fa-chart-line text-vaccent"></i> Daily Progress Log｜每日數據
-                                </h3>
-                            </div>
+                    <div class="flex flex-col gap-4 mt-2">
+                        <div class="flex items-center justify-between px-1">
+                            <h3 class="text-[16px] font-bold vtext dark:dark-mode-text flex items-center gap-2">
+                                <i class="fa-solid fa-chart-line text-vaccent"></i> Daily Progress Log｜每日數據
+                            </h3>
+                        </div>
 
-                            <div class="bg-vcard dark:dark-mode-card border border-vborder/70 dark:dark-mode-border rounded-xl overflow-hidden shadow-sm">
-                                <div class="overflow-x-auto custom-scrollbar">
-                                    <table class="w-full border-collapse">
-                                        <thead>
-                                            <tr class="bg-vbg/60 dark:bg-black/20 border-b border-vborder/70 dark:border-[#3F3F46] text-[12px] vmuted uppercase tracking-wider text-center">
-                                                <th class="py-3.5 px-5 font-semibold text-center">Date｜日期</th>
-                                                <th class="py-3.5 px-5 font-semibold text-center">Day｜天數</th>
-                                                <th class="py-3.5 px-5 font-semibold text-center">Total Subs｜訂閱數量</th>
-                                                <th class="py-3.5 px-5 font-semibold text-center">Stream Hours｜直播總長</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody class="divide-y divide-vborder/50 dark:divide-[#3F3F46] text-[13px] text-center">
+                        <div class="bg-vcard dark:dark-mode-card border border-vborder/70 dark:dark-mode-border rounded-xl overflow-hidden shadow-sm">
+                            <div class="overflow-x-auto custom-scrollbar">
+                                <table class="w-full border-collapse">
+                                    <thead>
+                                        <tr class="bg-vbg/60 dark:bg-black/20 border-b border-vborder/70 dark:border-[#3F3F46] text-[12px] vmuted uppercase tracking-wider text-center">
+                                            <th class="py-3.5 px-5 font-semibold text-center">Date｜日期</th>
+                                            <th class="py-3.5 px-5 font-semibold text-center">Day｜天數</th>
+                                            <th class="py-3.5 px-5 font-semibold text-center">Total Subs｜訂閱數量</th>
+                                            <th class="py-3.5 px-5 font-semibold text-center">Stream Hours｜直播總長</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-vborder/50 dark:divide-[#3F3F46] text-[13px] text-center">
                 `;
 
                 dailyLogs.forEach(row => {
@@ -712,12 +717,12 @@
                 });
 
                 html += `
-                                        </tbody>
-                                    </table>
-                                </div>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
+                </div>
                 `;
 
                 container.innerHTML = html;
