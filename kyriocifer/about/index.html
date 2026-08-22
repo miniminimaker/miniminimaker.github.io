@@ -285,61 +285,65 @@
                 }
 
                 let html = `<div class="flex flex-col gap-6 fade-in">`;
-                let isGridStarted = false;
+                let currentSectionBoxOpen = false;
 
                 displayData.forEach(item => {
                     if (item.isMultiSectionHeader) {
-                        if (isGridStarted) {
-                            html += `</div>`;
-                            isGridStarted = false;
+                        if (currentSectionBoxOpen) {
+                            html += `</div></div>`;
                         }
+                        currentSectionBoxOpen = true;
                         html += `
-                            <div class="bg-vcard dark:dark-mode-card border border-vborder/70 dark:dark-mode-border rounded-2xl p-5 md:p-6 shadow-sm flex items-center gap-4 mt-6 first:mt-0">
-                                <div class="w-10 h-10 rounded-xl bg-vaccent/10 text-vaccent flex items-center justify-center text-lg font-bold shrink-0">
-                                    <i class="fa-solid fa-folder-open"></i>
+                            <div class="bg-vcard dark:dark-mode-card border border-vborder/70 dark:dark-mode-border rounded-2xl p-6 md:p-8 shadow-sm flex flex-col gap-5 mt-6 first:mt-0">
+                                <div class="flex items-center gap-3 border-b border-vborder/50 dark:border-white/10 pb-4">
+                                    <div class="w-10 h-10 rounded-xl bg-vaccent/10 text-vaccent flex items-center justify-center text-lg font-bold shrink-0">
+                                        <i class="fa-solid fa-folder-open"></i>
+                                    </div>
+                                    <div class="flex flex-col">
+                                        <h2 class="text-[18px] font-bold vtext dark:dark-mode-text">${item.sectionTitle || ''}</h2>
+                                        ${item.sectionTitleZh ? `<p class="text-[12px] vmuted dark:dark-mode-muted mt-0.5">${item.sectionTitleZh}</p>` : ''}
+                                    </div>
                                 </div>
-                                <div class="flex flex-col">
-                                    <h2 class="text-[18px] font-bold vtext dark:dark-mode-text">${item.sectionTitle || ''}</h2>
-                                    ${item.sectionTitleZh ? `<p class="text-[12px] vmuted dark:dark-mode-muted mt-0.5">${item.sectionTitleZh}</p>` : ''}
-                                </div>
-                            </div>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         `;
                     } else if (item.isMultiSectionItem) {
-                        if (!isGridStarted) {
-                            html += `<div class="grid grid-cols-1 md:grid-cols-2 gap-3.5">`;
-                            isGridStarted = true;
-                        }
-
-                        const renderCell = (label, val) => {
+                        const renderCard = (label, val) => {
                             if (!label && !val) return '';
-                            const isUrl = String(val).trim().startsWith('http');
-                            const isEmail = String(val).trim().includes('@');
-                            let valHtml = val || '';
-                            if (isUrl) {
-                                valHtml = `<a href="${val}" target="_blank" class="text-vaccent hover:underline break-all inline-flex items-center gap-1.5"><i class="fa-solid fa-link text-xs"></i> ${val}</a>`;
-                            } else if (isEmail) {
-                                valHtml = `<a href="mailto:${val}" class="text-vaccent hover:underline break-all inline-flex items-center gap-1.5"><i class="fa-solid fa-envelope text-xs"></i> ${val}</a>`;
+                            const strVal = String(val).trim();
+                            const isUrl = strVal.startsWith('http://') || strVal.startsWith('https://');
+                            const isEmail = strVal.includes('@') && !isUrl;
+                            
+                            if (isUrl || isEmail) {
+                                const href = isUrl ? strVal : `mailto:${strVal}`;
+                                const iconClass = isUrl ? 'fa-link' : 'fa-envelope';
+                                return `
+                                    <a href="${href}" target="_blank" class="flex items-center gap-2.5 text-vaccent dark:text-orange-400 hover:opacity-80 transition-opacity w-fit py-1">
+                                        <div class="text-[12px] font-bold bg-vaccent/10 px-3 py-1.5 rounded-lg tracking-wide flex items-center gap-2">
+                                            <i class="fa-solid ${iconClass} text-[11px]"></i> ${label}
+                                        </div>
+                                    </a>
+                                `;
                             }
 
                             return `
-                                <div class="bg-vcard dark:dark-mode-card border border-vborder/70 dark:dark-mode-border rounded-xl p-4 flex flex-col justify-center gap-1.5 shadow-sm hover:shadow transition-all">
-                                    ${label ? `<div class="text-[11px] font-bold text-vaccent dark:text-orange-400 bg-vaccent/10 px-2.5 py-0.5 rounded-md w-fit tracking-wide">${label}</div>` : ''}
-                                    <div class="text-[13px] vtext dark:dark-mode-text cell-wrap-text font-semibold">${valHtml}</div>
+                                <div class="flex flex-col gap-1.5 py-1">
+                                    ${label ? `<div class="text-[11px] font-bold text-vaccent dark:text-orange-400 bg-vaccent/10 px-2.5 py-1 rounded-md w-fit tracking-wide">${label}</div>` : ''}
+                                    ${val ? `<div class="text-[14px] vtext dark:dark-mode-text cell-wrap-text font-semibold">${val}</div>` : ''}
                                 </div>
                             `;
                         };
 
                         if (item.labelLeftEn || item.valueLeft) {
-                            html += renderCell(item.labelLeftEn, item.valueLeft);
+                            html += renderCard(item.labelLeftEn, item.valueLeft);
                         }
                         if (item.labelRightEn || item.valueRight) {
-                            html += renderCell(item.labelRightEn, item.valueRight);
+                            html += renderCard(item.labelRightEn, item.valueRight);
                         }
                     }
                 });
 
-                if (isGridStarted) {
-                    html += `</div>`;
+                if (currentSectionBoxOpen) {
+                    html += `</div></div>`;
                 }
 
                 html += `</div>`;
