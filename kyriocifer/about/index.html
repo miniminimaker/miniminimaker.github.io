@@ -284,16 +284,19 @@
                     return;
                 }
 
-                // Group items into separate left and right columns with a central vertical line
+                // Group items into left and right columns
                 let html = `<div class="flex flex-col gap-6 fade-in">`;
                 let currentSectionBoxOpen = false;
                 let sectionItems = [];
 
                 const flushSection = () => {
                     if (sectionItems.length > 0 && currentSectionBoxOpen) {
-                        
+                        // Split items into left and right arrays
+                        const leftItems = sectionItems.filter((_, i) => i % 2 === 0);
+                        const rightItems = sectionItems.filter((_, i) => i % 2 !== 0);
+
                         const renderCard = (item) => {
-                            if (!item) return '';
+                            if (!item) return ``;
                             const label = item.labelLeftEn || '';
                             const val = item.valueLeft || '';
                             const strVal = String(val).trim();
@@ -312,34 +315,29 @@
                                 `;
                             }
 
+                            // Modified: Changed font-semibold to font-normal and text-[14px] to text-[12px]
                             return `
                                 <div class="flex flex-col gap-1.5 py-1">
-                                    ${label ? `<div class="text-[11px] font-bold text-vaccent dark:text-orange-400 bg-vaccent/10 px-2.5 py-1 rounded-md w-fit tracking-wide uppercase">${label}</div>` : ''}
-                                    ${val ? `<div class="text-[14px] vtext dark:dark-mode-text cell-wrap-text font-semibold">${val}</div>` : ''}
+                                    ${label ? `<div class="text-[11px] font-bold text-vaccent dark:text-orange-400 bg-vaccent/10 px-2.5 py-1 rounded-md w-fit tracking-wide">${label}</div>` : ''}
+                                    ${val ? `<div class="text-[12px] vtext dark:dark-mode-text cell-wrap-text font-normal">${val}</div>` : ''}
                                 </div>
                             `;
                         };
 
-                        html += `<div class="flex flex-col md:flex-row relative gap-6 md:gap-0 pt-2 w-full">`;
+                        // Render Two-column flexbox with vertical separator
+                        html += `
+                            <div class="flex flex-col md:flex-row gap-6 md:gap-0 relative py-2">
+                                <div class="flex-1 flex flex-col gap-6 md:pr-6">
+                                    ${leftItems.map(item => renderCard(item)).join('')}
+                                </div>
+                                <div class="hidden md:block w-[1px] bg-vborder/50 dark:bg-white/10 shrink-0 mx-2"></div>
+                                <div class="flex-1 flex flex-col gap-6 border-t border-vborder/50 dark:border-white/10 pt-6 md:border-t-0 md:pt-0 md:pl-6">
+                                    ${rightItems.map(item => renderCard(item)).join('')}
+                                </div>
+                            </div>
+                        `;
                         
-                        // Left Column
-                        html += `<div class="flex-1 flex flex-col gap-6 md:pr-8">`;
-                        for (let i = 0; i < sectionItems.length; i += 2) {
-                            if (sectionItems[i]) html += renderCard(sectionItems[i]);
-                        }
-                        html += `</div>`;
-
-                        // Middle Divider Line
-                        html += `<div class="hidden md:block w-[1px] bg-vborder/50 dark:bg-white/10"></div>`;
-
-                        // Right Column
-                        html += `<div class="flex-1 flex flex-col gap-6 md:pl-8 border-t border-vborder/40 md:border-t-0 pt-6 md:pt-0">`;
-                        for (let i = 0; i < sectionItems.length; i += 2) {
-                            if (sectionItems[i + 1]) html += renderCard(sectionItems[i + 1]);
-                        }
-                        html += `</div>`;
-
-                        html += `</div></div></div>`; // Close row flex, content wrapper, and card box
+                        html += `</div></div>`;
                         sectionItems = [];
                     }
                 };
@@ -388,12 +386,13 @@
                             </div>
                         `;
                     } else {
+                        // Modified: Changed font-semibold to font-normal and text-[14px] to text-[12px] for Stream Info content
                         html += `
                             <div class="bg-vcard dark:dark-mode-card border border-vborder/70 dark:dark-mode-border rounded-2xl p-6 md:p-8 flex flex-col gap-4 shadow-sm hover:shadow transition-all">
                                 ${item.sectionTitle ? `<div class="text-[14px] font-bold text-vaccent dark:text-orange-400 bg-vaccent/10 px-3 py-1 rounded-lg w-fit tracking-wide">${item.sectionTitle}</div>` : ''}
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 relative md:divide-x md:divide-vborder/40 md:dark:divide-white/10 pt-1">
-                                    <div class="text-[14px] vtext dark:dark-mode-text cell-wrap-text font-semibold md:pr-6">${item.contentEn || ''}</div>
-                                    <div class="text-[14px] vmuted dark:dark-mode-muted cell-wrap-text font-normal md:pl-6">${item.contentZh || ''}</div>
+                                    <div class="text-[12px] vtext dark:dark-mode-text cell-wrap-text font-normal md:pr-6">${item.contentEn || ''}</div>
+                                    <div class="text-[12px] vmuted dark:dark-mode-muted cell-wrap-text font-normal md:pl-6">${item.contentZh || ''}</div>
                                 </div>
                             </div>
                         `;
