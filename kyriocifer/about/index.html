@@ -6,7 +6,7 @@
     <link rel="preconnect" href="https://cdnjs.cloudflare.com">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>✨ Get to Know Kyrio Cifer</title>
+    <title>🎙️Kyrio Cifer's ASMR/Patreon</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -24,7 +24,7 @@
                         vtext: '#4F4538',
                         vmuted: '#8C8273',
                         vaccent: '#B45309',
-                        vlink: '#B45309',
+                        vlink: '#65A30D',
                         vtranslate: '#658C59',
                     }
                 } 
@@ -35,7 +35,7 @@
     <style>
         body { font-family: 'Inter', sans-serif; background-color: #F0EBE3; color: #4F4538; overflow-x: hidden; scroll-behavior: smooth; }
         .glass-panel { background-color: #F9F8F4; backdrop-filter: none; }
-        .cell-wrap-text { word-break: break-word; overflow-wrap: break-word; white-space: pre-line; line-height: 1.8; }
+        .cell-wrap-text { word-break: break-word; overflow-wrap: break-word; white-space: normal; line-height: 1.6; }
         
         @media (prefers-color-scheme: dark) {
             .dark-mode-bg { background-color: #1C1917 !important; }
@@ -62,31 +62,33 @@
 
     <header class="border-b border-vborder/50 dark:dark-mode-border glass-panel sticky top-0 z-30 px-6 py-[18px] flex flex-wrap gap-4 items-center justify-between shadow-sm/5">
         <div class="flex items-center space-x-4">
-            <a href="https://miniminimaker.github.io/kyriocifer/" class="w-11 h-11 rounded-xl bg-[#F8F5EF] border border-[#E5DED3] flex items-center justify-center overflow-hidden hover:opacity-90 transition-opacity">
-                <img src="logo.png" alt="Logo" class="w-9 h-9 object-contain" onerror="this.src='https://placehold.co/36x36/F0EBE3/4F4538?text=KC'">
+         <a href="https://miniminimaker.github.io/kyriocifer/" class="w-11 h-11 rounded-xl bg-[#F8F5EF] border border-[#E5DED3] flex items-center justify-center overflow-hidden hover:opacity-90 transition-opacity">
+                <img src="logo.png" alt="Logo" class="w-9 h-9 object-contain" onerror="this.style.display='none';">
             </a>
             <div class="flex flex-col">
                 <h1 class="text-[18px] sm:text-[20px] font-bold vtext dark:dark-mode-text leading-[1.25] flex items-center">
-                    <span class="mr-2 whitespace-nowrap text-[20px]">✨</span>
-                    <span>Get to Know Kyrio Cifer</span>
+                    <span class="mr-2 whitespace-nowrap text-[20px]">🎙️</span>
+                    <span>Kyrio Cifer's ASMR/Patreon</span>
                 </h1>
                 <p class="text-[12px] font-normal vmuted dark:dark-mode-muted mt-[4px] leading-[1.4]">
                     ‒‒‒‒‒ Made with ♡ by <a href="https://x.com/miniminimaker" target="_blank" class="text-vaccent hover:opacity-80 transition-opacity">miniminimaker</a>
                 </p>
             </div>
         </div>
+        <div class="flex items-center gap-2"></div>
     </header>
 
-    <main class="flex-1 max-w-[1200px] w-full mx-auto p-6 md:p-12 flex flex-col gap-12">
+    <main class="flex-1 max-w-[1400px] w-full mx-auto p-6 md:p-12 flex flex-col gap-12">
+        
         <section class="flex flex-col gap-4">
             <div class="space-y-0.5">
                 <p class="text-[17px] font-medium vtext dark:dark-mode-text leading-[1.55]">
-                    Channel information, stream guidelines, notes, and milestones about Kyrio Cifer.
+                    Archive of Kyrio Cifer’s ASMR/Patreon.
                 </p>
                 <p class="text-[15px] font-normal vtext dark:dark-mode-text leading-[1.6]">
-                    關於Kyrio Cifer的頻道資訊、直播規範、重要記事與里程碑。
+                    收錄Kyrio Cifer的ASMR/Patreon內容作品。
                 </p>
-            </div>
+           </div>
             <div class="space-y-0.5">
                 <p class="text-[12px] font-normal vmuted dark:dark-mode-muted leading-[1.5]">This is an unofficial website for reference only.</p>
                 <p class="text-[12px] font-normal vmuted dark:dark-mode-muted leading-[1.5]">本網站為非官方網站，僅供參考。</p>
@@ -98,15 +100,14 @@
         </section>
 
         <div class="flex flex-col gap-6">
-            <div class="relative group w-full" id="search-bar-wrapper">
+            <div class="relative group w-full">
                 <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-vmuted opacity-40 group-focus-within:text-vaccent transition-colors"></i>
-                <input type="text" id="input-search" placeholder="Search info, rules, guidelines, notes, or milestones..." 
+                <input type="text" id="input-search" placeholder="Search ASMR/Patreon titles, content, or types..." 
                     class="w-full bg-vcard dark:dark-mode-card border border-vborder dark:dark-mode-border rounded-xl pl-11 pr-4 py-3.5 text-sm focus:outline-none focus:ring-1 focus:ring-vaccent/30 focus:border-vaccent/40 transition-all placeholder-vmuted/50 vtext dark:dark-mode-text shadow-sm/30">
             </div>
 
             <div class="flex flex-wrap items-center justify-between gap-3 text-xs vmuted dark:dark-mode-muted px-1">
                 <div id="sheet-filters" class="flex flex-wrap items-center gap-2"></div>
-                <div id="sync-status" class="font-medium"></div>
             </div>
         </div>
 
@@ -118,6 +119,7 @@
                 </div>
             </div>
         </div>
+
     </main>
 
     <footer class="py-10 px-6 border-t border-vborder/50 dark:dark-mode-border text-center mt-auto">
@@ -131,9 +133,9 @@
         
     <script>
         const CONFIG = {
-            API_URL: "https://script.google.com/macros/s/AKfycbxEYlYCTHRiUK55grdhPBt-BhxXXX-1dcfJCp5FytoLUKlId0x75Po_liQOvo4kjn7n9g/exec",
+            API_URL: "https://script.google.com/macros/s/AKfycbyMsfAieg6jUrgY3zoTjCKGiNaXSJu8eKA9hop60jpSeJbREeOQes0CG568iJLUnpw/exec",
             TIMEZONE: "Asia/Taipei",
-            REFRESH_INTERVAL: 5 * 60 * 1000
+            REFRESH_INTERVAL: 5 * 60 * 1000 
         };
 
         const app = {
@@ -142,11 +144,9 @@
             currentSheetFilter: null,
             searchQuery: "",
             refreshTimer: null,
+            hasScrolledToToday: false,
 
             init: function() {
-                this.fetchData();
-                this.startAutoRefresh();
-                
                 const searchInput = document.getElementById('input-search');
                 if (searchInput) {
                     searchInput.addEventListener('input', (e) => {
@@ -154,22 +154,55 @@
                         this.render();
                     });
                 }
+
+                const cached = localStorage.getItem('kyrio_asmr_cache');
+                if (cached) {
+                    try {
+                        const parsedCache = JSON.parse(cached);
+                        if (parsedCache && parsedCache.length > 0) {
+                            this.processData(parsedCache);
+                            if (this.sheets.size > 0) {
+                                this.currentSheetFilter = Array.from(this.sheets)[0];
+                            }
+                            this.renderSheetFilters();
+                            this.render();
+                            setTimeout(() => { this.scrollToToday(); }, 150);
+                        }
+                    } catch (e) {
+                        console.error("Cache load error:", e);
+                    }
+                }
+
+                this.fetchData();
+                this.startAutoRefresh();
             },
 
             fetchData: async function(isManual = false) {
-                const statusText = document.getElementById('sync-status');
-                if (statusText) statusText.innerText = 'Syncing database...';
-
                 if (this.data.length === 0) {
                     this.showState('<i class="fa-solid fa-circle-notch fa-spin text-2xl text-vaccent"></i>', 'Loading data, please wait…｜讀取資料請稍後...');
                 }
 
                 try {
-                    const res = await fetch(CONFIG.API_URL + "?t=" + new Date().getTime());
-                    const result = await res.json();
+                    const res = await fetch(CONFIG.API_URL);
+                    const text = await res.text();
+                    
+                    let result;
+                    try {
+                        result = JSON.parse(text);
+                    } catch (e) {
+                        console.error("Non-JSON response received:", text);
+                        throw new Error("API returned non-JSON response.");
+                    }
                     
                     if (result.success) {
-                        this.processData(result.events || []);
+                        const rawEvents = result.events || [];
+                        try {
+                            localStorage.setItem('kyrio_asmr_cache', JSON.stringify(rawEvents));
+                        } catch (err) {
+                            console.error("Cache save error:", err);
+                        }
+
+                        this.processData(rawEvents);
                         
                         if (!this.currentSheetFilter && this.sheets.size > 0) {
                             this.currentSheetFilter = Array.from(this.sheets)[0];
@@ -177,92 +210,77 @@
                         
                         this.renderSheetFilters();
                         this.render();
-                        if (statusText) {
-                            const d = new Date();
-                            const timeStr = d.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
-                            const dateStr = d.toLocaleDateString('en-US', { month: '2-digit', day: '2-digit' });
-                            statusText.innerHTML = `▸ <span style="font-weight: 600;">Last Updated</span>: ${dateStr}, ${timeStr}`;
+
+                        if (!this.hasScrolledToToday && !this.searchQuery) {
+                            setTimeout(() => {
+                                this.scrollToToday();
+                            }, 200);
                         }
                     } else {
                         throw new Error("API returned failure status.");
                     }
                 } catch (err) {
-                    console.error("Data Fetch Error:", err);
+                    console.error("Fetch Error:", err);
                     if (this.data.length === 0) {
-                        this.showState('<i class="fa-solid fa-triangle-exclamation text-rose-600 dark:text-rose-400 text-3xl"></i>', 'Unable to load data.<br>Please try again later.');
+                        this.showState('<i class="fa-solid fa-triangle-exclamation text-rose-600 dark:text-rose-400 text-3xl mb-2"></i>', 'Unable to load data.<br>Please check console or try again later.');
                     }
-                    if (statusText) statusText.innerText = 'Sync failed';
                 }
             },
 
-            isNotesTab: function(sheetName) {
-                if (!sheetName) return false;
-                const lower = sheetName.toLowerCase();
-                return lower.includes('notes') || lower.includes('記事');
-            },
-
-            isStreamInfoTab: function(sheetName) {
-                if (!sheetName) return false;
-                const lower = sheetName.toLowerCase();
-                return lower.includes('stream info') || lower.includes('直播資訊');
+            scrollToToday: function() {
+                const todayEl = document.getElementById('today-event-card');
+                if (todayEl) {
+                    todayEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    this.hasScrolledToToday = true;
+                } else {
+                    const cards = document.querySelectorAll('.schedule-card-wrapper');
+                    for (let card of cards) {
+                        if (card.getAttribute('data-is-future') === 'true') {
+                            card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                            this.hasScrolledToToday = true;
+                            break;
+                        }
+                    }
+                }
             },
 
             processData: function(rawEvents) {
+                const now = new Date(); 
                 this.sheets.clear();
 
                 this.data = rawEvents.map(event => {
+                    const keys = Object.keys(event);
+                    
+                    const findKey = (keywords) => keys.find(k => keywords.some(kw => k.toLowerCase().includes(kw.toLowerCase())));
+                    
+                    const kDate = findKey(['上架時間', 'release', 'date']);
+                    const kType = findKey(['類型', 'type']);
+                    const kLink = findKey(['連結', 'link']);
+                    
+                    const kZh = findKey(['內容中譯', 'mandarin']);
+                    const kEn = keys.find(k => k.includes('內容') && !k.includes('中譯')) || findKey(['content']);
+
+                    const dateRaw = kDate ? event[kDate] : '';
+                    const typeRaw = kType ? event[kType] : '';
+                    let linkRaw = kLink ? event[kLink] : '';
+                    
+                    if (!linkRaw) {
+                        for (let k of keys) {
+                            if (k.toLowerCase().includes('link') || k.toLowerCase().includes('連結')) {
+                                if (event[k]) linkRaw = event[k];
+                            }
+                        }
+                    }
+
+                    const contentEn = kEn ? event[kEn] : '';
+                    const contentZh = kZh ? event[kZh] : '';
+                    
                     const sheetName = event._sheetName || 'Default';
-                    if (sheetName !== 'Default') {
+                    if(sheetName !== 'Default') {
                         this.sheets.add(sheetName);
                     }
 
-                    if (event.isStreamInfo) {
-                        return {
-                            sheetName,
-                            isStreamInfo: true,
-                            isSectionHeader: event.isSectionHeader || false,
-                            sectionTitle: event.sectionTitle || '',
-                            sectionTitleZh: event.sectionTitleZh || '',
-                            contentEn: event.contentEn || '',
-                            contentZh: event.contentZh || '',
-                            rawString: `${event.sectionTitle} ${event.sectionTitleZh} ${event.contentEn} ${event.contentZh}`.toLowerCase()
-                        };
-                    }
-
-                    if (this.isNotesTab(sheetName)) {
-                        const dateRaw = event['日期'] || event['Date'] || event.date || '';
-                        const contentEn = event['Content'] || '';
-                        const contentZh = event['內容'] || '';
-                        const rawString = `${dateRaw} ${contentEn} ${contentZh}`.toLowerCase();
-
-                        return {
-                            sheetName,
-                            isNotes: true,
-                            dateDisplay: dateRaw,
-                            contentEn,
-                            contentZh,
-                            rawString
-                        };
-                    }
-
-                    const dateRaw = event['Date\n日期'] || event['Date 日期'] || event.date || event['日期'] || '';
-                    const timeRaw = event['Time(GMT+8)\n時間GMT+8'] || event['Time(GMT+8) 時間GMT+8'] || event.time || event['時間'] || '';
-                    let title = event['Stream title\n直播標題'] || event['Stream title 直播標題'] || event['Content'] || event['內容'] || 'Untitled';
-                    const contentEn = event['Content'] || '';
-                    const contentZh = event['內容'] || '';
-                    const game = [contentEn, contentZh].filter(Boolean).join(' | ');
-                    
-                    let category = 'Stream';
-                    if (contentEn.toLowerCase().includes('no stream') || contentZh.includes('休息')) {
-                        category = 'Off Day';
-                    }
-                    
-                    const note1 = event['Notes *1\n備註*1'] || event['Notes *1 備註*1'] || '';
-                    const note2 = event['Notes *2\n備註*2'] || event['Notes *2 備註*2'] || '';
-                    const note = [note1, note2].filter(Boolean).join(' / ');
-                    const vodLink = event['VODs'] || '';
-                    const tlLink = event['Translation\n翻譯記錄'] || event['Translation 翻譯記錄'] || '';
-
+                    let eventDate = null;
                     let dateDisplay = '';
                     let dayDisplay = '';
 
@@ -271,44 +289,51 @@
                         if (parsedDateString.match(/^\d{4}\.\d{2}\.\d{2}$/)) {
                             parsedDateString = parsedDateString.replace(/\./g, '-');
                         }
-                        let eventDate = new Date(parsedDateString);
+                        
+                        eventDate = new Date(parsedDateString);
+                        
                         if (!isNaN(eventDate)) {
                             const y = eventDate.getFullYear();
                             const m = String(eventDate.getMonth() + 1).padStart(2, '0');
                             const d = String(eventDate.getDate()).padStart(2, '0');
-                            const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+                            const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+                            
                             dateDisplay = `${y}.${m}.${d}`;
-                            dayDisplay = daysOfWeek[eventDate.getDay()];
+                            dayDisplay = days[eventDate.getDay()];
                         } else {
                             dateDisplay = dateRaw; 
                         }
                     }
 
-                    const isValidUrl = (url) => {
-                        if (!url || typeof url !== 'string') return false;
-                        const trimmed = url.trim();
-                        return (trimmed.startsWith('http://') || trimmed.startsWith('https://'));
-                    };
+                    let isToday = false;
+                    let isFuture = false;
+                    if (eventDate && !isNaN(eventDate)) {
+                        const options = { timeZone: 'Asia/Taipei', year: 'numeric', month: '2-digit', day: '2-digit' };
+                        const formatter = new Intl.DateTimeFormat('en-CA', options);
+                        const todayTaipeiStr = formatter.format(now); 
+                        const eventTaipeiStr = formatter.format(eventDate);
+                        isToday = (todayTaipeiStr === eventTaipeiStr);
+                        isFuture = (eventTaipeiStr > todayTaipeiStr);
+                    }
 
-                    const rawString = `${dateDisplay} ${timeRaw} ${title} ${game} ${note}`.toLowerCase();
+                    const rawString = `${dateDisplay} ${typeRaw} ${contentEn} ${contentZh}`.toLowerCase();
 
                     return {
-                        isStreamInfo: false,
-                        isNotes: false,
-                        dateDisplay,
-                        dayDisplay,
-                        timeDisplay: timeRaw,
-                        title,
-                        category,
-                        game,
-                        note,
-                        vodLink: isValidUrl(vodLink) ? vodLink : '',
-                        tlLink: isValidUrl(tlLink) ? tlLink : '',
-                        sheetName,
-                        isOffDay: category === 'Off Day',
-                        rawString
+                        originalDate: eventDate,
+                        dateDisplay: dateDisplay,
+                        dayDisplay: dayDisplay,
+                        type: typeRaw,
+                        link: linkRaw,
+                        contentEn: contentEn,
+                        contentZh: contentZh,
+                        sheetName: sheetName,
+                        isToday: isToday,
+                        isFuture: isFuture,
+                        rawString: rawString
                     };
                 });
+                
+                this.data = this.data.filter(e => e.dateDisplay || e.contentEn || e.contentZh);
             },
             
             renderSheetFilters: function() {
@@ -325,13 +350,8 @@
                 sheetsArray.forEach(sheet => {
                     const isActive = this.currentSheetFilter === sheet;
                     const activeClass = isActive ? 'bg-vtext dark:bg-white text-vbg dark:text-black shadow-sm' : 'text-vmuted hover:bg-vborder/30 dark:hover:bg-white/5';
-                    
-                    let iconClass = 'fa-regular fa-folder';
-                    if (this.isNotesTab(sheet)) iconClass = 'fa-solid fa-note-sticky';
-                    if (this.isStreamInfoTab(sheet)) iconClass = 'fa-solid fa-circle-info';
-                    
-                    html += `<button class="filter-btn px-3.5 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-colors flex items-center gap-1.5 ${activeClass}" data-sheet="${sheet}">
-                                <i class="${iconClass} text-xs"></i> ${sheet}
+                    html += `<button class="filter-btn px-3 py-1.5 rounded-lg text-sm font-semibold transition-colors flex items-center gap-1.5 ${activeClass}" data-sheet="${sheet}">
+                                <i class="fa-regular fa-folder text-xs"></i> ${sheet}
                            </button>`;
                 });
                 
@@ -357,6 +377,12 @@
                     filtered = filtered.filter(e => e.rawString.includes(this.searchQuery));
                 }
 
+                filtered.sort((a, b) => {
+                    if (!a.originalDate) return 1;
+                    if (!b.originalDate) return -1;
+                    return a.originalDate.getTime() - b.originalDate.getTime();
+                });
+                
                 return filtered;
             },
 
@@ -367,136 +393,105 @@
                 const displayData = this.getFilteredData();
 
                 if (displayData.length === 0) {
-                    this.showState('<i class="fa-regular fa-calendar-xmark text-vmuted/50 text-4xl"></i>', 'No matching records found.｜沒有找到相符的紀錄');
+                    this.showState('<i class="fa-regular fa-folder-open text-vmuted/50 text-4xl mb-2"></i>', 'No matching records found.｜沒有找到相符的資料');
                     return;
                 }
 
                 container.innerHTML = '';
-
-                if (this.isStreamInfoTab(this.currentSheetFilter)) {
-                    this.renderStreamInfoView(container, displayData);
-                    return;
-                }
-
-                if (this.isNotesTab(this.currentSheetFilter)) {
-                    this.renderNotesView(container, displayData);
-                    return;
-                }
-
                 const fragment = document.createDocumentFragment();
-                displayData.forEach(event => {
-                    const cardWrapper = document.createElement('div');
-                    cardWrapper.className = "flex items-center gap-3 relative schedule-card-wrapper";
+
+                const getTypeBadge = (type) => {
+                    if (!type) return '';
+                    const t = type.toLowerCase();
+                    let colorClass = 'bg-gray-200 text-gray-700 dark:bg-gray-700 dark:text-gray-300'; 
                     
-                    const card = document.createElement('div');
-                    const offDayBgClass = event.isOffDay ? "bg-vborder/20 dark:bg-black/20" : "bg-vcard dark:dark-mode-card";
-                    card.className = `flex flex-col md:flex-row ${offDayBgClass} border border-vborder/70 dark:dark-mode-border rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow fade-in flex-grow`;
-                    
-                    let linksHtml = '';
-                    if (event.vodLink) {
-                        linksHtml += `<a href="${event.vodLink}" target="_blank" class="px-2.5 py-1.5 rounded-md bg-amber-50 dark:bg-amber-950/30 text-amber-700 dark:text-amber-400 text-[11px] font-semibold hover:bg-amber-100 dark:hover:bg-amber-900/50 transition-colors inline-flex justify-center items-center gap-1.5 border border-amber-200/60 dark:border-amber-900/30"><i class="fa-brands fa-youtube"></i> VOD</a>`;
+                    if (t.includes('18+')) {
+                        colorClass = 'bg-[#B01818] text-white';
+                    } else if (t.includes('asmr')) {
+                        colorClass = 'bg-[#CDE9C1] text-[#366A23] border border-[#A4D88F]';
+                    } else if (t.includes('bts') || t.includes('幕後')) {
+                        colorClass = 'bg-[#C2E3FB] text-[#296D9E] border border-[#9ACFF5]';
+                    } else if (t.includes('art') || t.includes('nsfw')) {
+                        colorClass = 'bg-[#6F3A96] text-white';
+                    } else if (t === 'art') {
+                        colorClass = 'bg-[#FDF4D6] text-[#A67C00] border border-[#FBE6A0]';
                     }
-                    if (event.tlLink) {
-                        linksHtml += `<a href="${event.tlLink}" target="_blank" class="px-2.5 py-1.5 rounded-md bg-[#EEF5EC] dark:bg-[#14532D]/30 text-[#527947] dark:text-[#84CC16] text-[11px] font-semibold hover:bg-[#E2EFE0] dark:hover:bg-[#14532D]/50 transition-colors inline-flex justify-center items-center gap-1.5 border border-[#D5E6D0] dark:border-[#166534]/50"><i class="fa-solid fa-language"></i> 翻譯</a>`;
+                    
+                    return `<span class="inline-flex items-center justify-center px-3 py-[3px] rounded-full text-[11px] font-bold tracking-wider shadow-sm ${colorClass}">${type}</span>`;
+                };
+
+                displayData.forEach((event, index) => {
+                    const cardWrapper = document.createElement('div');
+                    cardWrapper.className = "flex items-center gap-3 relative schedule-card-wrapper fade-in";
+                    cardWrapper.style.animationDelay = `${Math.min(index * 15, 300)}ms`;
+                    cardWrapper.setAttribute('data-is-future', event.isFuture ? 'true' : 'false');
+                    
+                    if (event.isToday) {
+                        cardWrapper.id = 'today-event-card';
                     }
 
-                    let metaHtml = '';
-                    if (event.game && !event.isOffDay) metaHtml += `<span class="flex items-center gap-1"><i class="fa-solid fa-gamepad opacity-70"></i> ${event.game}</span>`;
-                    if (event.note) metaHtml += `<span class="flex items-center gap-1"><i class="fa-solid fa-circle-info opacity-70"></i> ${event.note}</span>`;
-                    const metaDiv = metaHtml ? `<div class="flex flex-wrap gap-x-4 gap-y-1 mt-2 text-[12px] vmuted dark:dark-mode-muted">${metaHtml}</div>` : '';
+                    let indicatorHtml = '';
+                    if (event.isToday) {
+                        indicatorHtml = `<div class="text-vaccent dark:text-orange-400 text-[15px] md:text-[19px] font-bold shrink-0 select-none flex items-center justify-center w-4">▸</div>`;
+                    } else {
+                        indicatorHtml = `<div class="w-4 shrink-0"></div>`;
+                    }
+
+                    const card = document.createElement('div');
+                    card.className = "flex flex-col md:flex-row bg-vcard dark:dark-mode-card border border-vborder/70 dark:dark-mode-border rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow flex-grow";
+                    
+                    let linkHtml = '';
+                    if (event.link) {
+                        const linkStr = String(event.link).trim();
+                        const isUrl = linkStr.startsWith('http');
+                        if (isUrl) {
+                            linkHtml = `
+                            <a href="${linkStr}" target="_blank" class="px-2.5 py-1.5 rounded-md bg-blue-50 dark:bg-blue-950/30 text-blue-600 dark:text-blue-400 text-[11px] font-semibold hover:bg-blue-100 dark:hover:bg-blue-900/50 transition-colors inline-flex justify-center items-center gap-1.5 border border-blue-200/60 dark:border-blue-900/30 mt-3 md:mt-4">
+                                <i class="fa-solid fa-link"></i> Link
+                            </a>`;
+                        } else {
+                            linkHtml = `<div class="mt-3 text-blue-600 dark:text-blue-400 text-[11px] font-medium p-1.5 bg-blue-50 dark:bg-blue-900/20 rounded-md break-all border border-blue-100 dark:border-blue-800/30 text-center">${linkStr}</div>`;
+                        }
+                    }
 
                     card.innerHTML = `
                         <div class="flex-shrink-0 w-full md:w-[185px] flex flex-col justify-center items-center p-4 md:border-r border-vborder/50 dark:border-[#3F3F46] bg-vbg/40 dark:bg-black/10">
-                            <div class="text-[14px] md:text-[16px] font-bold text-vaccent dark:text-orange-400 tracking-wide flex items-center gap-1.5">
-                                <span>${event.dateDisplay || '-'}</span>
-                                <span class="text-[11px] font-medium vmuted dark:dark-mode-muted">${event.dayDisplay || ''}</span>
+                            <div class="flex flex-col items-center text-center">
+                                <div class="text-[14px] md:text-[16px] font-bold text-vaccent dark:text-orange-400 tracking-wide flex items-center gap-1.5">
+                                    <span>${event.dateDisplay || '-'}</span>
+                                    <span class="text-[11px] font-medium vmuted dark:dark-mode-muted">${event.dayDisplay || '-'}</span>
+                                </div>
                             </div>
-                            ${event.timeDisplay ? `<div class="text-[12px] md:text-[14px] font-bold vtext dark:dark-mode-text mt-2 md:mt-3 bg-vborder/30 dark:bg-white/10 px-2 py-0.5 rounded">${event.timeDisplay}</div>` : ''}
-                            ${linksHtml ? `<div class="flex flex-wrap justify-center items-center w-full gap-2 mt-3 px-1">${linksHtml}</div>` : ''}
+                            
+                            ${linkHtml}
                         </div>
+                        
                         <div class="flex-grow p-4 md:px-6 flex flex-col justify-center">
-                            <h3 class="text-[13px] md:text-[14px] font-bold vtext dark:dark-mode-text leading-snug">${event.title}</h3>
-                            ${metaDiv}
+                            <div class="flex flex-col gap-3">
+                                <div class="flex flex-col w-full">
+                                    <div class="flex flex-col gap-1.5">
+                                        <div class="flex flex-wrap items-center gap-2">
+                                            ${getTypeBadge(event.type)}
+                                        </div>
+                                        <h3 class="text-[13px] md:text-[14px] font-bold vtext dark:dark-mode-text leading-snug break-words whitespace-pre-wrap">${event.contentEn || '<span class="italic opacity-50">N/A</span>'}</h3>
+                                    </div>
+                                    
+                                    ${event.contentZh ? `
+                                    <div class="mt-2 text-[13px] md:text-[14px] font-normal vtext dark:dark-mode-text">
+                                        <span class="flex items-start gap-1.5"><i class="fa-solid fa-language opacity-70 mt-[3px] text-xs"></i> <span class="break-words whitespace-pre-wrap leading-snug">${event.contentZh}</span></span>
+                                    </div>
+                                    ` : ''}
+                                </div>
+                            </div>
                         </div>
                     `;
+
+                    cardWrapper.innerHTML = indicatorHtml;
                     cardWrapper.appendChild(card);
                     fragment.appendChild(cardWrapper);
                 });
+
                 container.appendChild(fragment);
-            },
-
-            renderStreamInfoView: function(container, data) {
-                let html = `<div class="flex flex-col gap-6 fade-in">`;
-
-                data.forEach(item => {
-                    if (item.isSectionHeader) {
-                        html += `
-                            <div class="bg-vcard dark:dark-mode-card border border-vborder/70 dark:dark-mode-border rounded-2xl p-6 md:p-8 shadow-sm flex items-center gap-4 mt-6 first:mt-0">
-                                <div class="w-12 h-12 rounded-xl bg-vaccent/10 text-vaccent flex items-center justify-center text-xl font-bold shrink-0">
-                                    <i class="fa-solid fa-circle-info"></i>
-                                </div>
-                                <div class="flex flex-col">
-                                    <h2 class="text-[20px] font-bold vtext dark:dark-mode-text">${item.sectionTitle || ''}</h2>
-                                    ${item.sectionTitleZh ? `<p class="text-[13px] vmuted dark:dark-mode-muted mt-0.5">${item.sectionTitleZh}</p>` : ''}
-                                </div>
-                            </div>
-                        `;
-                    } else {
-                        html += `
-                            <div class="bg-vcard dark:dark-mode-card border border-vborder/70 dark:dark-mode-border rounded-2xl p-6 md:p-8 flex flex-col gap-4 shadow-sm hover:shadow transition-all">
-                                ${item.sectionTitle ? `<div class="text-[14px] font-bold text-vaccent dark:text-orange-400 bg-vaccent/10 px-3 py-1 rounded-lg w-fit tracking-wide">${item.sectionTitle}</div>` : ''}
-                                <div class="flex flex-col gap-3 pt-1">
-                                    <div class="text-[14px] vtext dark:dark-mode-text cell-wrap-text font-semibold">${item.contentEn || ''}</div>
-                                    ${item.contentZh ? `<div class="text-[13px] vmuted dark:dark-mode-muted cell-wrap-text font-normal pt-2 border-t border-vborder/40 dark:border-white/5">${item.contentZh}</div>` : ''}
-                                </div>
-                            </div>
-                        `;
-                    }
-                });
-
-                html += `</div>`;
-                container.innerHTML = html;
-            },
-
-            renderNotesView: function(container, data) {
-                let html = `
-                    <div class="flex flex-col gap-6 fade-in">
-                        <div class="bg-vcard dark:dark-mode-card border border-vborder/70 dark:dark-mode-border rounded-2xl p-6 md:p-8 shadow-sm flex items-center gap-4">
-                            <div class="w-12 h-12 rounded-xl bg-vaccent/10 text-vaccent flex items-center justify-center text-xl font-bold shrink-0">
-                                <i class="fa-solid fa-note-sticky"></i>
-                            </div>
-                            <div class="flex flex-col">
-                                <h2 class="text-[20px] font-bold vtext dark:dark-mode-text">Notes & Milestones｜記事與里程碑</h2>
-                                <p class="text-[13px] vmuted dark:dark-mode-muted mt-0.5">Important milestones, debuts, and special events history.</p>
-                            </div>
-                        </div>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                `;
-
-                data.forEach(item => {
-                    const isBirthday = (item.contentEn && item.contentEn.toLowerCase().includes('birthday')) || 
-                                       (item.contentZh && item.contentZh.includes('生日'));
-                    const cardBg = isBirthday ? 'bg-amber-50/60 dark:bg-amber-950/20 border-amber-300/80 dark:border-amber-900/50' : 'bg-vcard dark:dark-mode-card border-vborder/70 dark:dark-mode-border';
-                    const iconColor = isBirthday ? 'text-amber-600 dark:text-amber-400' : 'text-vaccent';
-
-                    html += `
-                        <div class="${cardBg} border rounded-xl p-5 flex flex-col justify-between gap-3 shadow-sm hover:shadow transition-all">
-                            <div class="flex items-center justify-between">
-                                <span class="text-[13px] font-bold ${iconColor} bg-vaccent/10 px-3 py-1 rounded-lg">
-                                    <i class="fa-regular fa-calendar-days mr-1.5"></i> ${item.dateDisplay || '-'}
-                                </span>
-                                ${isBirthday ? '<span class="text-xs bg-amber-200/60 text-amber-800 dark:bg-amber-900/60 dark:text-amber-300 px-2 py-0.5 rounded-full font-semibold">Special</span>' : ''}
-                            </div>
-                            <div class="flex flex-col gap-1 pt-1">
-                                <h4 class="text-[15px] font-bold vtext dark:dark-mode-text leading-snug">${item.contentEn || ''}</h4>
-                                ${item.contentZh ? `<p class="text-[13px] vmuted dark:dark-mode-muted leading-snug">${item.contentZh}</p>` : ''}
-                            </div>
-                        </div>
-                    `;
-                });
-
-                html += `</div></div>`;
-                container.innerHTML = html;
             },
 
             showState: function(iconHtml, message) {
@@ -515,11 +510,15 @@
 
             startAutoRefresh: function() {
                 if (this.refreshTimer) clearInterval(this.refreshTimer);
-                this.refreshTimer = setInterval(() => { this.fetchData(); }, CONFIG.REFRESH_INTERVAL);
+                this.refreshTimer = setInterval(() => {
+                    this.fetchData();
+                }, CONFIG.REFRESH_INTERVAL);
             }
         };
 
-        window.addEventListener('DOMContentLoaded', () => { app.init(); });
+        window.addEventListener('DOMContentLoaded', () => {
+            app.init();
+        });
     </script>
 </body>
 </html>
