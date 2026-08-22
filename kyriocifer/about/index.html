@@ -113,7 +113,7 @@
             <div id="state-message" class="py-24 text-center bg-vcard dark:dark-mode-card rounded-xl border border-vborder/70 dark:dark-mode-border shadow-sm">
                 <div class="flex flex-col items-center justify-center gap-3">
                     <i class="fa-solid fa-circle-notch fa-spin text-2xl text-vaccent"></i>
-                    <span class="text-sm font-medium vtext dark:dark-mode-text">Loading data, please wait…｜讀取資料中...</span>
+                    <span class="text-sm font-medium vtext dark:dark-mode-text">Loading data, please wait...｜讀取資料中...</span>
                 </div>
             </div>
         </div>
@@ -184,119 +184,14 @@
                 }
             },
 
-            isNotesTab: function(sheetName) {
-                if (!sheetName) return false;
-                const lower = sheetName.toLowerCase();
-                return lower.includes('notes') || lower.includes('記事');
-            },
-
-            isStreamInfoTab: function(sheetName) {
-                if (!sheetName) return false;
-                const lower = sheetName.toLowerCase();
-                return lower.includes('stream info') || lower.includes('直播資訊');
-            },
-
             processData: function(rawEvents) {
                 this.sheets.clear();
-
                 this.data = rawEvents.map(event => {
                     const sheetName = event._sheetName || 'Default';
                     if (sheetName !== 'Default') {
                         this.sheets.add(sheetName);
                     }
-
-                    if (event.isStreamInfo) {
-                        return {
-                            sheetName,
-                            isStreamInfo: true,
-                            isSectionHeader: event.isSectionHeader || false,
-                            sectionTitle: event.sectionTitle || '',
-                            sectionTitleZh: event.sectionTitleZh || '',
-                            contentEn: event.contentEn || '',
-                            contentZh: event.contentZh || '',
-                            rawString: `${event.sectionTitle} ${event.sectionTitleZh} ${event.contentEn} ${event.contentZh}`.toLowerCase()
-                        };
-                    }
-
-                    if (this.isNotesTab(sheetName)) {
-                        const dateRaw = event['日期'] || event['Date'] || event.date || '';
-                        const contentEn = event['Content'] || '';
-                        const contentZh = event['內容'] || '';
-                        const rawString = `${dateRaw} ${contentEn} ${contentZh}`.toLowerCase();
-
-                        return {
-                            sheetName,
-                            isNotes: true,
-                            dateDisplay: dateRaw,
-                            contentEn,
-                            contentZh,
-                            rawString
-                        };
-                    }
-
-                    const dateRaw = event['Date\n日期'] || event['Date 日期'] || event.date || event['日期'] || '';
-                    const timeRaw = event['Time(GMT+8)\n時間GMT+8'] || event['Time(GMT+8) 時間GMT+8'] || event.time || event['時間'] || '';
-                    let title = event['Stream title\n直播標題'] || event['Stream title 直播標題'] || event['Content'] || event['內容'] || 'Untitled';
-                    const contentEn = event['Content'] || '';
-                    const contentZh = event['內容'] || '';
-                    const game = [contentEn, contentZh].filter(Boolean).join(' | ');
-                    
-                    let category = 'Stream';
-                    if (contentEn.toLowerCase().includes('no stream') || contentZh.includes('休息')) {
-                        category = 'Off Day';
-                    }
-                    
-                    const note1 = event['Notes *1\n備註*1'] || event['Notes *1 備註*1'] || '';
-                    const note2 = event['Notes *2\n備註*2'] || event['Notes *2 備註*2'] || '';
-                    const note = [note1, note2].filter(Boolean).join(' / ');
-                    const vodLink = event['VODs'] || '';
-                    const tlLink = event['Translation\n翻譯記錄'] || event['Translation 翻譯記錄'] || '';
-
-                    let dateDisplay = '';
-                    let dayDisplay = '';
-
-                    if (dateRaw) {
-                        let parsedDateString = String(dateRaw);
-                        if (parsedDateString.match(/^\d{4}\.\d{2}\.\d{2}$/)) {
-                            parsedDateString = parsedDateString.replace(/\./g, '-');
-                        }
-                        let eventDate = new Date(parsedDateString);
-                        if (!isNaN(eventDate)) {
-                            const y = eventDate.getFullYear();
-                            const m = String(eventDate.getMonth() + 1).padStart(2, '0');
-                            const d = String(eventDate.getDate()).padStart(2, '0');
-                            const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-                            dateDisplay = `${y}.${m}.${d}`;
-                            dayDisplay = daysOfWeek[eventDate.getDay()];
-                        } else {
-                            dateDisplay = dateRaw; 
-                        }
-                    }
-
-                    const isValidUrl = (url) => {
-                        if (!url || typeof url !== 'string') return false;
-                        const trimmed = url.trim();
-                        return (trimmed.startsWith('http://') || trimmed.startsWith('https://'));
-                    };
-
-                    const rawString = `${dateDisplay} ${timeRaw} ${title} ${game} ${note}`.toLowerCase();
-
-                    return {
-                        isStreamInfo: false,
-                        isNotes: false,
-                        dateDisplay,
-                        dayDisplay,
-                        timeDisplay: timeRaw,
-                        title,
-                        category,
-                        game,
-                        note,
-                        vodLink: isValidUrl(vodLink) ? vodLink : '',
-                        tlLink: isValidUrl(tlLink) ? tlLink : '',
-                        sheetName,
-                        isOffDay: category === 'Off Day',
-                        rawString
-                    };
+                    return event;
                 });
             },
             
@@ -316,8 +211,10 @@
                     const activeClass = isActive ? 'bg-vtext dark:bg-white text-vbg dark:text-black shadow-sm' : 'text-vmuted hover:bg-vborder/30 dark:hover:bg-white/5';
                     
                     let iconClass = 'fa-regular fa-folder';
-                    if (this.isNotesTab(sheet)) iconClass = 'fa-solid fa-note-sticky';
-                    if (this.isStreamInfoTab(sheet)) iconClass = 'fa-solid fa-circle-info';
+                    const lower = sheet.toLowerCase();
+                    if (lower.includes('about') || lower.includes('關於')) iconClass = 'fa-solid fa-circle-info';
+                    else if (lower.includes('link') || lower.includes('相關連結')) iconClass = 'fa-solid fa-link';
+                    else if (lower.includes('tag') || lower.includes('標籤')) iconClass = 'fa-solid fa-hashtag';
                     
                     html += `<button class="filter-btn px-3.5 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-colors flex items-center gap-1.5 ${activeClass}" data-sheet="${sheet}">
                                 <i class="${iconClass} text-xs"></i> ${sheet}
@@ -339,11 +236,14 @@
                 let filtered = [...this.data];
                 
                 if (this.currentSheetFilter) {
-                    filtered = filtered.filter(e => e.sheetName === this.currentSheetFilter);
+                    filtered = filtered.filter(e => e._sheetName === this.currentSheetFilter);
                 }
 
                 if (this.searchQuery) {
-                    filtered = filtered.filter(e => e.rawString.includes(this.searchQuery));
+                    filtered = filtered.filter(e => {
+                        const str = `${e.sectionTitle || ''} ${e.labelLeftEn || ''} ${e.valueLeft || ''} ${e.labelRightEn || ''} ${e.valueRight || ''}`.toLowerCase();
+                        return str.includes(this.searchQuery);
+                    });
                 }
 
                 return filtered;
@@ -356,73 +256,22 @@
                 const displayData = this.getFilteredData();
 
                 if (displayData.length === 0) {
-                    this.showState('<i class="fa-regular fa-calendar-xmark text-vmuted/50 text-4xl"></i>', 'No matching records found.｜沒有找到相符的紀錄');
+                    this.showState('<i class="fa-regular fa-folder-open text-vmuted/50 text-4xl"></i>', 'No matching records found.｜沒有找到相符的紀錄');
                     return;
                 }
 
                 container.innerHTML = '';
-
-                if (this.isStreamInfoTab(this.currentSheetFilter)) {
-                    this.renderStreamInfoView(container, displayData);
-                    return;
-                }
-
-                if (this.isNotesTab(this.currentSheetFilter)) {
-                    this.renderNotesView(container, displayData);
-                    return;
-                }
-
-                const fragment = document.createDocumentFragment();
-                displayData.forEach(event => {
-                    const cardWrapper = document.createElement('div');
-                    cardWrapper.className = "flex items-center gap-3 relative schedule-card-wrapper";
-                    
-                    const card = document.createElement('div');
-                    const offDayBgClass = event.isOffDay ? "bg-vborder/20 dark:bg-black/20" : "bg-vcard dark:dark-mode-card";
-                    card.className = `flex flex-col md:flex-row ${offDayBgClass} border border-vborder/70 dark:dark-mode-border rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow fade-in flex-grow`;
-                    
-                    let linksHtml = '';
-                    if (event.vodLink) {
-                        linksHtml += `<a href="${event.vodLink}" target="_blank" class="px-2.5 py-1.5 rounded-md bg-amber-50 dark:bg-amber-950/30 text-amber-700 dark:text-amber-400 text-[11px] font-semibold hover:bg-amber-100 dark:hover:bg-amber-900/50 transition-colors inline-flex justify-center items-center gap-1.5 border border-amber-200/60 dark:border-amber-900/30"><i class="fa-brands fa-youtube"></i> VOD</a>`;
-                    }
-                    if (event.tlLink) {
-                        linksHtml += `<a href="${event.tlLink}" target="_blank" class="px-2.5 py-1.5 rounded-md bg-[#EEF5EC] dark:bg-[#14532D]/30 text-[#527947] dark:text-[#84CC16] text-[11px] font-semibold hover:bg-[#E2EFE0] dark:hover:bg-[#14532D]/50 transition-colors inline-flex justify-center items-center gap-1.5 border border-[#D5E6D0] dark:border-[#166534]/50"><i class="fa-solid fa-language"></i> 翻譯</a>`;
-                    }
-
-                    let metaHtml = '';
-                    if (event.game && !event.isOffDay) metaHtml += `<span class="flex items-center gap-1"><i class="fa-solid fa-gamepad opacity-70"></i> ${event.game}</span>`;
-                    if (event.note) metaHtml += `<span class="flex items-center gap-1"><i class="fa-solid fa-circle-info opacity-70"></i> ${event.note}</span>`;
-                    const metaDiv = metaHtml ? `<div class="flex flex-wrap gap-x-4 gap-y-1 mt-2 text-[12px] vmuted dark:dark-mode-muted">${metaHtml}</div>` : '';
-
-                    card.innerHTML = `
-                        <div class="flex-shrink-0 w-full md:w-[185px] flex flex-col justify-center items-center p-4 md:border-r border-vborder/50 dark:border-[#3F3F46] bg-vbg/40 dark:bg-black/10">
-                            <div class="text-[14px] md:text-[16px] font-bold text-vaccent dark:text-orange-400 tracking-wide flex items-center gap-1.5">
-                                <span>${event.dateDisplay || '-'}</span>
-                                <span class="text-[11px] font-medium vmuted dark:dark-mode-muted">${event.dayDisplay || ''}</span>
-                            </div>
-                            ${event.timeDisplay ? `<div class="text-[12px] md:text-[14px] font-bold vtext dark:dark-mode-text mt-2 md:mt-3 bg-vborder/30 dark:bg-white/10 px-2 py-0.5 rounded">${event.timeDisplay}</div>` : ''}
-                            ${linksHtml ? `<div class="flex flex-wrap justify-center items-center w-full gap-2 mt-3 px-1">${linksHtml}</div>` : ''}
-                        </div>
-                        <div class="flex-grow p-4 md:px-6 flex flex-col justify-center">
-                            <h3 class="text-[13px] md:text-[14px] font-bold vtext dark:dark-mode-text leading-snug">${event.title}</h3>
-                            ${metaDiv}
-                        </div>
-                    `;
-                    cardWrapper.appendChild(card);
-                    fragment.appendChild(cardWrapper);
-                });
-                container.appendChild(fragment);
-            },
-
-            renderStreamInfoView: function(container, data) {
                 let html = `<div class="flex flex-col gap-6 fade-in">`;
+                
+                let currentHeader = '';
 
-                data.forEach(item => {
-                    if (item.isSectionHeader) {
+                displayData.forEach(item => {
+                    if (item.isMultiSectionHeader) {
+                        currentHeader = item.sectionTitle;
                         html += `
                             <div class="bg-vcard dark:dark-mode-card border border-vborder/70 dark:dark-mode-border rounded-2xl p-6 md:p-8 shadow-sm flex items-center gap-4 mt-6 first:mt-0">
                                 <div class="w-12 h-12 rounded-xl bg-vaccent/10 text-vaccent flex items-center justify-center text-xl font-bold shrink-0">
-                                    <i class="fa-solid fa-circle-info"></i>
+                                    <i class="fa-solid fa-folder-open"></i>
                                 </div>
                                 <div class="flex flex-col">
                                     <h2 class="text-[20px] font-bold vtext dark:dark-mode-text">${item.sectionTitle || ''}</h2>
@@ -430,61 +279,53 @@
                                 </div>
                             </div>
                         `;
-                    } else {
-                        html += `
-                            <div class="bg-vcard dark:dark-mode-card border border-vborder/70 dark:dark-mode-border rounded-2xl p-6 md:p-8 flex flex-col gap-4 shadow-sm hover:shadow transition-all">
-                                ${item.sectionTitle ? `<div class="text-[14px] font-bold text-vaccent dark:text-orange-400 bg-vaccent/10 px-3 py-1 rounded-lg w-fit tracking-wide">${item.sectionTitle}</div>` : ''}
-                                <div class="flex flex-col gap-3 pt-1">
-                                    <div class="text-[14px] vtext dark:dark-mode-text cell-wrap-text font-semibold">${item.contentEn || ''}</div>
-                                    ${item.contentZh ? `<div class="text-[13px] vmuted dark:dark-mode-muted cell-wrap-text font-normal pt-2 border-t border-vborder/40 dark:border-white/5">${item.contentZh}</div>` : ''}
+                    } else if (item.isMultiSectionItem) {
+                        const hasLeft = item.labelLeftEn || item.valueLeft;
+                        const hasRight = item.labelRightEn || item.valueRight;
+
+                        html += `<div class="grid grid-cols-1 md:grid-cols-2 gap-4">`;
+
+                        if (hasLeft) {
+                            const isUrl = String(item.valueLeft).trim().startsWith('http');
+                            const isEmail = String(item.valueLeft).trim().includes('@');
+                            let valHtml = item.valueLeft || '';
+                            if (isUrl) {
+                                valHtml = `<a href="${item.valueLeft}" target="_blank" class="text-vaccent hover:underline break-all flex items-center gap-1.5"><i class="fa-solid fa-link text-xs"></i> ${item.valueLeft}</a>`;
+                            } else if (isEmail) {
+                                valHtml = `<a href="mailto:${item.valueLeft}" class="text-vaccent hover:underline break-all flex items-center gap-1.5"><i class="fa-solid fa-envelope text-xs"></i> ${item.valueLeft}</a>`;
+                            }
+
+                            html += `
+                                <div class="bg-vcard dark:dark-mode-card border border-vborder/70 dark:dark-mode-border rounded-xl p-5 flex flex-col justify-between gap-2 shadow-sm hover:shadow transition-all">
+                                    ${item.labelLeftEn ? `<div class="text-[13px] font-bold text-vaccent dark:text-orange-400 bg-vaccent/10 px-3 py-1 rounded-lg w-fit tracking-wide">${item.labelLeftEn}</div>` : ''}
+                                    <div class="text-[14px] vtext dark:dark-mode-text cell-wrap-text font-semibold pt-1">${valHtml}</div>
                                 </div>
-                            </div>
-                        `;
+                            `;
+                        }
+
+                        if (hasRight) {
+                            const isUrl = String(item.valueRight).trim().startsWith('http');
+                            const isEmail = String(item.valueRight).trim().includes('@');
+                            let valHtml = item.valueRight || '';
+                            if (isUrl) {
+                                valHtml = `<a href="${item.valueRight}" target="_blank" class="text-vaccent hover:underline break-all flex items-center gap-1.5"><i class="fa-solid fa-link text-xs"></i> ${item.valueRight}</a>`;
+                            } else if (isEmail) {
+                                valHtml = `<a href="mailto:${item.valueRight}" class="text-vaccent hover:underline break-all flex items-center gap-1.5"><i class="fa-solid fa-envelope text-xs"></i> ${item.valueRight}</a>`;
+                            }
+
+                            html += `
+                                <div class="bg-vcard dark:dark-mode-card border border-vborder/70 dark:dark-mode-border rounded-xl p-5 flex flex-col justify-between gap-2 shadow-sm hover:shadow transition-all">
+                                    ${item.labelRightEn ? `<div class="text-[13px] font-bold text-vaccent dark:text-orange-400 bg-vaccent/10 px-3 py-1 rounded-lg w-fit tracking-wide">${item.labelRightEn}</div>` : ''}
+                                    <div class="text-[14px] vtext dark:dark-mode-text cell-wrap-text font-semibold pt-1">${valHtml}</div>
+                                </div>
+                            `;
+                        }
+
+                        html += `</div>`;
                     }
                 });
 
                 html += `</div>`;
-                container.innerHTML = html;
-            },
-
-            renderNotesView: function(container, data) {
-                let html = `
-                    <div class="flex flex-col gap-6 fade-in">
-                        <div class="bg-vcard dark:dark-mode-card border border-vborder/70 dark:dark-mode-border rounded-2xl p-6 md:p-8 shadow-sm flex items-center gap-4">
-                            <div class="w-12 h-12 rounded-xl bg-vaccent/10 text-vaccent flex items-center justify-center text-xl font-bold shrink-0">
-                                <i class="fa-solid fa-note-sticky"></i>
-                            </div>
-                            <div class="flex flex-col">
-                                <h2 class="text-[20px] font-bold vtext dark:dark-mode-text">Notes & Milestones｜記事與里程碑</h2>
-                                <p class="text-[13px] vmuted dark:dark-mode-muted mt-0.5">Important milestones, debuts, and special events history.</p>
-                            </div>
-                        </div>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                `;
-
-                data.forEach(item => {
-                    const isBirthday = (item.contentEn && item.contentEn.toLowerCase().includes('birthday')) || 
-                                     (item.contentZh && item.contentZh.includes('生日'));
-                    const cardBg = isBirthday ? 'bg-amber-50/60 dark:bg-amber-950/20 border-amber-300/80 dark:border-amber-900/50' : 'bg-vcard dark:dark-mode-card border-vborder/70 dark:dark-mode-border';
-                    const iconColor = isBirthday ? 'text-amber-600 dark:text-amber-400' : 'text-vaccent';
-
-                    html += `
-                        <div class="${cardBg} border rounded-xl p-5 flex flex-col justify-between gap-3 shadow-sm hover:shadow transition-all">
-                            <div class="flex items-center justify-between">
-                                <span class="text-[13px] font-bold ${iconColor} bg-vaccent/10 px-3 py-1 rounded-lg">
-                                    <i class="fa-regular fa-calendar-days mr-1.5"></i> ${item.dateDisplay || '-'}
-                                </span>
-                                ${isBirthday ? '<span class="text-xs bg-amber-200/60 text-amber-800 dark:bg-amber-900/60 dark:text-amber-300 px-2 py-0.5 rounded-full font-semibold">Special</span>' : ''}
-                            </div>
-                            <div class="flex flex-col gap-1 pt-1">
-                                <h4 class="text-[15px] font-bold vtext dark:dark-mode-text leading-snug">${item.contentEn || ''}</h4>
-                                ${item.contentZh ? `<p class="text-[13px] vmuted dark:dark-mode-muted leading-snug">${item.contentZh}</p>` : ''}
-                            </div>
-                        </div>
-                    `;
-                });
-
-                html += `</div></div>`;
                 container.innerHTML = html;
             },
 
@@ -512,3 +353,4 @@
     </script>
 </body>
 </html>
+```eof
