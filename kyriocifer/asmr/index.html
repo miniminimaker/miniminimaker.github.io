@@ -100,7 +100,6 @@
         </section>
 
         <div class="flex flex-col gap-6">
-            <!-- Added Search Bar -->
             <div class="relative group w-full">
                 <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-vmuted opacity-40 group-focus-within:text-vaccent transition-colors"></i>
                 <input type="text" id="input-search" placeholder="Search ASMR/Patreon titles, content, or types..." 
@@ -138,6 +137,10 @@
             API_URL: "https://script.google.com/macros/s/AKfycbyMsfAieg6jUrgY3zoTjCKGiNaXSJu8eKA9hop60jpSeJbREeOQes0CG568iJLUnpw/exec",
             TIMEZONE: "Asia/Taipei",
             REFRESH_INTERVAL: 5 * 60 * 1000 
+        };
+
+        const DOM = {
+            updatedText: document.getElementById('sync-status')
         };
 
         const app = {
@@ -180,7 +183,7 @@
             },
 
             fetchData: async function(isManual = false) {
-                const statusText = document.getElementById('sync-status');
+                const statusText = DOM.updatedText;
                 if (statusText) statusText.innerText = 'Syncing database...';
 
                 if (this.data.length === 0) {
@@ -215,11 +218,17 @@
                         
                         this.renderSheetFilters();
                         this.render();
-                        if (statusText) {
-                            const d = new Date();
-                            const timeStr = d.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
-                            const dateStr = d.toLocaleDateString('en-US', { month: '2-digit', day: '2-digit' });
-                            statusText.innerHTML = `▸ <span style="font-weight: 600;">Last Updated</span>: ${dateStr}, ${timeStr}`;
+                        
+                        if (DOM.updatedText) {
+                            if (result.lastSynced) {
+                                const dateObj = new Date(result.lastSynced);
+                                const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+                                const day = String(dateObj.getDate()).padStart(2, '0');
+                                const time = dateObj.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
+                                DOM.updatedText.innerText = `▸ Last Updated: ${month}/${day}, ${time}`;
+                            } else {
+                                DOM.updatedText.innerText = `▸ Last Updated: Just now`;
+                            }
                         }
 
                         if (!this.hasScrolledToToday && !this.searchQuery) {
@@ -235,7 +244,7 @@
                     if (this.data.length === 0) {
                         this.showState('<i class="fa-solid fa-triangle-exclamation text-rose-600 dark:text-rose-400 text-3xl mb-2"></i>', 'Unable to load data.<br>Please check console or try again later.');
                     }
-                    if (statusText) statusText.innerHTML = '<span class="text-rose-500">Sync failed</span>';
+                    if (DOM.updatedText) DOM.updatedText.innerText = 'Sync failed';
                 }
             },
 
@@ -498,11 +507,7 @@
                         </div>
                     `;
 
-                    cardWrapper.appendChild(indicatorHtml ? Object.assign(document.createElement('div'),{innerHTML:indicatorHtml}).firstElementChild : null);
-                    if(indicatorHtml){
-                         cardWrapper.innerHTML = indicatorHtml;
-                    }
-                    
+                    cardWrapper.innerHTML = indicatorHtml;
                     cardWrapper.appendChild(card);
                     fragment.appendChild(cardWrapper);
                 });
