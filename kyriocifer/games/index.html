@@ -118,7 +118,6 @@
 
             <div class="flex flex-wrap items-center justify-between gap-3 text-xs vmuted dark:dark-mode-muted px-1">
                 <div id="stats-text" class="font-medium">Connecting...</div>
-                <div id="last-updated-text">Syncing database...</div>
             </div>
 
             <div class="flex flex-col gap-1.5 -mt-1">
@@ -180,7 +179,6 @@
             search: document.getElementById('input-search'),
             alphabetNav: document.getElementById('alphabet-nav'),
             statsText: document.getElementById('stats-text'),
-            updatedText: document.getElementById('last-updated-text'),
             btnRetry: document.getElementById('btn-retry')
         };
 
@@ -222,18 +220,6 @@
                 updateTableHeader();
                 buildAlphabetNav();
                 applyFilters(); 
-                
-                if (DOM.updatedText) {
-                    if (json.lastSynced) {
-                        const dateObj = new Date(json.lastSynced);
-                        const month = String(dateObj.getMonth() + 1).padStart(2, '0');
-                        const day = String(dateObj.getDate()).padStart(2, '0');
-                        const time = dateObj.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
-                        DOM.updatedText.innerText = `▸ Last Updated: ${month}/${day}, ${time}`;
-                    } else {
-                        DOM.updatedText.innerText = `▸ Last Updated: Just now`;
-                    }
-                }
 
             } catch (error) {
                 console.error("Fetch failed:", error);
