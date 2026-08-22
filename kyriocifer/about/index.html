@@ -365,9 +365,9 @@
                         html += `
                             <div class="bg-vcard dark:dark-mode-card border border-vborder/70 dark:dark-mode-border rounded-2xl p-6 md:p-8 flex flex-col gap-4 shadow-sm hover:shadow transition-all">
                                 ${item.sectionTitle ? `<div class="text-[14px] font-bold text-vaccent dark:text-orange-400 bg-vaccent/10 px-3 py-1 rounded-lg w-fit tracking-wide">${item.sectionTitle}</div>` : ''}
-                                <div class="flex flex-col gap-3 pt-1">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-1">
                                     <div class="text-[14px] vtext dark:dark-mode-text cell-wrap-text font-semibold">${item.contentEn || ''}</div>
-                                    ${item.contentZh ? `<div class="text-[13px] vmuted dark:dark-mode-muted cell-wrap-text font-normal pt-2 border-t border-vborder/40 dark:border-white/5">${item.contentZh}</div>` : ''}
+                                    <div class="text-[14px] vmuted dark:dark-mode-muted cell-wrap-text font-normal">${item.contentZh || ''}</div>
                                 </div>
                             </div>
                         `;
