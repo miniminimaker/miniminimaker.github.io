@@ -56,7 +56,7 @@
 <body class="flex flex-col min-h-screen dark:dark-mode-bg transition-colors duration-300">
 
     <header class="border-b border-vborder/50 dark:dark-mode-border glass-panel sticky top-0 z-30 px-6 py-[18px] flex flex-wrap gap-4 items-center justify-between shadow-sm/5">
-          <div class="flex items-center space-x-4">
+         <div class="flex items-center space-x-4">
             <a href="https://miniminimaker.github.io/kyriocifer/" class="w-11 h-11 rounded-xl bg-[#F8F5EF] border border-[#E5DED3] flex items-center justify-center overflow-hidden hover:opacity-90 transition-opacity">
                 <img src="logo.png" alt="Logo" class="w-9 h-9 object-contain">
             </a>
@@ -117,7 +117,6 @@
 
             <div class="flex flex-wrap items-center justify-between gap-3 text-xs vmuted dark:dark-mode-muted px-1">
                 <div id="total-songs-count" class="font-medium"></div>
-                <div id="last-sync-time"></div>
             </div>
 
             <div class="flex flex-col gap-1.5 -mt-1">
@@ -166,10 +165,6 @@
         window.currentLetterFilter = 'ALL';
         window.songsData = [];
 
-        const DOM = {
-            updatedText: document.getElementById('last-sync-time')
-        };
-
         window.onload = function() {
             window.fetchSongsFromBackend();
         };
@@ -177,12 +172,10 @@
         window.fetchSongsFromBackend = async function() {
             const tbody = document.getElementById('song-table-body');
             const totalCountEl = document.getElementById('total-songs-count');
-            const syncTimeEl = document.getElementById('last-sync-time');
             const btnRetry = document.getElementById('btn-retry');
             
             if (btnRetry) btnRetry.classList.add('hidden');
             if (totalCountEl) totalCountEl.innerHTML = 'Connecting...';
-            if (syncTimeEl) syncTimeEl.innerHTML = 'Syncing database...';
             
             if (tbody) {
                 tbody.innerHTML = `
@@ -213,25 +206,12 @@
 
                     window.songsData = window.sortSongs(normalizedSongs);
                     
-                    if (DOM.updatedText) {
-                        if (result.lastSynced) {
-                            const dateObj = new Date(result.lastSynced);
-                            const month = String(dateObj.getMonth() + 1).padStart(2, '0');
-                            const day = String(dateObj.getDate()).padStart(2, '0');
-                            const time = dateObj.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
-                            DOM.updatedText.innerText = `▸ Last Updated: ${month}/${day}, ${time}`;
-                        } else {
-                            DOM.updatedText.innerText = `▸ Last Updated: Just now`;
-                        }
-                    }
-                    
                     window.buildAlphabetNav();
                     window.filterSongs();
                 } else {
                     throw new Error("Failed to fetch from API.");
                 }
             } catch (err) {
-                if (syncTimeEl) syncTimeEl.innerHTML = 'Data connection error';
                 if (btnRetry) btnRetry.classList.remove('hidden');
                 
                 if (tbody) {
