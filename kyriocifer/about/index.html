@@ -320,15 +320,15 @@
                                 const iconClass = isUrl ? 'fa-link' : 'fa-envelope';
                                 cardHtml = `
                                     <div class="flex flex-col gap-1.5 py-1 ${paddingClass}">
-                                        <a href="${href}" target="_blank" class="inline-flex items-center gap-1.5 text-vaccent dark:text-orange-400 bg-vaccent/10 hover:bg-vaccent/20 px-3.5 py-2 rounded-lg w-fit tracking-wide transition-colors font-bold text-[12px]">
-                                            <i class="fa-solid ${iconClass} text-[11px]"></i> ${label}
+                                        <a href="${href}" target="_blank" class="inline-flex items-center gap-1.5 text-vaccent dark:text-orange-400 bg-vaccent/10 hover:bg-vaccent/20 px-3.5 py-2 rounded-lg w-fit tracking-wide transition-colors font-bold text-[14px]">
+                                            <i class="fa-solid ${iconClass} text-[13px]"></i> ${label}
                                         </a>
                                     </div>
                                 `;
                             } else {
                                 cardHtml = `
                                     <div class="flex flex-col gap-1.5 py-1 ${paddingClass}">
-                                        ${label ? `<div class="text-[12px] font-bold text-vaccent dark:text-orange-400 bg-vaccent/10 px-2.5 py-1 rounded-md w-fit tracking-wide">${label}</div>` : ''}
+                                        ${label ? `<div class="text-[14px] font-bold text-vaccent dark:text-orange-400 bg-vaccent/10 px-3 py-1.5 rounded-lg w-fit tracking-wide">${label}</div>` : ''}
                                         ${val ? `<div class="text-[12px] font-normal vtext dark:dark-mode-text cell-wrap-text">${this.autoLink(val)}</div>` : ''}
                                     </div>
                                 `;
@@ -423,7 +423,7 @@
                         
                         html += `
                             <div class="flex flex-col gap-4 ${isLastInSection ? '' : 'border-b border-vborder/50 dark:border-white/10 pb-[44px] mb-[44px]'}">
-                                ${item.sectionTitle ? `<div class="text-[12px] font-bold text-vaccent dark:text-orange-400 bg-vaccent/10 px-3 py-1 rounded-lg w-fit tracking-wide">${item.sectionTitle}</div>` : ''}
+                                ${item.sectionTitle ? `<div class="text-[14px] font-bold text-vaccent dark:text-orange-400 bg-vaccent/10 px-3 py-1.5 rounded-lg w-fit tracking-wide">${item.sectionTitle}</div>` : ''}
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 relative md:divide-x md:divide-vborder/50 md:dark:divide-white/10 pt-1">
                                     <div class="text-[12px] font-normal vtext dark:dark-mode-text cell-wrap-text md:pr-6">${this.autoLink(item.contentEn || '')}</div>
                                     <div class="text-[12px] font-normal vmuted dark:dark-mode-muted cell-wrap-text md:pl-6">${this.autoLink(item.contentZh || '')}</div>
