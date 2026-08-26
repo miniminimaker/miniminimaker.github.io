@@ -196,7 +196,7 @@
                 } catch (err) {
                     console.error("Schedule Fetch Error:", err);
                     if (this.data.length === 0) {
-                        this.showState('<i class="fa-solid fa-triangle-exclamation text-rose-600 dark:text-rose-400 text-3xl"></i>', 'Unable to load schedule.<br>Please try again later.');
+                        this.showState('<i class="fa-solid fa-triangle-exclamation text-rose-600 dark:text-rose-400 text-3xl"></i>', 'Data load failed. Please refresh.｜資料載入失敗，請重新整理。');
                     }
                 }
             },
