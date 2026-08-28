@@ -278,14 +278,15 @@
                     const dateRaw = event['Date\n日期'] || event['Date 日期'] || event.date || event['日期'] || '';
                     const timeRaw = event['Time(GMT+8)\n時間GMT+8'] || event['Time(GMT+8) 時間GMT+8'] || event.time || event['時間'] || '';
                     
-                    let title = event['Stream title\n直播標題'] || event['Stream title 直播標題'] || event['Content'] || event['內容'] || 'Untitled Stream';
                     const contentEn = event['Content'] || '';
                     const contentZh = event['內容'] || '';
                     const game = [contentEn, contentZh].filter(Boolean).join(' | ');
                     
                     let category = 'Stream';
+                    let isOffDay = false;
                     if (contentEn.toLowerCase().includes('no stream') || contentZh.includes('休息')) {
                         category = 'Off Day';
+                        isOffDay = true;
                     }
                     
                     const note1 = event['Notes *1\n備註*1'] || event['Notes *1 備註*1'] || '';
@@ -345,7 +346,7 @@
                         return (trimmed.startsWith('http://') || trimmed.startsWith('https://'));
                     };
 
-                    const rawString = `${dateDisplay} ${timeDisplay} ${title} ${game} ${note}`.toLowerCase();
+                    const rawString = `${dateDisplay} ${timeDisplay} ${contentEn} ${contentZh} ${note}`.toLowerCase();
 
                     return {
                         isSubathon: false,
@@ -353,7 +354,8 @@
                         dateDisplay,
                         dayDisplay,
                         timeDisplay,
-                        title,
+                        contentEn,
+                        contentZh,
                         category,
                         game,
                         note,
@@ -362,7 +364,7 @@
                         isToday,
                         isFuture,
                         sheetName,
-                        isOffDay: category === 'Off Day',
+                        isOffDay,
                         rawString
                     };
                 });
@@ -503,17 +505,8 @@
                             <div class="flex flex-col gap-3">
                                 <div class="flex flex-col w-full">
                                     <div class="flex flex-col gap-1">
-                                        ${(() => {
-                                            if (!event.title) return '';
-                                            const titleStr = String(event.title);
-                                            const parts = titleStr.split('\n');
-                                            if (parts.length > 1) {
-                                                let html = `<h3 class="text-[13px] md:text-[14px] font-bold ${titleClass} leading-snug">${parts[0].trim()}</h3>`;
-                                                html += `<h4 class="text-[13px] md:text-[14px] font-medium ${titleClass} leading-snug mt-1">${parts.slice(1).join(' ').trim()}</h4>`;
-                                                return html;
-                                            }
-                                            return `<h3 class="text-[13px] md:text-[14px] font-bold ${titleClass} leading-snug">${titleStr}</h3>`;
-                                        })()}
+                                        <h3 class="text-[13px] md:text-[14px] font-bold ${titleClass} leading-snug">${event.contentEn || 'Untitled Stream'}</h3>
+                                        ${event.contentZh ? `<h4 class="text-[13px] md:text-[14px] font-medium ${titleClass} leading-snug mt-1">${event.contentZh}</h4>` : ''}
                                     </div>
                                     ${metaDiv}
                                 </div>
