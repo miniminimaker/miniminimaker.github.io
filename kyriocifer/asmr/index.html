@@ -406,15 +406,15 @@
                     let colorClass = 'bg-gray-200 text-gray-700 dark:bg-gray-700 dark:text-gray-300'; 
                     
                     if (t.includes('18+')) {
-                        colorClass = 'bg-[#B01818] text-white';
+                        colorClass = 'bg-[#ffc9c2] text-[#b10202]';
                     } else if (t.includes('asmr')) {
-                        colorClass = 'bg-[#CDE9C1] text-[#366A23] border border-[#A4D88F]';
+                        colorClass = 'bg-[#d4edbc] text-[#11734b]';
                     } else if (t.includes('bts') || t.includes('幕後')) {
-                        colorClass = 'bg-[#C2E3FB] text-[#296D9E] border border-[#9ACFF5]';
+                        colorClass = 'bg-[#e6cff2] text-[#5a3286]';
                     } else if (t.includes('art') || t.includes('nsfw')) {
-                        colorClass = 'bg-[#6F3A96] text-white';
+                        colorClass = 'bg-[#ffe9d2] text-[#c94e25]'';
                     } else if (t === 'art') {
-                        colorClass = 'bg-[#FDF4D6] text-[#A67C00] border border-[#FBE6A0]';
+                        colorClass = 'bg-[#bfe1f6] text-[#0a53a8]';
                     }
                     
                     return `<span class="inline-flex items-center justify-center px-3 py-[3px] rounded-full text-[11px] font-bold tracking-wider shadow-sm ${colorClass}">${type}</span>`;
