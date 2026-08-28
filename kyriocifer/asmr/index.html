@@ -323,6 +323,8 @@
                         dateDisplay: dateDisplay,
                         dayDisplay: dayDisplay,
                         type: typeRaw,
+                        typeBgColor: event._typeBgColor || '',
+                        typeTextColor: event._typeTextColor || '',
                         link: linkRaw,
                         contentEn: contentEn,
                         contentZh: contentZh,
@@ -400,31 +402,31 @@
                 container.innerHTML = '';
                 const fragment = document.createDocumentFragment();
 
-                const getTypeBadge = (type) => {
+                const getTypeBadge = (type, bgColor, textColor) => {
                     if (!type) return '';
-                    // Clean up the type string for comparison
+                    
+                    if (bgColor && bgColor !== '#ffffff' && bgColor !== '#fff') {
+                        const txtColor = (textColor && textColor !== '#000000') ? textColor : '#374151';
+                        return `<span class="inline-flex items-center justify-center px-3 py-[3px] rounded-full text-[11px] font-bold tracking-wider shadow-sm" style="background-color: ${bgColor}; color: ${txtColor}; border: 1px solid ${txtColor}30;">${type}</span>`;
+                    }
+
                     const cleanType = type.trim();
                     const t = cleanType.toLowerCase();
-                    let colorClass = 'bg-gray-200 text-gray-700 dark:bg-gray-700 dark:text-gray-300'; // Default
+                    let colorClass = 'bg-gray-200 text-gray-700 dark:bg-gray-700 dark:text-gray-300'; 
                     
-                    // Map to match the screenshot colors
                     if (t === 'art') {
-                        // Light blue bg, darker blue text
                         colorClass = 'bg-[#CBE4F9] text-[#1E6091]'; 
                     } else if (t === 'asmr 18+') {
-                        // Light red/pink bg, red text
                         colorClass = 'bg-[#FADBD8] text-[#C0392B]';
                     } else if (cleanType === 'Art（NSFW）' || t === 'art (nsfw)' || t === 'art(nsfw)') {
-                        // Light orange bg, orange/brown text
                         colorClass = 'bg-[#FDEBD0] text-[#D35400]';
                     } else if (t === 'asmr') {
-                        // Light green bg, darker green text
                         colorClass = 'bg-[#D5F5E3] text-[#1E8449]';
                     } else if (t.includes('bts') || t.includes('幕後')) {
                          colorClass = 'bg-[#C2E3FB] text-[#296D9E]';
                     }
                     
-                    return `<span class="inline-flex items-center justify-center px-3 py-1 rounded-full text-[12px] font-medium tracking-wide ${colorClass}">${type}</span>`;
+                    return `<span class="inline-flex items-center justify-center px-3 py-[3px] rounded-full text-[11px] font-bold tracking-wider shadow-sm ${colorClass}">${type}</span>`;
                 };
 
                 displayData.forEach((event, index) => {
@@ -476,9 +478,9 @@
                         <div class="flex-grow p-4 md:px-6 flex flex-col justify-center">
                             <div class="flex flex-col gap-3">
                                 <div class="flex flex-col w-full">
-                                    <div class="flex flex-col gap-2">
+                                    <div class="flex flex-col gap-1.5">
                                         <div class="flex flex-wrap items-center gap-2">
-                                            ${getTypeBadge(event.type)}
+                                            ${getTypeBadge(event.type, event.typeBgColor, event.typeTextColor)}
                                         </div>
                                         <h3 class="text-[13px] md:text-[14px] font-bold vtext dark:dark-mode-text leading-snug break-words whitespace-pre-wrap">${event.contentEn || '<span class="italic opacity-50">N/A</span>'}</h3>
                                     </div>
