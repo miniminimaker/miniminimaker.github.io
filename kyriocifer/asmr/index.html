@@ -405,24 +405,21 @@
                     const cleanType = type.trim();
                     const t = cleanType.toLowerCase();
                     
-                    let bg = '#E5E7EB';
-                    let fg = '#374151';
-
-                    if (t === 'asmr') {
-                        bg = '#D1E7DD'; fg = '#0F5132';
-                    } else if (t === 'asmr 18+') {
-                        bg = '#F8D7DA'; fg = '#842029';
-                    } else if (cleanType.includes('Art') && cleanType.includes('NSFW')) {
-                        bg = '#FFE5D0'; fg = '#8D4004';
-                    } else if (t === 'art') {
-                        bg = '#CBE4F9'; fg = '#1E6091';
+                    let colorClass = 'bg-gray-200 text-gray-700 dark:bg-gray-700 dark:text-gray-300'; 
+                    
+                    if (t === 'art') {
+                        colorClass = 'bg-[#D4E9FC] text-[#1B66B1]'; 
                     } else if (t.includes('bts') || t.includes('幕後')) {
-                        bg = '#E2D9F3'; fg = '#432874';
-                    } else {
-                        bg = '#E5E7EB'; fg = '#374151';
+                        colorClass = 'bg-[#ECD9F8] text-[#622588]';
+                    } else if (cleanType === 'Art（NSFW）' || t === 'art (nsfw)' || t === 'art(nsfw)') {
+                        colorClass = 'bg-[#FFE8CF] text-[#BD5305]';
+                    } else if (t === 'asmr 18+') {
+                        colorClass = 'bg-[#FFD4D4] text-[#BF1515]';
+                    } else if (t === 'asmr') {
+                        colorClass = 'bg-[#D6EFD1] text-[#11612B]';
                     }
                     
-                    return `<span class="inline-flex items-center justify-center px-3 py-[3px] rounded-full text-[11px] font-bold tracking-wider shadow-sm" style="background-color: ${bg}; color: ${fg};">${type}</span>`;
+                    return `<span class="inline-flex items-center justify-center px-3 py-[3px] rounded-full text-[11px] font-bold tracking-wider shadow-sm ${colorClass}">${type}</span>`;
                 };
 
                 displayData.forEach((event, index) => {
