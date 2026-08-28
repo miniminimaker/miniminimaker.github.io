@@ -323,8 +323,6 @@
                         dateDisplay: dateDisplay,
                         dayDisplay: dayDisplay,
                         type: typeRaw,
-                        typeBgColor: event._typeBgColor || '',
-                        typeTextColor: event._typeTextColor || '',
                         link: linkRaw,
                         contentEn: contentEn,
                         contentZh: contentZh,
@@ -402,31 +400,29 @@
                 container.innerHTML = '';
                 const fragment = document.createDocumentFragment();
 
-                const getTypeBadge = (type, bgColor, textColor) => {
+                const getTypeBadge = (type) => {
                     if (!type) return '';
-                    
-                    if (bgColor && bgColor !== '#ffffff' && bgColor !== '#fff') {
-                        const txtColor = (textColor && textColor !== '#000000') ? textColor : '#374151';
-                        return `<span class="inline-flex items-center justify-center px-3 py-[3px] rounded-full text-[11px] font-bold tracking-wider shadow-sm" style="background-color: ${bgColor}; color: ${txtColor}; border: 1px solid ${txtColor}30;">${type}</span>`;
-                    }
-
                     const cleanType = type.trim();
                     const t = cleanType.toLowerCase();
-                    let colorClass = 'bg-gray-200 text-gray-700 dark:bg-gray-700 dark:text-gray-300'; 
                     
-                    if (t === 'art') {
-                        colorClass = 'bg-[#CBE4F9] text-[#1E6091]'; 
+                    let bg = '#E5E7EB';
+                    let fg = '#374151';
+
+                    if (t === 'asmr') {
+                        bg = '#D1E7DD'; fg = '#0F5132';
                     } else if (t === 'asmr 18+') {
-                        colorClass = 'bg-[#FADBD8] text-[#C0392B]';
-                    } else if (cleanType === 'Art（NSFW）' || t === 'art (nsfw)' || t === 'art(nsfw)') {
-                        colorClass = 'bg-[#FDEBD0] text-[#D35400]';
-                    } else if (t === 'asmr') {
-                        colorClass = 'bg-[#D5F5E3] text-[#1E8449]';
+                        bg = '#F8D7DA'; fg = '#842029';
+                    } else if (cleanType.includes('Art') && cleanType.includes('NSFW')) {
+                        bg = '#FFE5D0'; fg = '#8D4004';
+                    } else if (t === 'art') {
+                        bg = '#CBE4F9'; fg = '#1E6091';
                     } else if (t.includes('bts') || t.includes('幕後')) {
-                         colorClass = 'bg-[#C2E3FB] text-[#296D9E]';
+                        bg = '#E2D9F3'; fg = '#432874';
+                    } else {
+                        bg = '#E5E7EB'; fg = '#374151';
                     }
                     
-                    return `<span class="inline-flex items-center justify-center px-3 py-[3px] rounded-full text-[11px] font-bold tracking-wider shadow-sm ${colorClass}">${type}</span>`;
+                    return `<span class="inline-flex items-center justify-center px-3 py-[3px] rounded-full text-[11px] font-bold tracking-wider shadow-sm" style="background-color: ${bg}; color: ${fg};">${type}</span>`;
                 };
 
                 displayData.forEach((event, index) => {
@@ -477,17 +473,17 @@
                         
                         <div class="flex-grow p-4 md:px-6 flex flex-col justify-center">
                             <div class="flex flex-col gap-3">
-                                <div class="flex flex-col w-full">
-                                    <div class="flex flex-col gap-1.5">
+                                <div class="flex flex-col w-full items-start text-left">
+                                    <div class="flex flex-col gap-1.5 w-full items-start text-left">
                                         <div class="flex flex-wrap items-center gap-2">
-                                            ${getTypeBadge(event.type, event.typeBgColor, event.typeTextColor)}
+                                            ${getTypeBadge(event.type)}
                                         </div>
-                                        <h3 class="text-[13px] md:text-[14px] font-bold vtext dark:dark-mode-text leading-snug break-words whitespace-pre-wrap">${event.contentEn || '<span class="italic opacity-50">N/A</span>'}</h3>
+                                        <h3 class="text-[13px] md:text-[14px] font-bold vtext dark:dark-mode-text leading-snug break-words whitespace-pre-wrap text-left">${event.contentEn || '<span class="italic opacity-50">N/A</span>'}</h3>
                                     </div>
                                     
                                     ${event.contentZh ? `
-                                    <div class="mt-2 text-[13px] md:text-[14px] font-normal vtext dark:dark-mode-text">
-                                        <span class="flex items-start gap-1.5"><i class="fa-solid fa-language opacity-70 mt-[3px] text-xs"></i> <span class="break-words whitespace-pre-wrap leading-snug">${event.contentZh}</span></span>
+                                    <div class="mt-2 text-[13px] md:text-[14px] font-normal vtext dark:dark-mode-text w-full text-left">
+                                        <span class="flex items-start gap-1.5 text-left"><i class="fa-solid fa-language opacity-70 mt-[3px] text-xs shrink-0"></i> <span class="break-words whitespace-pre-wrap leading-snug text-left">${event.contentZh}</span></span>
                                     </div>
                                     ` : ''}
                                 </div>
