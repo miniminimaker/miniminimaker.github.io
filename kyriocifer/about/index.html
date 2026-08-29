@@ -277,12 +277,15 @@
 
                 const displayData = this.getFilteredData();
 
-                if (displayData.length === 0) {
-                    this.showState('<i class="fa-regular fa-folder-open text-vmuted/50 text-4xl"></i>', 'No matching records found.｜沒有找到相符的紀錄');
-                    return;
-                }
+if (displayData.length === 0) {
+    this.showState(
+        '<i class="fa-regular fa-folder-open text-vmuted/50 text-4xl mb-2"></i>',
+        'No matching records found.｜查無符合的資料。'
+    );
+    return;
+}
 
-                container.innerHTML = '';
+container.innerHTML = '';
 
                 if (this.isStreamInfoTab(this.currentSheetFilter)) {
                     this.renderStreamInfoView(container, displayData);
