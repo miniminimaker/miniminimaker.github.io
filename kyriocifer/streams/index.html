@@ -295,6 +295,8 @@
 
                     const vodLink = event['VODs'] || '';
                     const tlLink = event['Translation\n翻譯記錄'] || event['Translation 翻譯記錄'] || '';
+                    
+                    const streamTitle = event['Stream title\n直播標題'] || event['Stream title 直播標題'] || event['Stream title'] || event['直播標題'] || '';
 
                     let eventDate = null;
                     let dateDisplay = '';
@@ -346,7 +348,7 @@
                         return (trimmed.startsWith('http://') || trimmed.startsWith('https://'));
                     };
 
-                    const rawString = `${dateDisplay} ${timeDisplay} ${contentEn} ${contentZh} ${note}`.toLowerCase();
+                    const rawString = `${dateDisplay} ${timeDisplay} ${contentEn} ${contentZh} ${note} ${streamTitle}`.toLowerCase();
 
                     return {
                         isSubathon: false,
@@ -356,6 +358,7 @@
                         timeDisplay,
                         contentEn,
                         contentZh,
+                        streamTitle,
                         category,
                         game,
                         note,
@@ -430,7 +433,7 @@
                 const displayData = this.getFilteredData();
 
                 if (displayData.length === 0) {
-                    this.showState('<i class="fa-regular fa-calendar-xmark text-vmuted/50 text-4xl"></i>', 'No matching events found.｜沒有找到相符的行程');
+                    this.showState('<i class="fa-regular fa-calendar-xmark text-vmuted/50 text-4xl"></i>', 'No matching data found.｜沒有找到相符的資料');
                     return;
                 }
 
@@ -480,15 +483,40 @@
                     }
 
                     let metaHtml = '';
-                    if (event.game && !event.isOffDay) {
-                         metaHtml += `<span class="flex items-center gap-1"><i class="fa-solid fa-gamepad opacity-70"></i> ${event.game}</span>`;
-                    }
                     if (event.note) {
                          metaHtml += `<span class="flex items-center gap-1"><i class="fa-solid fa-circle-info opacity-70"></i> ${event.note}</span>`;
                     }
 
-                    const metaDiv = metaHtml ? `<div class="flex flex-wrap gap-x-4 gap-y-1 mt-2 text-[12px] vmuted dark:dark-mode-muted">${metaHtml}</div>` : '';
+                    const metaDiv = metaHtml ? `<div class="flex flex-wrap gap-x-4 gap-y-1 mt-2.5 text-[12px] vmuted dark:dark-mode-muted">${metaHtml}</div>` : '';
+                    
+                    let streamTitleHtml = '';
+                    if (event.streamTitle && !event.isOffDay) {
+                        const formattedTitle = String(event.streamTitle).replace(/\n/g, '<br>');
+                        streamTitleHtml = `
+                            <div class="mt-2.5 pl-3 py-0.5 border-l-[3px] border-vborder dark:border-[#3F3F46] text-[13px] vtext dark:dark-mode-text/90 leading-relaxed font-medium">
+                                ${formattedTitle}
+                            </div>
+                        `;
+                    }
+
                     const titleClass = event.isOffDay ? "text-vmuted dark:text-[#A1A1AA]" : "vtext dark:dark-mode-text";
+
+                    let mainTitleHtml = '';
+                    if (event.isOffDay) {
+                        mainTitleHtml = `
+                            <div class="flex flex-col gap-1">
+                                <h3 class="text-[13px] md:text-[14px] font-bold ${titleClass} leading-snug">${event.contentEn || 'No Stream Scheduled'}</h3>
+                                ${event.contentZh ? `<h4 class="text-[13px] md:text-[14px] font-medium ${titleClass} leading-snug mt-1">${event.contentZh}</h4>` : ''}
+                            </div>
+                        `;
+                    } else {
+                        mainTitleHtml = `
+                            <div class="flex items-start gap-1.5">
+                                <i class="fa-solid fa-gamepad opacity-70 ${titleClass} text-[13px] md:text-[14px] mt-0.5"></i>
+                                <h3 class="text-[13px] md:text-[14px] font-bold ${titleClass} leading-snug">${event.game || 'No Stream Scheduled'}</h3>
+                            </div>
+                        `;
+                    }
 
                     card.innerHTML = `
                         <div class="flex-shrink-0 w-full md:w-[185px] flex flex-col justify-center items-center p-4 md:border-r border-vborder/50 dark:border-[#3F3F46] bg-vbg/40 dark:bg-black/10">
@@ -504,10 +532,8 @@
                         <div class="flex-grow p-4 md:px-6 flex flex-col justify-center">
                             <div class="flex flex-col gap-3">
                                 <div class="flex flex-col w-full">
-                                    <div class="flex flex-col gap-1">
-                                        <h3 class="text-[13px] md:text-[14px] font-bold ${titleClass} leading-snug">${event.contentEn || 'Untitled Stream'}</h3>
-                                        ${event.contentZh ? `<h4 class="text-[13px] md:text-[14px] font-medium ${titleClass} leading-snug mt-1">${event.contentZh}</h4>` : ''}
-                                    </div>
+                                    ${mainTitleHtml}
+                                    ${streamTitleHtml}
                                     ${metaDiv}
                                 </div>
                             </div>
