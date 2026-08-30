@@ -224,6 +224,23 @@
                 }
             },
 
+            linkifyText: function(text) {
+                if (!text) return '';
+                
+                // 1. 處理 Markdown 格式的連結: [顯示文字](http://url)
+                const markdownRegex = /\[([^\]]+)\]\((https?:\/\/[^\s\)]+)\)/g;
+                let processedText = text.replace(markdownRegex, `<a href="$2" target="_blank" class="text-vaccent dark:text-orange-400 hover:underline inline-flex items-center gap-0.5"><i class="fa-solid fa-link text-[10px]"></i>$1</a>`);
+
+                // 2. 處理未被 Markdown 包覆的純網址
+                const parts = processedText.split(/(<a\b[^>]*>.*?<\/a>)/i);
+                for (let i = 0; i < parts.length; i++) {
+                    if (!parts[i].toLowerCase().startsWith('<a')) {
+                        parts[i] = parts[i].replace(/(https?:\/\/[^\s<>]+)/g, `<a href="$1" target="_blank" class="text-vaccent dark:text-orange-400 hover:underline inline-flex items-center gap-0.5"><i class="fa-solid fa-link text-[10px]"></i>Link</a>`);
+                    }
+                }
+                return parts.join('');
+            },
+
             processData: function(rawEvents) {
                 const now = new Date(); 
                 this.sheets.clear();
@@ -234,6 +251,7 @@
                         this.sheets.add(sheetName);
                     }
 
+                    // Process Subathon Tabs
                     if (this.isSubathonTab(sheetName)) {
                         const dateRaw = event['Date 日期'] || event.date || '';
                         const days = event['Days 天數'] || '';
@@ -275,6 +293,7 @@
                         };
                     }
 
+                    // Process Normal Schedule Tabs
                     const dateRaw = event['Date\n日期'] || event['Date 日期'] || event.date || event['日期'] || '';
                     const timeRaw = event['Time(GMT+8)\n時間GMT+8'] || event['Time(GMT+8) 時間GMT+8'] || event.time || event['時間'] || '';
                     
@@ -292,6 +311,8 @@
                     const note1 = event['Notes *1\n備註*1'] || event['Notes *1 備註*1'] || '';
                     const note2 = event['Notes *2\n備註*2'] || event['Notes *2 備註*2'] || '';
                     const note = [note1, note2].filter(Boolean).join(' / ');
+
+                    const linkifiedNote = this.linkifyText(note);
 
                     const vodLink = event['VODs'] || '';
                     const tlLink = event['Translation\n翻譯記錄'] || event['Translation 翻譯記錄'] || '';
@@ -362,6 +383,7 @@
                         category,
                         game,
                         note,
+                        linkifiedNote,
                         vodLink: isValidUrl(vodLink) ? vodLink : '',
                         tlLink: isValidUrl(tlLink) ? tlLink : '',
                         isToday,
@@ -483,8 +505,8 @@
                     }
 
                     let metaHtml = '';
-                    if (event.note) {
-                         metaHtml += `<span class="flex items-center gap-1"><i class="fa-solid fa-circle-info opacity-70"></i> ${event.note}</span>`;
+                    if (event.linkifiedNote) {
+                         metaHtml += `<span class="flex items-center gap-1 break-all"><i class="fa-solid fa-circle-info opacity-70"></i> <span>${event.linkifiedNote}</span></span>`;
                     }
 
                     const metaDiv = metaHtml ? `<div class="flex flex-wrap gap-x-4 gap-y-1 mt-2.5 text-[12px] vmuted dark:dark-mode-muted">${metaHtml}</div>` : '';
@@ -512,7 +534,7 @@
                     } else {
                         mainTitleHtml = `
                             <div class="flex items-start gap-1.5">
-                                <i class="fa-solid fa-gamepad opacity-70 ${titleClass} text-[13px] md:text-[14px] mt-0.5"></i>
+                                <i class="fa-solid fa-gamepad opacity-70 ${titleClass} text-[13px] md:text-[14px] mt-0.5 shrink-0"></i>
                                 <h3 class="text-[13px] md:text-[14px] font-bold ${titleClass} leading-snug">${event.game || 'No Stream Scheduled'}</h3>
                             </div>
                         `;
@@ -706,7 +728,7 @@
                                             <th class="py-3.5 px-5 font-semibold text-center">Stream Hours｜直播總長</th>
                                         </tr>
                                     </thead>
-                                    <tbody class="divide-y divide-vborder/50 dark:divide-[#3F3F46] text-[13px] text-center">
+                                    <tdody class="divide-y divide-vborder/50 dark:divide-[#3F3F46] text-[13px] text-center">
                 `;
 
                 dailyLogs.forEach(row => {
