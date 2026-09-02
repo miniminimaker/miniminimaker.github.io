@@ -269,12 +269,16 @@
             const filterLetter = window.currentLetterFilter;
             
             const filtered = window.songsData.filter(song => {
-                if (filterLetter !== 'ALL' && song.firstLetter !== filterLetter) return false;
                 if (query) {
                     return (song.title || '').toLowerCase().includes(query) ||
                            (song.artist || '').toLowerCase().includes(query) ||
                            (song.album || '').toLowerCase().includes(query);
                 }
+                
+                if (filterLetter !== 'ALL' && song.firstLetter !== filterLetter) {
+                    return false;
+                }
+                
                 return true;
             });
             return window.sortSongs(filtered);
@@ -302,18 +306,18 @@
             }
 
             if (currentCount === 0) {
-    tbody.innerHTML = `
-        <tr id="state-row">
-            <td colspan="4" class="py-24 text-center">
-                <div class="flex flex-col items-center justify-center gap-4 max-w-md mx-auto">
-                    <i class="fa-regular fa-folder-open text-vmuted/50 text-4xl mb-2"></i>
-                    <div class="text-[14px] leading-relaxed font-medium vtext dark:dark-mode-text">No matching records found.｜查無符合的資料。</div>
-                </div>
-            </td>
-        </tr>
-    `;
-    return;
-}
+                tbody.innerHTML = `
+                    <tr id="state-row">
+                        <td colspan="4" class="py-24 text-center">
+                            <div class="flex flex-col items-center justify-center gap-4 max-w-md mx-auto">
+                                <i class="fa-regular fa-folder-open text-vmuted/50 text-4xl mb-2"></i>
+                                <div class="text-[14px] leading-relaxed font-medium vtext dark:dark-mode-text">No matching records found.｜查無符合的資料。</div>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
 
             const fragment = document.createDocumentFragment();
 
