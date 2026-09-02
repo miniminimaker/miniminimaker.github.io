@@ -325,8 +325,12 @@
             const { search, letter } = AppState.filters;
 
             AppState.filteredGames = AppState.normalizedGames.filter(game => {
-                if (search && !game.rawString.includes(search)) return false;
-                if (letter !== 'ALL' && game.firstLetter !== letter) return false;
+                if (search) {
+                    return game.rawString.includes(search);
+                }
+                if (letter !== 'ALL' && game.firstLetter !== letter) {
+                    return false;
+                }
                 return true;
             });
 
