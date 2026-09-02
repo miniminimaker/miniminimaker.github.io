@@ -168,7 +168,7 @@
 
             fetchData: async function(isManual = false) {
                 if (this.data.length === 0) {
-                    this.showState('<i class="fa-solid fa-circle-notch fa-spin text-2xl text-vaccent"></i>', 'Loading data, please wait…｜讀取資料請稍後...');
+                    this.showState('<i class="fa-solid fa-circle-notch fa-spin text-2xl text-vaccent"></i>', 'Loading data, please wait...｜讀取資料中...');
                 }
 
                 try {
@@ -227,11 +227,9 @@
             linkifyText: function(text) {
                 if (!text) return '';
                 
-                // 1. 處理 Markdown 格式的連結: [顯示文字](http://url)
                 const markdownRegex = /\[([^\]]+)\]\((https?:\/\/[^\s\)]+)\)/g;
                 let processedText = text.replace(markdownRegex, `<a href="$2" target="_blank" class="text-vaccent dark:text-orange-400 hover:underline inline-flex items-center gap-0.5"><i class="fa-solid fa-link text-[10px]"></i>$1</a>`);
 
-                // 2. 處理未被 Markdown 包覆的純網址
                 const parts = processedText.split(/(<a\b[^>]*>.*?<\/a>)/i);
                 for (let i = 0; i < parts.length; i++) {
                     if (!parts[i].toLowerCase().startsWith('<a')) {
@@ -251,7 +249,6 @@
                         this.sheets.add(sheetName);
                     }
 
-                    // Process Subathon Tabs
                     if (this.isSubathonTab(sheetName)) {
                         const dateRaw = event['Date 日期'] || event.date || '';
                         const days = event['Days 天數'] || '';
@@ -271,7 +268,16 @@
                         const topGifterDescEn = event['Top Gifter Desc En'] || '';
                         const topGifterDescZh = event['Top Gifter Desc Zh'] || '';
 
-                        const rawString = `${dateRaw} ${days} ${totalSubs} ${contentEn} ${contentZh} ${subGoal}`.toLowerCase();
+                        const rawString = `${dateRaw} ${days} ${totalSubs} ${contentEn} ${contentZh} ${subGoal} ${topGifterDescEn} ${topGifterDescZh} ${sheetName}`.toLowerCase();
+
+                        let parsedDate = null;
+                        if (dateRaw) {
+                            let parsedDateString = String(dateRaw);
+                            if (parsedDateString.match(/^\d{4}\.\d{2}\.\d{2}$/)) {
+                                parsedDateString = parsedDateString.replace(/\./g, '-');
+                            }
+                            parsedDate = new Date(parsedDateString);
+                        }
 
                         return {
                             sheetName,
@@ -289,11 +295,24 @@
                             topGifterRank,
                             topGifterDescEn,
                             topGifterDescZh,
-                            rawString
+                            rawString,
+                            dateDisplay: dateRaw || '-',
+                            dayDisplay: 'Subathon',
+                            timeDisplay: '',
+                            isOffDay: false,
+                            game: subGoal ? `Goal: ${subGoal} Subs` : (topGifterRank ? `Top Gifter: ${topGifterRank}` : (days ? `Daily Log: Day ${days}` : 'Subathon Info')),
+                            streamTitle: contentEn || topGifterDescEn || (totalSubs ? `Total Subs: ${totalSubs}` : ''),
+                            note: completed ? 'Completed' : '',
+                            linkifiedNote: completed ? '<span class="text-green-600 dark:text-green-500 font-bold">✔ Completed</span>' : '',
+                            vodLink: '',
+                            tlLink: '',
+                            isToday: false,
+                            isFuture: false,
+                            originalDate: parsedDate,
+                            category: 'Subathon'
                         };
                     }
 
-                    // Process Normal Schedule Tabs
                     const dateRaw = event['Date\n日期'] || event['Date 日期'] || event.date || event['日期'] || '';
                     const timeRaw = event['Time(GMT+8)\n時間GMT+8'] || event['Time(GMT+8) 時間GMT+8'] || event.time || event['時間'] || '';
                     
@@ -369,7 +388,7 @@
                         return (trimmed.startsWith('http://') || trimmed.startsWith('https://'));
                     };
 
-                    const rawString = `${dateDisplay} ${timeDisplay} ${contentEn} ${contentZh} ${note} ${streamTitle}`.toLowerCase();
+                    const rawString = `${dateDisplay} ${timeDisplay} ${contentEn} ${contentZh} ${note} ${streamTitle} ${sheetName}`.toLowerCase();
 
                     return {
                         isSubathon: false,
@@ -430,21 +449,21 @@
             getFilteredData: function() {
                 let filtered = [...this.data];
                 
-                if (this.currentSheetFilter) {
+                if (this.searchQuery) {
+                    filtered = filtered.filter(e => e.rawString.includes(this.searchQuery));
+                } 
+                else if (this.currentSheetFilter) {
                     filtered = filtered.filter(e => e.sheetName === this.currentSheetFilter);
                 }
 
-                if (this.searchQuery) {
-                    filtered = filtered.filter(e => e.rawString.includes(this.searchQuery));
-                }
-
-                if (!this.isSubathonTab(this.currentSheetFilter)) {
+                if (this.searchQuery || !this.isSubathonTab(this.currentSheetFilter)) {
                     filtered.sort((a, b) => {
-                        if (!a.originalDate) return 1;
-                        if (!b.originalDate) return -1;
-                        return a.originalDate.getTime() - b.originalDate.getTime();
+                        const dateA = a.originalDate && !isNaN(a.originalDate) ? a.originalDate.getTime() : 0;
+                        const dateB = b.originalDate && !isNaN(b.originalDate) ? b.originalDate.getTime() : 0;
+                        return dateA - dateB;
                     });
                 }
+                
                 return filtered;
             },
 
@@ -461,7 +480,7 @@
 
                 container.innerHTML = '';
 
-                if (this.isSubathonTab(this.currentSheetFilter)) {
+                if (this.isSubathonTab(this.currentSheetFilter) && !this.searchQuery) {
                     this.renderSubathonView(container, displayData);
                     return;
                 }
@@ -545,7 +564,7 @@
                             <div class="flex flex-col items-center text-center">
                                 <div class="text-[14px] md:text-[16px] font-bold text-vaccent dark:text-orange-400 tracking-wide flex items-center gap-1.5">
                                     <span>${event.dateDisplay || '-'}</span>
-                                    <span class="text-[11px] font-medium vmuted dark:dark-mode-muted">${event.dayDisplay || '-'}</span>
+                                    <span class="text-[11px] font-medium vmuted dark:dark-mode-muted flex items-center">${event.dayDisplay || '-'}</span>
                                 </div>
                                 ${event.timeDisplay ? `<div class="text-[12px] md:text-[14px] font-bold vtext dark:dark-mode-text mt-2 md:mt-3 bg-vborder/30 dark:bg-white/10 px-2 py-0.5 rounded">${event.timeDisplay}</div>` : ''}
                             </div>
@@ -594,7 +613,7 @@
                                     </h2>
                                     <p class="text-[13px] vmuted dark:dark-mode-muted mt-1">
                                         Tracking subscription counts and milestones throughout the event.<br>
-紀錄活動期間的訂閱數以及里程碑。
+                                        紀錄活動期間的訂閱數以及里程碑。
                                     </p>
                                 </div>
                             </div>
