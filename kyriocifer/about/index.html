@@ -246,15 +246,13 @@
             getFilteredData: function() {
                 let filtered = [...this.data];
                 
-                if (this.currentSheetFilter) {
-                    filtered = filtered.filter(e => e._sheetName === this.currentSheetFilter);
-                }
-
                 if (this.searchQuery) {
                     filtered = filtered.filter(e => {
-                        const str = `${e.sectionTitle || ''} ${e.labelLeftEn || ''} ${e.valueLeft || ''}`.toLowerCase();
+                        const str = `${e.sectionTitle || ''} ${e.sectionTitleZh || ''} ${e.labelLeftEn || ''} ${e.valueLeft || ''} ${e.labelRightEn || ''} ${e.valueRight || ''} ${e.contentEn || ''} ${e.contentZh || ''} ${e.dateDisplay || ''}`.toLowerCase();
                         return str.includes(this.searchQuery);
                     });
+                } else if (this.currentSheetFilter) {
+                    filtered = filtered.filter(e => e._sheetName === this.currentSheetFilter);
                 }
 
                 return filtered;
@@ -271,38 +269,21 @@
                 return str;
             },
 
-            render: function() {
-                const container = document.getElementById('schedule-container');
-                if (!container) return;
-
-                const displayData = this.getFilteredData();
-
-if (displayData.length === 0) {
-    this.showState(
-        '<i class="fa-regular fa-folder-open text-vmuted/50 text-4xl mb-2"></i>',
-        'No matching records found.｜查無符合的資料。'
-    );
-    return;
-}
-
-container.innerHTML = '';
-
-                if (this.isStreamInfoTab(this.currentSheetFilter)) {
-                    this.renderStreamInfoView(container, displayData);
-                    return;
-                }
-
-                if (this.isNotesTab(this.currentSheetFilter)) {
-                    this.renderNotesView(container, displayData);
-                    return;
-                }
-
-                let html = `<div class="flex flex-col gap-6 fade-in">`;
+            getAboutHtml: function(data) {
+                let html = `<div class="flex flex-col gap-6 fade-in w-full">`;
                 let currentSectionBoxOpen = false;
                 let sectionItems = [];
 
                 const flushSection = () => {
-                    if (sectionItems.length > 0 && currentSectionBoxOpen) {
+                    if (sectionItems.length > 0) {
+                        if (!currentSectionBoxOpen) {
+                            html += `
+                                <div class="bg-vcard dark:dark-mode-card border border-vborder/70 dark:dark-mode-border rounded-2xl p-6 md:p-8 shadow-sm flex flex-col gap-5 mt-6 first:mt-0">
+                                    <div class="flex flex-col">
+                            `;
+                            currentSectionBoxOpen = true;
+                        }
+
                         let leftHtml = '';
                         let rightHtml = '';
 
@@ -349,15 +330,17 @@ container.innerHTML = '';
                                 <div class="flex-1 flex flex-col gap-6">${rightHtml}</div>
                             </div>
                         `;
-                        
-                        html += `</div></div>`;
                         sectionItems = [];
                     }
                 };
 
-                displayData.forEach(item => {
+                data.forEach(item => {
                     if (item.isMultiSectionHeader) {
                         flushSection();
+                        if (currentSectionBoxOpen) {
+                            html += `</div></div>`;
+                            currentSectionBoxOpen = false;
+                        }
                         currentSectionBoxOpen = true;
                         html += `
                             <div class="bg-vcard dark:dark-mode-card border border-vborder/70 dark:dark-mode-border rounded-2xl p-6 md:p-8 shadow-sm flex flex-col gap-5 mt-6 first:mt-0">
@@ -373,18 +356,21 @@ container.innerHTML = '';
                                 <div class="border-b border-vborder/50 dark:border-white/10 w-full mb-1"></div>
                                 <div class="flex flex-col">
                         `;
-                    } else if (item.isMultiSectionItem) {
+                    } else if (item.isMultiSectionItem || item.valueLeft || item.labelLeftEn) {
                         sectionItems.push(item);
                     }
                 });
 
                 flushSection();
+                if (currentSectionBoxOpen) {
+                    html += `</div></div>`;
+                }
                 html += `</div>`;
-                container.innerHTML = html;
+                return html;
             },
 
-            renderStreamInfoView: function(container, data) {
-                let html = `<div class="flex flex-col gap-6 fade-in">`;
+            getStreamInfoHtml: function(data) {
+                let html = `<div class="flex flex-col gap-6 fade-in w-full">`;
                 let currentSectionBoxOpen = false;
 
                 const flushSection = () => {
@@ -438,12 +424,12 @@ container.innerHTML = '';
 
                 flushSection();
                 html += `</div>`;
-                container.innerHTML = html;
+                return html;
             },
 
-            renderNotesView: function(container, data) {
+            getNotesHtml: function(data) {
                 let html = `
-                    <div class="fade-in">
+                    <div class="fade-in w-full">
                         <div class="bg-vcard dark:dark-mode-card border border-vborder/70 dark:dark-mode-border rounded-2xl shadow-sm overflow-hidden flex flex-col">
                             <div class="p-6 md:p-8 flex items-center gap-3 border-b border-vborder/70 dark:border-white/10">
                                 <div class="w-10 h-10 rounded-xl bg-vaccent/10 text-vaccent flex items-center justify-center text-[18px] font-bold shrink-0">
@@ -488,7 +474,51 @@ container.innerHTML = '';
                         </div>
                     </div>
                 `;
-                container.innerHTML = html;
+                return html;
+            },
+
+            render: function() {
+                const container = document.getElementById('schedule-container');
+                if (!container) return;
+
+                const displayData = this.getFilteredData();
+
+                if (displayData.length === 0) {
+                    this.showState(
+                        '<i class="fa-regular fa-folder-open text-vmuted/50 text-4xl mb-2"></i>',
+                        'No matching records found.｜查無符合的資料。'
+                    );
+                    return;
+                }
+
+                container.innerHTML = '';
+
+                if (this.searchQuery) {
+                    const aboutData = displayData.filter(e => !this.isStreamInfoTab(e._sheetName) && !this.isNotesTab(e._sheetName));
+                    const infoData = displayData.filter(e => this.isStreamInfoTab(e._sheetName));
+                    const notesData = displayData.filter(e => this.isNotesTab(e._sheetName));
+
+                    let html = '<div class="flex flex-col gap-8 w-full">';
+                    if (aboutData.length > 0) html += this.getAboutHtml(aboutData);
+                    if (infoData.length > 0) html += this.getStreamInfoHtml(infoData);
+                    if (notesData.length > 0) html += this.getNotesHtml(notesData);
+                    html += '</div>';
+
+                    container.innerHTML = html;
+                    return;
+                }
+
+                if (this.isStreamInfoTab(this.currentSheetFilter)) {
+                    container.innerHTML = this.getStreamInfoHtml(displayData);
+                    return;
+                }
+
+                if (this.isNotesTab(this.currentSheetFilter)) {
+                    container.innerHTML = this.getNotesHtml(displayData);
+                    return;
+                }
+
+                container.innerHTML = this.getAboutHtml(displayData);
             },
 
             showState: function(iconHtml, message) {
