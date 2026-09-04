@@ -198,7 +198,7 @@
             isStreamInfoTab: function(sheetName) {
                 if (!sheetName) return false;
                 const lower = sheetName.toLowerCase();
-                return lower.includes('stream info') || lower.includes('直播資訊') || lower.includes('guidelines') || lower.includes('指南') || lower.includes('rules') || lower.includes('規則');
+                return lower.includes('stream info') || lower.includes('直播資訊') || lower.includes('rules') || lower.includes('規則') || lower.includes('guidelines') || lower.includes('指南');
             },
 
             processData: function(rawEvents) {
@@ -227,11 +227,18 @@
                     const isActive = this.currentSheetFilter === sheet;
                     const activeClass = isActive ? 'bg-vtext dark:bg-white text-vbg dark:text-black shadow-sm' : 'text-vmuted hover:bg-vborder/30 dark:hover:bg-white/5';
                     
-                    let iconClass = 'fa-regular fa-folder';
+                    let iconClass = 'fa-regular fa-folder'; // 預設圖示
                     const lower = sheet.toLowerCase();
-                    if (lower.includes('about') || lower.includes('關於')) iconClass = 'fa-solid fa-user';
-                    else if (this.isNotesTab(sheet)) iconClass = 'fa-solid fa-note-sticky';
-                    else if (this.isStreamInfoTab(sheet)) iconClass = 'fa-solid fa-circle-info';
+                    
+                    if (lower.includes('about') || lower.includes('關於')) {
+                        iconClass = 'fa-solid fa-user';
+                    } else if (this.isNotesTab(sheet)) {
+                        iconClass = 'fa-solid fa-note-sticky';
+                    } else if (lower.includes('guidelines') || lower.includes('指南') || lower.includes('rules') || lower.includes('規則')) {
+                        iconClass = 'fa-solid fa-book'; // 👈 新增：指南專用的書本圖示
+                    } else if (this.isStreamInfoTab(sheet)) {
+                        iconClass = 'fa-solid fa-circle-info';
+                    }
                     
                     html += `<button class="filter-btn px-3.5 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-colors flex items-center gap-1.5 ${activeClass}" data-sheet="${sheet}">
                                 <i class="${iconClass} text-xs"></i> ${sheet}
@@ -298,11 +305,11 @@
                             const label = item.labelLeftEn || '';
                             const val = item.valueLeft || '';
                             
-                            let cardHtml = '';
                             const isRightCol = i % 2 !== 0;
                             const paddingClass = isRightCol ? 'md:pl-6' : 'md:pr-6';
 
-                            cardHtml = `
+                            // 統一改成分開顯示標題與內容
+                            const cardHtml = `
                                 <div class="flex flex-col gap-1.5 py-1 ${paddingClass}">
                                     ${label ? `<div class="text-[14px] font-bold text-vaccent dark:text-orange-400 bg-vaccent/10 px-3 py-1.5 rounded-lg w-fit tracking-wide">${label}</div>` : ''}
                                     ${val ? `<div class="text-[12px] font-normal vtext dark:dark-mode-text cell-wrap-text">${this.autoLink(val)}</div>` : ''}
@@ -361,6 +368,16 @@
             },
 
             getStreamInfoHtml: function(data) {
+                if (!data || data.length === 0) return '';
+                
+                // 動態判斷內容區塊的大 Icon
+                const sheetName = data[0]._sheetName || '';
+                const lowerSheet = sheetName.toLowerCase();
+                let sectionIcon = 'fa-solid fa-circle-info';
+                if (lowerSheet.includes('guidelines') || lowerSheet.includes('指南') || lowerSheet.includes('rules') || lowerSheet.includes('規則')) {
+                    sectionIcon = 'fa-solid fa-book';
+                }
+
                 let html = `<div class="flex flex-col gap-6 fade-in w-full">`;
                 let currentSectionBoxOpen = false;
 
@@ -379,7 +396,7 @@
                             <div id="section-${index}" class="bg-vcard dark:dark-mode-card border border-vborder/70 dark:dark-mode-border rounded-2xl p-6 md:p-8 shadow-sm flex flex-col gap-5 mt-6 first:mt-0 scroll-mt-24">
                                 <div class="flex items-center gap-3 pb-2">
                                     <div class="w-10 h-10 rounded-xl bg-vaccent/10 text-vaccent flex items-center justify-center text-[18px] font-bold shrink-0">
-                                        <i class="fa-solid fa-circle-info"></i>
+                                        <i class="${sectionIcon}"></i>
                                     </div>
                                     <div class="flex flex-col">
                                         <h2 class="text-[18px] font-bold vtext dark:dark-mode-text">${item.sectionTitle || ''}</h2>
