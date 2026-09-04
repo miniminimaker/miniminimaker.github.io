@@ -111,7 +111,6 @@
                 <div class="flex flex-wrap items-center justify-between gap-3 text-xs vmuted dark:dark-mode-muted px-1">
                     <div id="sheet-filters" class="flex flex-wrap items-center gap-2"></div>
                 </div>
-                <div id="sub-nav-filters" class="hidden"></div>
             </div>
         </div>
 
@@ -199,7 +198,7 @@
             isStreamInfoTab: function(sheetName) {
                 if (!sheetName) return false;
                 const lower = sheetName.toLowerCase();
-                return lower.includes('stream info') || lower.includes('直播資訊');
+                return lower.includes('stream info') || lower.includes('直播資訊') || lower.includes('guidelines') || lower.includes('指南') || lower.includes('rules') || lower.includes('規則');
             },
 
             processData: function(rawEvents) {
@@ -250,55 +249,6 @@
                 });
             },
 
-            renderSubNav: function(data) {
-                const container = document.getElementById('sub-nav-filters');
-                if (!container) return;
-
-                if (this.searchQuery) {
-                    container.innerHTML = '';
-                    container.classList.add('hidden');
-                    return;
-                }
-
-                let subNavItems = [];
-                data.forEach((item, index) => {
-                    if (item.isMultiSectionHeader || item.isSectionHeader) {
-                        let title = item.sectionTitle || '';
-                        if (title && item.sectionTitleZh) {
-                            title += `｜${item.sectionTitleZh}`;
-                        } else if (!title && item.sectionTitleZh) {
-                            title = item.sectionTitleZh;
-                        }
-                        
-                        if (title) {
-                            subNavItems.push({ title: title, id: `section-${index}` });
-                        }
-                    }
-                });
-
-                if (subNavItems.length > 0) {
-                    let html = `
-                        <div class="w-full h-[1px] bg-vborder/30 dark:bg-white/5 mt-1 mb-3"></div>
-                        <div class="flex flex-wrap items-center gap-x-5 gap-y-2.5 px-2 fade-in">
-                    `;
-                    subNavItems.forEach(nav => {
-                        html += `
-                            <a href="#${nav.id}" class="text-[13px] font-medium text-vmuted hover:text-vaccent dark:hover:text-orange-400 transition-colors flex items-center gap-1.5 group">
-                                <i class="fa-solid fa-angle-right text-[10px] opacity-40 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all"></i>
-                                ${nav.title}
-                            </a>
-                        `;
-                    });
-                    html += `</div>`;
-                    
-                    container.innerHTML = html;
-                    container.className = 'flex flex-col w-full';
-                } else {
-                    container.innerHTML = '';
-                    container.className = 'hidden';
-                }
-            },
-
             getFilteredData: function() {
                 let filtered = [...this.data];
                 
@@ -347,32 +297,17 @@
                             const item = sectionItems[i];
                             const label = item.labelLeftEn || '';
                             const val = item.valueLeft || '';
-                            const strVal = String(val).trim();
-                            const isUrl = strVal.startsWith('http://') || strVal.startsWith('https://');
-                            const isEmail = strVal.includes('@') && !isUrl;
                             
                             let cardHtml = '';
                             const isRightCol = i % 2 !== 0;
                             const paddingClass = isRightCol ? 'md:pl-6' : 'md:pr-6';
 
-                            if (isUrl || isEmail) {
-                                const href = isUrl ? strVal : `mailto:${strVal}`;
-                                const iconClass = isUrl ? 'fa-link' : 'fa-envelope';
-                                cardHtml = `
-                                    <div class="flex flex-col gap-1.5 py-1 ${paddingClass}">
-                                        <a href="${href}" target="_blank" class="inline-flex items-center gap-1.5 text-vaccent dark:text-orange-400 bg-vaccent/10 hover:bg-vaccent/20 px-3.5 py-2 rounded-lg w-fit tracking-wide transition-colors font-bold text-[14px]">
-                                            <i class="fa-solid ${iconClass} text-[13px]"></i> ${label}
-                                        </a>
-                                    </div>
-                                `;
-                            } else {
-                                cardHtml = `
-                                    <div class="flex flex-col gap-1.5 py-1 ${paddingClass}">
-                                        ${label ? `<div class="text-[14px] font-bold text-vaccent dark:text-orange-400 bg-vaccent/10 px-3 py-1.5 rounded-lg w-fit tracking-wide">${label}</div>` : ''}
-                                        ${val ? `<div class="text-[12px] font-normal vtext dark:dark-mode-text cell-wrap-text">${this.autoLink(val)}</div>` : ''}
-                                    </div>
-                                `;
-                            }
+                            cardHtml = `
+                                <div class="flex flex-col gap-1.5 py-1 ${paddingClass}">
+                                    ${label ? `<div class="text-[14px] font-bold text-vaccent dark:text-orange-400 bg-vaccent/10 px-3 py-1.5 rounded-lg w-fit tracking-wide">${label}</div>` : ''}
+                                    ${val ? `<div class="text-[12px] font-normal vtext dark:dark-mode-text cell-wrap-text">${this.autoLink(val)}</div>` : ''}
+                                </div>
+                            `;
 
                             if (isRightCol) rightHtml += cardHtml;
                             else leftHtml += cardHtml;
@@ -538,8 +473,6 @@
                 if (!container) return;
 
                 const displayData = this.getFilteredData();
-
-                this.renderSubNav(displayData);
 
                 if (displayData.length === 0) {
                     this.showState(
