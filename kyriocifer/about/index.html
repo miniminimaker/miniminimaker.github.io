@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-TW" class="h-full">
+<html lang="zh-TW" class="h-full scroll-smooth">
 <head>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -96,18 +96,22 @@
             </div>
         </section>
 
-    <div class="flex flex-col gap-6">
-    <div class="relative group w-full" id="search-bar-wrapper">
-        <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-vmuted opacity-40 group-focus-within:text-vaccent transition-colors"></i>
+        <div class="flex flex-col gap-6">
+            <div class="relative group w-full" id="search-bar-wrapper">
+                <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-vmuted opacity-40 group-focus-within:text-vaccent transition-colors"></i>
 
-        <input
-            type="text"
-            id="input-search"
-            class="w-full bg-vcard dark:dark-mode-card border border-vborder dark:dark-mode-border rounded-xl pl-11 pr-4 py-3.5 text-sm focus:outline-none focus:ring-1 focus:ring-vaccent/30 focus:border-vaccent/40 transition-all placeholder-vmuted/50 vtext dark:dark-mode-text shadow-sm/30"
-        >
-    </div>
-            <div class="flex flex-wrap items-center justify-between gap-3 text-xs vmuted dark:dark-mode-muted px-1">
-                <div id="sheet-filters" class="flex flex-wrap items-center gap-2"></div>
+                <input
+                    type="text"
+                    id="input-search"
+                    class="w-full bg-vcard dark:dark-mode-card border border-vborder dark:dark-mode-border rounded-xl pl-11 pr-4 py-3.5 text-sm focus:outline-none focus:ring-1 focus:ring-vaccent/30 focus:border-vaccent/40 transition-all placeholder-vmuted/50 vtext dark:dark-mode-text shadow-sm/30"
+                >
+            </div>
+            
+            <div class="flex flex-col gap-3">
+                <div class="flex flex-wrap items-center justify-between gap-3 text-xs vmuted dark:dark-mode-muted px-1">
+                    <div id="sheet-filters" class="flex flex-wrap items-center gap-2"></div>
+                </div>
+                <div id="sub-nav-filters" class="hidden"></div>
             </div>
         </div>
 
@@ -226,7 +230,7 @@
                     
                     let iconClass = 'fa-regular fa-folder';
                     const lower = sheet.toLowerCase();
-                    if (lower.includes('about') || lower.includes('links') || lower.includes('tag')) iconClass = 'fa-solid fa-user';
+                    if (lower.includes('about') || lower.includes('關於')) iconClass = 'fa-solid fa-user';
                     else if (this.isNotesTab(sheet)) iconClass = 'fa-solid fa-note-sticky';
                     else if (this.isStreamInfoTab(sheet)) iconClass = 'fa-solid fa-circle-info';
                     
@@ -244,6 +248,55 @@
                         this.render();
                     });
                 });
+            },
+
+            renderSubNav: function(data) {
+                const container = document.getElementById('sub-nav-filters');
+                if (!container) return;
+
+                if (this.searchQuery) {
+                    container.innerHTML = '';
+                    container.classList.add('hidden');
+                    return;
+                }
+
+                let subNavItems = [];
+                data.forEach((item, index) => {
+                    if (item.isMultiSectionHeader || item.isSectionHeader) {
+                        let title = item.sectionTitle || '';
+                        if (title && item.sectionTitleZh) {
+                            title += `｜${item.sectionTitleZh}`;
+                        } else if (!title && item.sectionTitleZh) {
+                            title = item.sectionTitleZh;
+                        }
+                        
+                        if (title) {
+                            subNavItems.push({ title: title, id: `section-${index}` });
+                        }
+                    }
+                });
+
+                if (subNavItems.length > 0) {
+                    let html = `
+                        <div class="w-full h-[1px] bg-vborder/30 dark:bg-white/5 mt-1 mb-3"></div>
+                        <div class="flex flex-wrap items-center gap-x-5 gap-y-2.5 px-2 fade-in">
+                    `;
+                    subNavItems.forEach(nav => {
+                        html += `
+                            <a href="#${nav.id}" class="text-[13px] font-medium text-vmuted hover:text-vaccent dark:hover:text-orange-400 transition-colors flex items-center gap-1.5 group">
+                                <i class="fa-solid fa-angle-right text-[10px] opacity-40 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all"></i>
+                                ${nav.title}
+                            </a>
+                        `;
+                    });
+                    html += `</div>`;
+                    
+                    container.innerHTML = html;
+                    container.className = 'flex flex-col w-full';
+                } else {
+                    container.innerHTML = '';
+                    container.className = 'hidden';
+                }
             },
 
             getFilteredData: function() {
@@ -337,7 +390,7 @@
                     }
                 };
 
-                data.forEach(item => {
+                data.forEach((item, index) => {
                     if (item.isMultiSectionHeader) {
                         flushSection();
                         if (currentSectionBoxOpen) {
@@ -346,7 +399,7 @@
                         }
                         currentSectionBoxOpen = true;
                         html += `
-                            <div class="bg-vcard dark:dark-mode-card border border-vborder/70 dark:dark-mode-border rounded-2xl p-6 md:p-8 shadow-sm flex flex-col gap-5 mt-6 first:mt-0">
+                            <div id="section-${index}" class="bg-vcard dark:dark-mode-card border border-vborder/70 dark:dark-mode-border rounded-2xl p-6 md:p-8 shadow-sm flex flex-col gap-5 mt-6 first:mt-0 scroll-mt-24">
                                 <div class="flex items-center gap-3 pb-2">
                                     <div class="w-10 h-10 rounded-xl bg-vaccent/10 text-vaccent flex items-center justify-center text-[18px] font-bold shrink-0">
                                         <i class="fa-solid fa-folder-open"></i>
@@ -388,7 +441,7 @@
                         flushSection();
                         currentSectionBoxOpen = true;
                         html += `
-                            <div class="bg-vcard dark:dark-mode-card border border-vborder/70 dark:dark-mode-border rounded-2xl p-6 md:p-8 shadow-sm flex flex-col gap-5 mt-6 first:mt-0">
+                            <div id="section-${index}" class="bg-vcard dark:dark-mode-card border border-vborder/70 dark:dark-mode-border rounded-2xl p-6 md:p-8 shadow-sm flex flex-col gap-5 mt-6 first:mt-0 scroll-mt-24">
                                 <div class="flex items-center gap-3 pb-2">
                                     <div class="w-10 h-10 rounded-xl bg-vaccent/10 text-vaccent flex items-center justify-center text-[18px] font-bold shrink-0">
                                         <i class="fa-solid fa-circle-info"></i>
@@ -485,6 +538,8 @@
                 if (!container) return;
 
                 const displayData = this.getFilteredData();
+
+                this.renderSubNav(displayData);
 
                 if (displayData.length === 0) {
                     this.showState(
