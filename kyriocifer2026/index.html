@@ -213,12 +213,12 @@
 
     <script>
         // Supabase Client Initialization
-        let SUPABASE_URL = localStorage.getItem('sb_url') || 'https://demo-project.supabase.co';
-        let SUPABASE_ANON_KEY = localStorage.getItem('sb_key') || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.demo';
+        let SUPABASE_URL = localStorage.getItem('sb_url') || 'https://sxuwpcvdnbzettdmrclo.supabase.co';
+        let SUPABASE_ANON_KEY = localStorage.getItem('sb_key') || '請在此填入您的_ANON_PUBLIC_KEY';
         let supabaseClient = null;
 
         try {
-            if (supabase && SUPABASE_URL !== 'https://demo-project.supabase.co') {
+            if (supabase && SUPABASE_URL) {
                 supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
             }
         } catch (e) {
@@ -282,26 +282,26 @@
         let currentAudioPlayer = null;
         let currentMapLevel = 'world'; // 'world' | 'country' | 'city'
 
-        // Initialize Map (Single Map Instance with Esri Canvas Tiles, noWrap & maxBounds to prevent horizontal repetition)
+        // Initialize Map (minZoom: 3 & initial view zoom: 3 to eliminate side grey blocks)
         async function initMap() {
             map = L.map('map', {
                 zoomControl: false,
                 attributionControl: false,
-                minZoom: 2,
+                minZoom: 3,
                 maxZoom: 16,
                 maxBounds: [[-85, -180], [85, 180]],
                 maxBoundsViscosity: 1.0
-            }).setView([20.0, 0.0], 2);
+            }).setView([20.0, 0.0], 3);
 
             window.dayTileLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
                 maxZoom: 16,
-                minZoom: 2,
+                minZoom: 3,
                 noWrap: true
             });
 
             window.nightTileLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
                 maxZoom: 16,
-                minZoom: 2,
+                minZoom: 3,
                 noWrap: true
             });
 
@@ -539,7 +539,7 @@
             activeCountryId = null;
             currentMapLevel = 'world';
 
-            map.flyTo([20.0, 0.0], 2, { duration: 1.5 });
+            map.flyTo([20.0, 0.0], 3, { duration: 1.5 });
             renderWorldView(activeLanguageFilter);
             updateBreadcrumb();
         }
