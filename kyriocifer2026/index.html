@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LOVE AROUND THE WORLD 💖</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        darkBg: '#0F172A',
+                        mapDark: '#1E293B',
+                        loveGold: '#FFD166',
+                        accentPink: '#FF6F91'
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <!-- Supabase JS Client -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        .leaflet-container { background: #0F172A !important; font-family: inherit; }
+        @keyframes pulse-glow {
+            0% { transform: scale(1); filter: drop-shadow(0 0 4px rgba(255, 209, 102, 0.8)); }
+            50% { transform: scale(1.25); filter: drop-shadow(0 0 12px rgba(255, 209, 102, 1)); }
+            100% { transform: scale(1); filter: drop-shadow(0 0 4px rgba(255, 209, 102, 0.8)); }
+        }
+        .heart-marker {
+            font-size: 24px;
+            cursor: pointer;
+            animation: pulse-glow 2s infinite ease-in-out;
+            display: inline-block;
+            text-align: center;
+        }
+    </style>
+</head>
+<body class="bg-darkBg text-slate-100 h-screen flex flex-col overflow-hidden">
+
+    <!-- 頂部導覽列 (已移除搜尋欄與Admin按鈕) -->
+    <header class="h-16 bg-slate-900/80 backdrop-blur border-b border-slate-800 flex items-center justify-between px-6 z-20">
+        <div class="flex items-center space-x-3 cursor-pointer" onclick="resetView()">
+            <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-rose-500 to-amber-300 flex items-center justify-center text-xl shadow-lg shadow-rose-500/30">🌍</div>
+            <div>
+                <h1 class="font-bold text-lg tracking-wide bg-gradient-to-r from-rose-400 to-amber-300 bg-clip-text text-transparent">LOVE AROUND THE WORLD</h1>
+                <p class="text-xs text-slate-400">點亮世界，聽見愛的語言 ✨</p>
+            </div>
+        </div>
+
+        <div class="flex items-center space-x-4">
+            <!-- 語言篩選器 -->
+            <select id="languageFilter" onchange="filterByLanguage(this.value)" class="bg-slate-800 text-slate-200 text-sm rounded-lg px-3 py-2 border border-slate-700 focus:outline-none focus:border-rose-500">
+                <option value="">🌍 All Languages</option>
+            </select>
+
+            <!-- 主題切換 -->
+            <button onclick="toggleTheme()" class="w-10 h-10 rounded-lg bg-slate-800 border border-slate-700 flex items-center justify-center hover:bg-slate-700 transition">
+                🌙
+            </button>
+        </div>
+    </header>
+
+    <!-- 麵包屑導覽列 -->
+    <div class="bg-slate-950/50 px-6 py-2 border-b border-slate-800/60 flex items-center justify-between text-sm z-10">
+        <div id="breadcrumb" class="flex items-center space-x-2 text-slate-400">
+            <span class="cursor-pointer hover:text-white transition" onclick="resetView()">World</span>
+        </div>
+        <button id="backButton" onclick="resetView()" class="hidden text-xs bg-rose-500/20 text-rose-300 px-3 py-1 rounded-full border border-rose-500/30 hover:bg-rose-500/30 transition">
+            🔙 回到主畫面
+        </button>
+    </div>
+
+    <!-- 地圖主區域 -->
+    <main class="flex-1 relative">
+        <div id="map" class="w-full h-full"></div>
+    </main>
+
+    <!-- 底部資訊列 -->
+    <footer class="h-12 bg-slate-900/90 border-t border-slate-800 px-6 flex items-center justify-between text-xs text-slate-400 z-10">
+        <div class="flex items-center space-x-2">
+            <span class="inline-block w-2 h-2 rounded-full bg-rose-500 animate-ping"></span>
+            <span>聽聽各地動人的「我愛你 ♥」</span>
+        </div>
+        <div id="countryTicker" class="flex space-x-4 overflow-hidden">
+            <!-- 動態載入國家標籤 -->
+        </div>
+    </footer>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        // Supabase 設定
+        const SUPABASE_URL = 'https://sxuwpcvdnbzettdmrclo.supabase.co';
+        const SUPABASE_ANON_KEY = '請在此填入您的_ANON_PUBLIC_KEY'; // 填入一長串 eyJ... 亂碼
+        
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        let map;
+        let markersLayer = L.layerGroup();
+        let allPeopleData = [];
+
+        // 初始化地圖
+        function initMap() {
+            map = L.map('map', { zoomControl: false }).setView([25.0330, 121.5654], 3);
+            L.control.zoom({ position: 'bottomright' }).addTo(map);
+
+            // 夜晚地球圖層 (CartoDB Dark Matter)
+            L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+                maxZoom: 19,
+                subdomains: 'abcd',
+                attribution: '&copy; OpenStreetMap contributors &copy; CARTO'
+            }).addTo(map);
+
+            markersLayer.addTo(map);
+            loadDataFromSupabase();
+        }
+
+        // 從 Supabase 載入資料
+        async function loadDataFromSupabase() {
+            try {
+                // 同時載入 people、countries、cities、languages
+                const { data, error } = await supabaseClient
+                    .from('people')
+                    .select(`
+                        id,
+                        name,
+                        avatar_url,
+                        countries (id, name, name_en, country_code, flag),
+                        cities (id, name, name_en, latitude, longitude),
+                        languages (id, name, native_name, love_phrase, romanization, translation, audio_url)
+                    `)
+                    .eq('active', true);
+
+                if (error) throw error;
+
+                allPeopleData = data || [];
+                renderMarkers(allPeopleData);
+                populateLanguageDropdown(allPeopleData);
+                renderTicker(allPeopleData);
+            } catch (err) {
+                console.error('載入 Supabase 資料失敗:', err.message);
+            }
+        }
+
+        // 渲染地圖上的愛心標記
+        function renderMarkers(data) {
+            markersLayer.clearLayers();
+
+            data.forEach(person => {
+                if (!person.cities) return;
+                const lat = person.cities.latitude;
+                const lng = person.cities.longitude;
+
+                const customIcon = L.divIcon({
+                    className: 'custom-div-icon',
+                    html: `<div class="heart-marker" title="${person.name} (${person.countries.name})">♥</div>`,
+                    iconSize: [30, 30],
+                    iconAnchor: [15, 15]
+                });
+
+                const marker = L.marker([lat, lng], { icon: customIcon });
+
+                // 彈出卡片內容
+                const popupContent = `
+                    <div style="background: #1E293B; color: #F8FAFC; padding: 12px; border-radius: 12px; min-width: 200px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.5);">
+                        <img src="${person.avatar_url || 'https://via.placeholder.com/80'}" style="width: 60px; height: 60px; border-radius: 50%; object-fit: cover; margin: 0 auto 8px auto; border: 2px solid #FFD166;" />
+                        <h3 style="font-weight: bold; font-size: 16px; margin-bottom: 4px;">${person.name}</h3>
+                        <p style="font-size: 12px; color: #94A3B8; margin-bottom: 8px;">📍 ${person.cities.name}, ${person.countries.name} ${person.countries.flag}</p>
+                        <div style="background: rgba(255,209,102,0.1); border: 1px solid rgba(255,209,102,0.3); padding: 8px; border-radius: 8px; margin-bottom: 8px;">
+                            <p style="color: #FFD166; font-size: 15px; font-weight: bold;">"${person.languages.love_phrase}"</p>
+                            <p style="font-size: 11px; color: #CBD5E1;">(${person.languages.romanization})</p>
+                        </div>
+                        ${person.languages.audio_url ? `
+                            <audio controls style="width: 100%; height: 32px; margin-top: 4px;">
+                                <source src="${person.languages.audio_url}" type="audio/mpeg">
+                                您的瀏覽器不支援語音播放
+                            </audio>
+                        ` : '<span style="font-size: 11px; color: #64748B;">（暫無語音）</span>'}
+                    </div>
+                `;
+
+                marker.bindPopup(popupContent, { className: 'custom-popup', maxWidth: 260 });
+                markersLayer.addLayer(marker);
+            });
+        }
+
+        // 填入語言選單
+        function populateLanguageDropdown(data) {
+            const select = document.getElementById('languageFilter');
+            const langs = {};
+            data.forEach(p => {
+                if (p.languages) {
+                    langs[p.languages.id] = p.languages.name;
+                }
+            });
+
+            for (const [id, name] of Object.entries(langs)) {
+                const opt = document.createElement('option');
+                opt.value = id;
+                opt.textContent = name;
+                select.appendChild(opt);
+            }
+        }
+
+        // 渲染底部國家清單
+        function renderTicker(data) {
+            const ticker = document.getElementById('countryTicker');
+            ticker.innerHTML = '';
+            const countriesMap = new Map();
+            data.forEach(p => {
+                if (p.countries) {
+                    countriesMap.set(p.countries.id, `${p.countries.flag} ${p.countries.name}`);
+                }
+            });
+
+            countriesMap.forEach((val, id) => {
+                const span = document.createElement('span');
+                span.className = 'bg-slate-800 px-3 py-1 rounded-full border border-slate-700 cursor-pointer hover:border-rose-500 transition';
+                span.textContent = val;
+                span.onclick = () => filterByCountry(id);
+                ticker.appendChild(span);
+            });
+        }
+
+        // 依照語言過濾
+        function filterByLanguage(langId) {
+            if (!langId) {
+                renderMarkers(allPeopleData);
+                return;
+            }
+            const filtered = allPeopleData.filter(p => p.languages && p.languages.id === langId);
+            renderMarkers(filtered);
+            if (filtered.length > 0 && filtered[0].cities) {
+                map.setView([filtered[0].cities.latitude, filtered[0].cities.longitude], 6);
+            }
+        }
+
+        // 依照國家過濾
+        function filterByCountry(countryId) {
+            const filtered = allPeopleData.filter(p => p.countries && p.countries.id === countryId);
+            renderMarkers(filtered);
+            if (filtered.length > 0 && filtered[0].cities) {
+                map.setView([filtered[0].cities.latitude, filtered[0].cities.longitude], 5);
+                document.getElementById('backButton').classList.remove('hidden');
+            }
+        }
+
+        // 重置地圖視角
+        function resetView() {
+            map.setView([25.0330, 121.5654], 3);
+            renderMarkers(allPeopleData);
+            document.getElementById('languageFilter').value = '';
+            document.getElementById('backButton').classList.add('hidden');
+        }
+
+        function toggleTheme() {
+            // 切換 dark/light 模式樣式
+            document.documentElement.classList.toggle('dark');
+        }
+
+        // 頁面載入初始化
+        window.onload = initMap;
+    </script>
+</body>
+</html>
