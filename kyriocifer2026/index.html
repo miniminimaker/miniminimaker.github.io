@@ -98,12 +98,16 @@
                 <i class="fa-solid fa-earth-americas text-white text-lg"></i>
             </div>
             <div>
-                <h1 id="headerTitle" class="font-extrabold text-base sm:text-lg bg-gradient-to-r from-day-pink to-day-lavender bg-clip-text text-transparent">LOVE AROUND THE WORLD ♡</h1>
+                <h1 id="headerTitle" class="font-extrabold text-base sm:text-lg bg-gradient-to-r from-day-pink to-day-lavender bg-clip-text text-transparent flex items-center gap-1.5">
+                    LOVE AROUND THE WORLD ♡
+                    <!-- Live Sync Indicator -->
+                    <span id="liveSyncDot" class="hidden w-2 h-2 rounded-full bg-green-500 animate-pulse shadow-[0_0_5px_#22c55e]" title="已連線至資料庫，即時同步中"></span>
+                </h1>
                 <p class="text-xs text-day-muted dark:text-night-muted">點亮世界，聽見愛的語言 ✨</p>
             </div>
         </div>
 
-        <!-- Controls: Language Filter Only (Search input removed) -->
+        <!-- Controls: Language Filter Only -->
         <div class="hidden md:flex items-center space-x-3">
             <select id="langFilterSelect" onchange="handleLanguageFilter(this.value)" class="bg-slate-100 dark:bg-slate-800 border border-day-border dark:border-night-border rounded-xl px-3 py-1.5 text-xs font-semibold outline-none cursor-pointer">
                 <option value="all">🌍 All Languages</option>
@@ -212,63 +216,37 @@
     </main>
 
     <script>
-        // Supabase Client Initialization
-        let SUPABASE_URL = localStorage.getItem('sb_url') || 'https://sxuwpcvdnbzettdmrclo.supabase.co';
-        let SUPABASE_ANON_KEY = localStorage.getItem('sb_key') || '請在此填入您的_ANON_PUBLIC_KEY';
+        // ==========================================
+        // 1. SUPABASE 資料庫連線設定
+        // ==========================================
+        const YOUR_SUPABASE_URL = 'https://sxuwpcvdnbzettdmrclo.supabase.co';
+        
+        // 填入您提供的完整 Publishable Key
+        const YOUR_SUPABASE_ANON_KEY = 'sb_publishable_YIg5VkT5PG3vZ6zIwTWZhA_Vf9v3Zq6';
+
         let supabaseClient = null;
 
         try {
-            if (supabase && SUPABASE_URL) {
-                supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+            if (supabase && YOUR_SUPABASE_URL && YOUR_SUPABASE_ANON_KEY) {
+                supabaseClient = supabase.createClient(YOUR_SUPABASE_URL, YOUR_SUPABASE_ANON_KEY);
             }
         } catch (e) {
-            console.warn('Supabase initialization fallback to local mock store:', e);
+            console.warn('Supabase initialization failed:', e);
         }
 
-        // Default Rich Seed Data
+        // Default Rich Seed Data (當資料庫沒連上時的備用假資料)
         const demoData = {
             countries: [
-                { id: 'c_tw', name: 'Taiwan', flag: '🇹🇼', country_code: 'TW', lat: 23.6978, lng: 120.9605, zoom: 8 },
-                { id: 'c_jp', name: 'Japan', flag: '🇯🇵', country_code: 'JP', lat: 36.2048, lng: 138.2529, zoom: 6 },
-                { id: 'c_kr', name: 'South Korea', flag: '🇰🇷', country_code: 'KR', lat: 35.9078, lng: 127.7669, zoom: 7 },
-                { id: 'c_fr', name: 'France', flag: '🇫🇷', country_code: 'FR', lat: 46.2276, lng: 2.2137, zoom: 6 },
-                { id: 'c_us', name: 'United States', flag: '🇺🇸', country_code: 'US', lat: 37.0902, lng: -95.7129, zoom: 4 },
-                { id: 'c_br', name: 'Brazil', flag: '🇧🇷', country_code: 'BR', lat: -14.2350, lng: -51.9253, zoom: 4 }
+                { id: 'c_tw', name: 'Taiwan', flag: '🇹🇼', country_code: 'TW', lat: 23.6978, lng: 120.9605, zoom: 8 }
             ],
             cities: [
-                { id: 'ci_taipei', country_id: 'c_tw', name: 'Taipei', latitude: 25.0330, longitude: 121.5654 },
-                { id: 'ci_taichung', country_id: 'c_tw', name: 'Taichung', latitude: 24.1477, longitude: 120.6736 },
-                { id: 'ci_tainan', country_id: 'c_tw', name: 'Tainan', latitude: 22.9997, longitude: 120.2270 },
-                { id: 'ci_kaohsiung', country_id: 'c_tw', name: 'Kaohsiung', latitude: 22.6273, longitude: 120.3014 },
-                { id: 'ci_tokyo', country_id: 'c_jp', name: 'Tokyo', latitude: 35.6762, longitude: 139.6503 },
-                { id: 'ci_kyoto', country_id: 'c_jp', name: 'Kyoto', latitude: 35.0116, longitude: 135.7681 },
-                { id: 'ci_seoul', country_id: 'c_kr', name: 'Seoul', latitude: 37.5665, longitude: 126.9780 },
-                { id: 'ci_paris', country_id: 'c_fr', name: 'Paris', latitude: 48.8566, longitude: 2.3522 },
-                { id: 'ci_ny', country_id: 'c_us', name: 'New York', latitude: 40.7128, longitude: -74.0060 },
-                { id: 'ci_rio', country_id: 'c_br', name: 'Rio de Janeiro', latitude: -22.9068, longitude: -43.1729 }
+                { id: 'ci_taipei', country_id: 'c_tw', name: 'Taipei', latitude: 25.0330, longitude: 121.5654 }
             ],
             languages: [
-                { id: 'l_mandarin', name: 'Mandarin (中文)', native_name: '我愛你', romanization: 'Wǒ ài nǐ', translation: 'I love you', audio_url: 'https://actions.google.com/sounds/v1/ambiences/morning_birds.ogg' },
-                { id: 'l_japanese', name: 'Japanese (日本語)', native_name: '愛してる', romanization: 'Aishiteru', translation: 'I love you', audio_url: 'https://actions.google.com/sounds/v1/ambiences/morning_birds.ogg' },
-                { id: 'l_korean', name: 'Korean (한국어)', native_name: '사랑해', romanization: 'Saranghae', translation: 'I love you', audio_url: 'https://actions.google.com/sounds/v1/ambiences/morning_birds.ogg' },
-                { id: 'l_french', name: 'French (Français)', native_name: 'Je t’aime', romanization: 'Zhuh tem', translation: 'I love you', audio_url: 'https://actions.google.com/sounds/v1/ambiences/morning_birds.ogg' },
-                { id: 'l_english', name: 'English', native_name: 'I love you', romanization: 'I love you', translation: 'I love you', audio_url: 'https://actions.google.com/sounds/v1/ambiences/morning_birds.ogg' },
-                { id: 'l_portuguese', name: 'Portuguese (Português)', native_name: 'Eu te amo', romanization: 'Ew tee ah-moo', translation: 'I love you', audio_url: 'https://actions.google.com/sounds/v1/ambiences/morning_birds.ogg' }
+                { id: 'l_mandarin', name: 'Mandarin (中文)', native_name: '我愛你', romanization: 'Wǒ ài nǐ', translation: 'I love you', audio_url: 'https://actions.google.com/sounds/v1/ambiences/morning_birds.ogg' }
             ],
             people: [
-                { id: 'p1', name: 'MINI', avatar_url: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150', country_id: 'c_tw', city_id: 'ci_taipei', language_id: 'l_mandarin', active: true },
-                { id: 'p2', name: 'Aiko', avatar_url: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=150', country_id: 'c_tw', city_id: 'ci_taipei', language_id: 'l_mandarin', active: true },
-                { id: 'p3', name: 'Yuki', avatar_url: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=150', country_id: 'c_tw', city_id: 'ci_taipei', language_id: 'l_mandarin', active: true },
-                { id: 'p4', name: 'Alex', avatar_url: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150', country_id: 'c_tw', city_id: 'ci_taichung', language_id: 'l_mandarin', active: true },
-                { id: 'p5', name: 'Momo', avatar_url: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150', country_id: 'c_tw', city_id: 'ci_taichung', language_id: 'l_mandarin', active: true },
-                { id: 'p6', name: 'Ken', avatar_url: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150', country_id: 'c_tw', city_id: 'ci_tainan', language_id: 'l_mandarin', active: true },
-                { id: 'p7', name: 'Luna', avatar_url: 'https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?w=150', country_id: 'c_tw', city_id: 'ci_kaohsiung', language_id: 'l_mandarin', active: true },
-                { id: 'p8', name: 'Rin', avatar_url: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=150', country_id: 'c_jp', city_id: 'ci_tokyo', language_id: 'l_japanese', active: true },
-                { id: 'p9', name: 'Ren', avatar_url: 'https://images.unsplash.com/photo-1501196354995-cbb51c65aaea?w=150', country_id: 'c_jp', city_id: 'ci_kyoto', language_id: 'l_japanese', active: true },
-                { id: 'p10', name: 'Min-jun', avatar_url: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=150', country_id: 'c_kr', city_id: 'ci_seoul', language_id: 'l_korean', active: true },
-                { id: 'p11', name: 'Chloe', avatar_url: 'https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=150', country_id: 'c_fr', city_id: 'ci_paris', language_id: 'l_french', active: true },
-                { id: 'p12', name: 'Lucas', avatar_url: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=150', country_id: 'c_us', city_id: 'ci_ny', language_id: 'l_english', active: true },
-                { id: 'p13', name: 'Beatriz', avatar_url: 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=150', country_id: 'c_br', city_id: 'ci_rio', language_id: 'l_portuguese', active: true }
+                { id: 'p1', name: 'MINI (如果看到這個代表資料庫連線失敗或無資料)', avatar_url: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150', country_id: 'c_tw', city_id: 'ci_taipei', language_id: 'l_mandarin', active: true }
             ]
         };
 
@@ -282,7 +260,9 @@
         let currentAudioPlayer = null;
         let currentMapLevel = 'world'; // 'world' | 'country' | 'city'
 
-        // Initialize Map (minZoom: 3 & initial view zoom: 3 to eliminate side grey blocks)
+        // ==========================================
+        // 2. 初始化地圖與資料取得
+        // ==========================================
         async function initMap() {
             map = L.map('map', {
                 zoomControl: false,
@@ -294,15 +274,11 @@
             }).setView([20.0, 0.0], 3);
 
             window.dayTileLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
-                maxZoom: 16,
-                minZoom: 3,
-                noWrap: true
+                maxZoom: 16, minZoom: 3, noWrap: true
             });
 
             window.nightTileLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
-                maxZoom: 16,
-                minZoom: 3,
-                noWrap: true
+                maxZoom: 16, minZoom: 3, noWrap: true
             });
 
             if (document.documentElement.classList.contains('dark')) {
@@ -321,6 +297,9 @@
             updateBreadcrumb();
 
             map.on('move zoom', updateBubblePosition);
+            
+            // 啟動即時資料更新監聽
+            setupRealtimeUpdates();
         }
 
         async function fetchAppData() {
@@ -332,16 +311,50 @@
                     supabaseClient.from('languages').select('*'),
                     supabaseClient.from('people').select('*')
                 ]);
-                if (coRes.data && coRes.data.length > 0) appData.countries = coRes.data;
-                if (ciRes.data && ciRes.data.length > 0) appData.cities = ciRes.data;
-                if (lRes.data && lRes.data.length > 0) appData.languages = lRes.data;
-                if (pRes.data && pRes.data.length > 0) appData.people = pRes.data;
+                
+                // 強制將真實資料庫的資料覆蓋上去 (即使是空的也覆蓋)
+                if (coRes.data) appData.countries = coRes.data;
+                if (ciRes.data) appData.cities = ciRes.data;
+                if (lRes.data) appData.languages = lRes.data;
+                if (pRes.data) appData.people = pRes.data;
+                
+                // 若連線成功，顯示左上角的綠燈
+                document.getElementById('liveSyncDot').classList.remove('hidden');
             } catch (err) {
                 console.log('Using local seed data due to Supabase fetch error:', err);
             }
         }
 
-        // Render World View (Using warm golden glowing heart markers ♥)
+        // ==========================================
+        // 3. Supabase Realtime 即時更新功能
+        // ==========================================
+        function setupRealtimeUpdates() {
+            if (!supabaseClient) return;
+            
+            supabaseClient
+                .channel('public:people')
+                .on('postgres_changes', { event: '*', schema: 'public', table: 'people' }, (payload) => {
+                    console.log('後台資料有更新了！即時重新整理畫面...', payload);
+                    
+                    // 重新抓取資料並繪製
+                    fetchAppData().then(() => {
+                        if (currentMapLevel === 'world') {
+                            renderWorldView(activeLanguageFilter);
+                        } else if (currentMapLevel === 'country') {
+                            flyToCountry(activeCountryId);
+                        } else if (currentMapLevel === 'city' && activeCityForBubble) {
+                            const updatedCity = appData.cities.find(c => c.id === activeCityForBubble.id);
+                            const cityPeople = appData.people.filter(p => p.active && p.city_id === updatedCity.id);
+                            handleCityClick(updatedCity, cityPeople);
+                        }
+                    });
+                })
+                .subscribe();
+        }
+
+        // ==========================================
+        // 4. 地圖渲染邏輯
+        // ==========================================
         function renderWorldView(filterLang = 'all') {
             markersLayer.clearLayers();
             currentMapLevel = 'world';
@@ -456,6 +469,9 @@
             }
         }
 
+        // ==========================================
+        // 5. 彈出視窗與互動邏輯
+        // ==========================================
         function showCityPeopleCard(city, people) {
             const country = appData.countries.find(c => c.id === city.country_id);
             document.getElementById('cardCityName').innerText = `${country ? country.flag : ''} ${city.name}`;
@@ -523,7 +539,6 @@
             resetAudioBtn();
         }
 
-        // Return to World View (Unified Return Function)
         function returnToWorldView() {
             closeCityPeopleCard();
             closePersonBubble();
@@ -544,7 +559,6 @@
             updateBreadcrumb();
         }
 
-        // Update Breadcrumb UI
         function updateBreadcrumb() {
             const trail = document.getElementById('breadcrumbTrail');
             const returnBtnContainer = document.getElementById('quickReturnBtnContainer');
@@ -594,7 +608,6 @@
             }
         }
 
-        // Audio Playback
         function playPersonAudio() {
             if (!currentSelectedPerson) return;
             const lang = appData.languages.find(l => l.id === currentSelectedPerson.language_id);
@@ -634,7 +647,6 @@
             if (text) text.innerText = '🔊 播放真人語音';
         }
 
-        // Bottom Country Carousel
         function renderCountryCarousel() {
             const carousel = document.getElementById('countryCarousel');
             carousel.innerHTML = '';
@@ -667,7 +679,6 @@
             renderWorldView(langId);
         }
 
-        // Theme Toggle (Night mode priority by default)
         function toggleTheme() {
             const html = document.documentElement;
             const icon = document.getElementById('themeIcon');
@@ -686,7 +697,6 @@
             }
         }
 
-        // Default priority: Night / Dark mode on first load unless 'day' is explicitly stored
         if (localStorage.getItem('theme') === 'day') {
             document.documentElement.classList.remove('dark');
             document.getElementById('themeIcon').className = 'fa-solid fa-sun text-day-yellow';
