@@ -336,8 +336,23 @@
                     const dateRaw = event['Date\n日期'] || event['Date 日期'] || event.date || event['日期'] || '';
                     const timeRaw = event['Time(GMT+8)\n時間GMT+8'] || event['Time(GMT+8) 時間GMT+8'] || event.time || event['時間'] || '';
                     
-                    const contentEn = event['Content'] || '';
-                    const contentZh = event['內容'] || '';
+                    let rawEn = event['Content'] || '';
+                    let rawZh = event['內容'] || '';
+                    let partTag = '';
+
+                    const partMatch = rawEn.match(/(?:\s*\|\s*)?(?:Part|Pt\.?)\s*\.?\s*(\d+)/i);
+                    if (partMatch) {
+                        partTag = `Part.${partMatch[1]}`;
+                        rawEn = rawEn.replace(partMatch[0], '').trim();
+                        
+                        const zhPartMatch = rawZh.match(/\s*(?:Part|Pt\.?)\s*\.?\s*\d+/i);
+                        if (zhPartMatch) {
+                            rawZh = rawZh.replace(zhPartMatch[0], '').trim();
+                        }
+                    }
+
+                    const contentEn = rawEn;
+                    const contentZh = rawZh;
                     const game = [contentEn, contentZh].filter(Boolean).join(' | ');
                     
                     let category = 'Stream';
@@ -418,6 +433,7 @@
                         timeDisplay,
                         contentEn,
                         contentZh,
+                        partTag,
                         streamTitle,
                         category,
                         game,
@@ -576,9 +592,9 @@
                     let mainTitleHtml = '';
                     if (event.isOffDay) {
                         mainTitleHtml = `
-                            <div class="flex flex-col gap-0.5 justify-center">
-                                <h3 class="text-[14px] md:text-[15px] font-bold ${titleClass} leading-snug">${event.contentEn || 'No Stream Scheduled'}</h3>
-                                ${event.contentZh ? `<h4 class="text-[12px] md:text-[13px] font-medium vmuted dark:text-[#A1A1AA] leading-snug">${event.contentZh}</h4>` : ''}
+                            <div class="flex flex-col gap-1 justify-center">
+                                <h3 class="text-[13px] md:text-[14px] font-bold ${titleClass} leading-snug">${event.contentEn || 'No Stream Scheduled'}</h3>
+                                ${event.contentZh ? `<h4 class="text-[13px] md:text-[14px] font-medium ${titleClass} leading-snug mt-1">${event.contentZh}</h4>` : ''}
                             </div>
                         `;
                     } else {
@@ -588,7 +604,10 @@
                                     <i class="fa-solid fa-gamepad text-[13px]"></i>
                                 </div>
                                 <div class="flex flex-col justify-center gap-0.5">
-                                    <h3 class="text-[14px] md:text-[15px] font-bold ${titleClass} leading-tight">${event.contentEn || 'No Stream Scheduled'}</h3>
+                                    <div class="flex items-center gap-2 flex-wrap">
+                                        <h3 class="text-[14px] md:text-[15px] font-bold ${titleClass} leading-tight">${event.contentEn || 'No Stream Scheduled'}</h3>
+                                        ${event.partTag ? `<span class="bg-vaccent dark:bg-orange-500 text-white px-1.5 py-[2px] rounded text-[10px] font-bold tracking-wide shadow-sm whitespace-nowrap transform -translate-y-[0.5px]">${event.partTag}</span>` : ''}
+                                    </div>
                                     ${event.contentZh ? `<h4 class="text-[12px] md:text-[13px] font-medium vmuted dark:text-[#A1A1AA] leading-tight">${event.contentZh}</h4>` : ''}
                                 </div>
                             </div>
@@ -776,23 +795,23 @@
                             <div class="overflow-x-auto custom-scrollbar">
                                 <table class="w-full border-collapse">
                                     <thead>
-                                        <tr class="bg-vbg/60 dark:bg-black/20 border-b border-vborder/70 dark:border-[#3F3F46] text-[12px] vmuted uppercase tracking-wider text-center">
-                                            <th class="py-3.5 px-5 font-semibold text-center">Date｜日期</th>
-                                            <th class="py-3.5 px-5 font-semibold text-center">Day｜天數</th>
-                                            <th class="py-3.5 px-5 font-semibold text-center">Total Subs｜訂閱數量</th>
-                                            <th class="py-3.5 px-5 font-semibold text-center">Stream Hours｜直播總長</th>
+                                        <tr class="bg-vbg/60 dark:bg-black/20 border-b border-vborder/70 dark:border-[#3F3F46] text-[11px] vmuted uppercase tracking-wider text-center">
+                                            <th class="py-4 px-4 font-semibold text-center">Date｜日期</th>
+                                            <th class="py-4 px-4 font-semibold text-center">Day｜天數</th>
+                                            <th class="py-4 px-4 font-semibold text-center">Total Subs｜訂閱數量</th>
+                                            <th class="py-4 px-4 font-semibold text-center">Stream Hours｜直播總長</th>
                                         </tr>
                                     </thead>
-                                    <tdody class="divide-y divide-vborder/50 dark:divide-[#3F3F46] text-[13px] text-center">
+                                    <tbody class="divide-y divide-vborder/50 dark:divide-[#3F3F46] text-[12px] text-center">
                 `;
 
                 dailyLogs.forEach(row => {
                     html += `
                         <tr class="hover:bg-transparent transition-colors">
-                            <td class="py-3.5 px-5 font-medium vtext dark:dark-mode-text text-center">${row.dateRaw || '-'}</td>
-                            <td class="py-3.5 px-5 font-normal vtext dark:dark-mode-text text-center">${row.days || '-'}</td>
-                            <td class="py-3.5 px-5 font-normal vtext dark:dark-mode-text text-center">${row.totalSubs ? Number(String(row.totalSubs).replace(/,/g, '')).toLocaleString() : '-'}</td>
-                            <td class="py-3.5 px-5 vmuted dark:dark-mode-muted text-center">${row.streamHours || '-'}</td>
+                            <td class="py-4 px-4 font-medium vtext dark:dark-mode-text text-center">${row.dateRaw || '-'}</td>
+                            <td class="py-4 px-4 font-normal vtext dark:dark-mode-text text-center">${row.days || '-'}</td>
+                            <td class="py-4 px-4 font-normal vtext dark:dark-mode-text text-center">${row.totalSubs ? Number(String(row.totalSubs).replace(/,/g, '')).toLocaleString() : '-'}</td>
+                            <td class="py-4 px-4 vmuted dark:dark-mode-muted text-center">${row.streamHours || '-'}</td>
                         </tr>
                     `;
                 });
