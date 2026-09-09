@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LOVE AROUND THE WORLD ♡ 點亮世界，聽見愛的語言</title>
+    <title>LOVE AROUND THE WORLD ♡</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Leaflet CSS & JS -->
@@ -12,7 +12,7 @@
     <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <!-- Google Fonts: Plus Jakarta Sans -->
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <!-- Supabase JS Client -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     
@@ -24,30 +24,14 @@
                     fontFamily: { sans: ['"Plus Jakarta Sans"', 'sans-serif'] },
                     colors: {
                         day: {
-                            bg: '#FFFDF9',
-                            sky: '#8EDFF2',
-                            pink: '#FF6F91',
-                            lavender: '#A78BFA',
-                            yellow: '#FFD166',
-                            mint: '#8ED1B2',
-                            orange: '#FFB86B',
-                            text: '#26345D',
-                            muted: '#69738F',
-                            card: '#FFFFFF',
-                            border: '#F1EFEA'
+                            bg: '#FFFDF9', sky: '#8EDFF2', pink: '#FF6F91', lavender: '#A78BFA',
+                            yellow: '#FFD166', mint: '#8ED1B2', orange: '#FFB86B', text: '#26345D',
+                            muted: '#69738F', card: '#FFFFFF', border: '#F1EFEA'
                         },
                         night: {
-                            bg: '#080D1A',
-                            sky: '#111827',
-                            pink: '#F43F5E',
-                            lavender: '#8B5CF6',
-                            yellow: '#FBBF24',
-                            mint: '#10B981',
-                            orange: '#F97316',
-                            text: '#F8FAFC',
-                            muted: '#94A3B8',
-                            card: '#111827',
-                            border: '#1E293B'
+                            bg: '#080D1A', sky: '#111827', pink: '#F43F5E', lavender: '#8B5CF6',
+                            yellow: '#FBBF24', mint: '#10B981', orange: '#F97316', text: '#F8FAFC',
+                            muted: '#94A3B8', card: '#111827', border: '#1E293B'
                         }
                     }
                 }
@@ -59,11 +43,9 @@
         .leaflet-container { width: 100%; height: 100%; background: #080D1A !important; transition: background 0.5s ease; }
         
         /* Cinematic Night Earth Map Styling & Clarity */
-        .dark .leaflet-tile-pane {
-            filter: brightness(0.9) contrast(1.08) saturate(0.75);
-        }
+        .dark .leaflet-tile-pane { filter: brightness(0.9) contrast(1.08) saturate(0.75); }
 
-        /* Warm Golden Glowing Heart Marker (♥) with Gentle 2.5s Pulse Animation */
+        /* Warm Golden Glowing Heart Marker (♥) */
         @keyframes heart-gentle-pulse {
             0%, 100% { transform: scale(1); filter: drop-shadow(0 0 6px rgba(251, 191, 36, 0.7)); }
             50% { transform: scale(1.22); filter: drop-shadow(0 0 14px rgba(251, 191, 36, 0.95)); }
@@ -72,17 +54,17 @@
             animation: heart-gentle-pulse 2.5s infinite ease-in-out;
             cursor: pointer;
             transition: transform 0.2s ease, filter 0.2s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #FBBF24;
-            font-size: 20px;
-            user-select: none;
-            font-weight: 800;
+            display: flex; align-items: center; justify-content: center;
+            color: #FBBF24; font-size: 20px; user-select: none; font-weight: 800;
         }
         .city-heart-marker:hover {
             transform: scale(1.4);
             filter: drop-shadow(0 0 18px rgba(251, 191, 36, 1));
+        }
+
+        /* Glowing text effect for native phrases */
+        .text-glow {
+            text-shadow: 0 0 20px rgba(244, 63, 94, 0.4);
         }
 
         /* Hide scrollbar for clean carousels */
@@ -92,30 +74,28 @@
 </head>
 <body class="h-full bg-day-bg text-day-text dark:bg-night-bg dark:text-night-text flex flex-col overflow-hidden transition-colors duration-300">
 
-    <header class="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-day-border dark:border-night-border px-4 py-3 flex items-center justify-between z-40 shrink-0">
+    <header class="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-day-border dark:border-night-border px-4 py-3 flex items-center justify-between z-40 shrink-0 shadow-sm">
         <div class="flex items-center space-x-3 cursor-pointer group" onclick="returnToWorldView()">
             <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-day-pink to-day-yellow flex items-center justify-center shadow-md shadow-day-pink/20 group-hover:scale-105 transition">
                 <i class="fa-solid fa-earth-americas text-white text-lg"></i>
             </div>
             <div>
-                <h1 id="headerTitle" class="font-extrabold text-base sm:text-lg bg-gradient-to-r from-day-pink to-day-lavender bg-clip-text text-transparent flex items-center gap-1.5">
+                <h1 id="headerTitle" class="font-extrabold text-base sm:text-lg bg-gradient-to-r from-day-pink to-day-lavender bg-clip-text text-transparent flex items-center gap-1.5 tracking-tight">
                     LOVE AROUND THE WORLD ♡
                     <!-- Live Sync Indicator -->
-                    <span id="liveSyncDot" class="hidden w-2 h-2 rounded-full bg-green-500 animate-pulse shadow-[0_0_5px_#22c55e]" title="已連線至資料庫，即時同步中"></span>
+                    <span id="liveSyncDot" class="hidden w-2 h-2 rounded-full bg-green-500 animate-pulse shadow-[0_0_5px_#22c55e]" title="Live Sync Active"></span>
                 </h1>
-                <p class="text-xs text-day-muted dark:text-night-muted">點亮世界，聽見愛的語言 ✨</p>
+                <p class="text-xs text-day-muted dark:text-night-muted font-medium">Light up the world, hear the languages of love ✨</p>
             </div>
         </div>
 
-        <!-- Controls: Language Filter Only -->
         <div class="hidden md:flex items-center space-x-3">
-            <select id="langFilterSelect" onchange="handleLanguageFilter(this.value)" class="bg-slate-100 dark:bg-slate-800 border border-day-border dark:border-night-border rounded-xl px-3 py-1.5 text-xs font-semibold outline-none cursor-pointer">
+            <select id="langFilterSelect" onchange="handleLanguageFilter(this.value)" class="bg-slate-100 dark:bg-slate-800 border border-day-border dark:border-night-border rounded-xl px-3 py-1.5 text-xs font-semibold outline-none cursor-pointer hover:border-day-pink/50 transition-colors">
                 <option value="all">🌍 All Languages</option>
             </select>
         </div>
 
         <div class="flex items-center space-x-2">
-            <!-- Day/Night Toggle -->
             <button onclick="toggleTheme()" class="w-9 h-9 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 flex items-center justify-center text-day-text dark:text-night-text transition shadow-sm" title="Toggle Theme">
                 <i id="themeIcon" class="fa-solid fa-moon text-night-yellow"></i>
             </button>
@@ -123,93 +103,62 @@
     </header>
 
     <main class="flex-1 relative overflow-hidden flex flex-col">
-        <!-- Leaflet Map Container -->
         <div id="map" class="w-full h-full absolute inset-0 z-10"></div>
 
-        <!-- Breadcrumb & Navigation Overlay -->
-        <div id="breadcrumbOverlay" class="absolute top-4 left-4 z-20 flex flex-col sm:flex-row sm:items-center gap-2 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md px-4 py-2.5 rounded-2xl border border-day-border dark:border-night-border shadow-lg text-xs font-semibold pointer-events-auto">
-            <div id="breadcrumbTrail" class="flex items-center space-x-2 text-day-muted">
+        <!-- Glassmorphic Breadcrumb Overlay -->
+        <div id="breadcrumbOverlay" class="absolute top-4 left-4 z-20 flex flex-col sm:flex-row sm:items-center gap-2 bg-white/70 dark:bg-slate-900/70 backdrop-blur-xl px-5 py-2.5 rounded-full border border-white/20 dark:border-slate-700/50 shadow-xl text-xs font-medium pointer-events-auto transition-all">
+            <div id="breadcrumbTrail" class="flex items-center space-x-2 text-day-muted dark:text-slate-300">
                 <!-- Injected via JS -->
             </div>
-            <div id="quickReturnBtnContainer" class="hidden sm:pl-2 sm:border-l sm:border-day-border dark:sm:border-night-border">
-                <button onclick="returnToWorldView()" class="px-2.5 py-1 bg-day-pink/10 hover:bg-day-pink hover:text-white text-day-pink rounded-xl text-[11px] font-bold transition flex items-center space-x-1">
-                    <span>🌎</span>
-                    <span>回到主畫面</span>
+            <div id="quickReturnBtnContainer" class="hidden sm:pl-3 sm:border-l sm:border-slate-300 dark:sm:border-slate-700">
+                <button onclick="returnToWorldView()" class="px-3 py-1.5 bg-day-pink/10 hover:bg-day-pink hover:text-white text-day-pink rounded-full text-[11px] font-bold transition flex items-center space-x-1.5 backdrop-blur-md">
+                    <i class="fa-solid fa-house"></i>
+                    <span>Home</span>
                 </button>
             </div>
         </div>
 
-        <!-- City People Selector Popup Card -->
-        <div id="cityPeopleCard" class="absolute z-30 bg-white dark:bg-slate-900 border border-day-border dark:border-night-border rounded-3xl shadow-2xl p-5 w-72 hidden transform -translate-x-1/2 -translate-y-full mb-3 pointer-events-auto animate-in fade-in zoom-in-95 duration-200">
-            <div class="flex items-center justify-between mb-3 pb-2 border-b border-day-border dark:border-night-border">
-                <div>
-                    <div id="cardCityName" class="font-extrabold text-sm text-day-text dark:text-night-text">Taipei</div>
-                    <div id="cardCityCount" class="text-[11px] text-day-muted">5 people here</div>
-                </div>
-                <button onclick="closeCityPeopleCard()" class="w-7 h-7 rounded-full bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 flex items-center justify-center text-day-muted transition">
-                    <i class="fa-solid fa-xmark text-xs"></i>
-                </button>
-            </div>
-            <div id="cardPeopleAvatarList" class="flex flex-col gap-2 max-h-44 overflow-y-auto py-1 no-scrollbar">
-                <!-- Injected via JS -->
-            </div>
-            <div class="mt-3 pt-3 border-t border-day-border dark:border-night-border flex flex-col gap-2">
-                <button onclick="returnToWorldView()" class="w-full py-2 bg-slate-100 dark:bg-slate-800 hover:bg-day-pink/10 text-day-text dark:text-night-text hover:text-day-pink rounded-xl text-xs font-bold transition flex items-center justify-center space-x-1.5 shadow-sm">
-                    <span>🌎</span>
-                    <span>回到主畫面</span>
-                </button>
-            </div>
-        </div>
-
-        <!-- Person Speech Bubble Popup -->
-        <div id="personSpeechBubble" class="absolute z-30 bg-white dark:bg-slate-900 border-2 border-day-pink/40 rounded-3xl shadow-2xl p-5 w-80 hidden transform -translate-x-1/2 -translate-y-full mb-4 pointer-events-auto animate-in fade-in zoom-in-95 duration-200">
-            <div class="absolute -bottom-3 left-1/2 transform -translate-x-1/2 w-5 h-5 bg-white dark:bg-slate-900 border-r-2 border-b-2 border-day-pink/40 rotate-45"></div>
+        <!-- Unified Dark Popup Card -->
+        <div id="cityPopupCard" class="absolute z-30 bg-[#0F172A] border border-slate-700/60 rounded-3xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.5)] p-0 w-72 hidden transform -translate-x-1/2 -translate-y-full mb-4 pointer-events-auto animate-in fade-in zoom-in-95 duration-200 ring-1 ring-white/10">
+            <!-- Downward pointing arrow -->
+            <div class="absolute -bottom-2.5 left-1/2 transform -translate-x-1/2 w-5 h-5 bg-[#0F172A] border-r border-b border-slate-700/60 rotate-45 rounded-sm"></div>
             
-            <div class="flex items-start justify-between mb-3">
-                <div class="flex items-center space-x-3">
-                    <img id="bubbleAvatar" src="" alt="Avatar" class="w-14 h-14 rounded-full object-cover border-2 border-day-pink shadow-md" onerror="this.src='https://placehold.co/100x100/ffe4e6/f43f5e?text=👤'">
-                    <div>
-                        <h3 id="bubbleName" class="font-extrabold text-base text-day-text dark:text-night-text">MINI</h3>
-                        <div class="text-xs text-day-muted flex items-center space-x-1.5 mt-0.5">
-                            <span id="bubbleCountryFlag">🇹🇼</span>
-                            <span id="bubbleCountryName">Taiwan</span>
-                            <span>•</span>
-                            <span id="bubbleCityName" class="text-day-pink font-semibold">Taipei</span>
-                        </div>
+            <button onclick="closeCityPopup()" class="absolute top-4 right-4 w-7 h-7 rounded-full bg-slate-800 hover:bg-slate-700 flex items-center justify-center text-slate-400 hover:text-white transition z-10">
+                <i class="fa-solid fa-xmark text-xs"></i>
+            </button>
+
+            <!-- Card Header: Location & Typography Hierarchy -->
+            <div class="p-5 flex flex-col items-center justify-center text-center border-b border-slate-800/80 relative overflow-hidden">
+                <!-- Soft glow background effect -->
+                <div class="absolute inset-0 bg-gradient-to-b from-day-pink/10 to-transparent opacity-50"></div>
+                
+                <div class="relative z-10 flex flex-col items-center w-full">
+                    <div class="text-[10px] text-slate-400 font-bold tracking-widest uppercase flex items-center space-x-1 mb-2">
+                        <i class="fa-solid fa-location-dot text-day-pink"></i>
+                        <span id="popupLocation">Country • City</span>
+                    </div>
+                    
+                    <div id="popupNativePhrase" class="text-3xl font-black text-white text-glow mb-1 drop-shadow-md">我愛你</div>
+                    <div id="popupRomanization" class="text-xs text-slate-300 font-medium mb-3">Wǒ ài nǐ</div>
+                    
+                    <div id="popupLanguageTag" class="px-3 py-1 bg-slate-800/80 backdrop-blur-sm rounded-full border border-slate-600 text-[10px] text-slate-300 font-bold uppercase tracking-wider">
+                        Mandarin
                     </div>
                 </div>
-                <button onclick="closePersonBubble()" class="w-7 h-7 rounded-full bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 flex items-center justify-center text-day-muted transition" title="關閉對話框">
-                    <i class="fa-solid fa-xmark text-xs"></i>
-                </button>
             </div>
 
-            <!-- Love Phrase Box -->
-            <div class="bg-day-bg dark:bg-slate-800/80 rounded-2xl p-4 text-center border border-day-border dark:border-night-border shadow-inner">
-                <div class="text-[10px] text-day-muted uppercase tracking-widest font-bold mb-1" id="bubbleLangName">Mandarin</div>
-                <div id="bubbleLovePhrase" class="text-2xl font-black text-day-pink my-1">我愛你</div>
-                <div id="bubbleRomanization" class="text-xs italic text-day-text dark:text-night-text">Wǒ ài nǐ</div>
-                <div id="bubbleTranslation" class="text-[11px] text-day-muted mt-0.5">I love you</div>
-
-                <!-- Audio Play Button & Return to World -->
-                <div class="mt-3 pt-3 border-t border-day-border dark:border-night-border flex flex-col gap-2">
-                    <button onclick="playPersonAudio()" id="audioPlayBtn" class="w-full py-2 bg-gradient-to-r from-day-pink to-day-lavender text-white rounded-xl text-xs font-bold shadow-md shadow-day-pink/30 hover:opacity-90 transition flex items-center justify-center space-x-2 active:scale-95">
-                        <i class="fa-solid fa-volume-high" id="audioIcon"></i>
-                        <span id="audioBtnText">🔊 播放真人語音</span>
-                    </button>
-                    <button onclick="returnToWorldView()" class="w-full py-2 bg-slate-100 dark:bg-slate-800 hover:bg-day-pink/10 text-day-text dark:text-night-text hover:text-day-pink rounded-xl text-xs font-bold transition flex items-center justify-center space-x-1.5 shadow-sm">
-                        <span>🌎</span>
-                        <span>回到主畫面</span>
-                    </button>
-                </div>
+            <!-- Card Body: Spotify-like Audio List -->
+            <div id="popupPeopleList" class="p-3 flex flex-col gap-1 max-h-52 overflow-y-auto no-scrollbar relative z-10 bg-[#0B1120] rounded-b-3xl">
+                <!-- Injected via JS -->
             </div>
         </div>
 
-        <div class="absolute bottom-0 inset-x-0 z-20 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-t border-day-border dark:border-night-border py-3 px-4 flex items-center justify-between shadow-lg">
-            <div class="text-xs font-bold text-day-muted hidden md:flex items-center space-x-2 shrink-0 pr-3">
-                <span class="w-2 h-2 rounded-full bg-day-pink animate-pulse"></span>
-                <span>聽聽各地的「我愛你 ♡」:</span>
+        <div class="absolute bottom-0 inset-x-0 z-20 bg-white/80 dark:bg-slate-900/80 backdrop-blur-lg border-t border-day-border dark:border-night-border py-3 px-4 flex items-center justify-between shadow-[0_-4px_20px_rgba(0,0,0,0.05)] dark:shadow-[0_-4px_20px_rgba(0,0,0,0.3)]">
+            <div class="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider hidden md:flex items-center space-x-2 shrink-0 pr-4 border-r border-slate-200 dark:border-slate-700 mr-2">
+                <span class="w-2 h-2 rounded-full bg-day-pink animate-pulse shadow-[0_0_8px_#f43f5e]"></span>
+                <span>Hear "I love you" from around the world ♡</span>
             </div>
-            <div id="countryCarousel" class="flex items-center space-x-2.5 overflow-x-auto no-scrollbar py-1 flex-1 px-1">
+            <div id="countryCarousel" class="flex items-center space-x-3 overflow-x-auto no-scrollbar py-1 flex-1 px-1">
                 <!-- Injected via JS -->
             </div>
         </div>
@@ -217,13 +166,10 @@
 
     <script>
         // ==========================================
-        // 1. SUPABASE 資料庫連線設定
+        // 1. SUPABASE CONNECTION CONFIGURATION
         // ==========================================
         const YOUR_SUPABASE_URL = 'https://sxuwpcvdnbzettdmrclo.supabase.co';
-        
-        // 填入您提供的完整 Publishable Key
         const YOUR_SUPABASE_ANON_KEY = 'sb_publishable_YIg5VkT5PG3vZ6zIwTWZhA_Vf9v3Zq6';
-
         let supabaseClient = null;
 
         try {
@@ -234,52 +180,38 @@
             console.warn('Supabase initialization failed:', e);
         }
 
-        // Default Rich Seed Data (當資料庫沒連上時的備用假資料)
         const demoData = {
-            countries: [
-                { id: 'c_tw', name: 'Taiwan', flag: '🇹🇼', country_code: 'TW', lat: 23.6978, lng: 120.9605, zoom: 8 }
-            ],
-            cities: [
-                { id: 'ci_taipei', country_id: 'c_tw', name: 'Taipei', latitude: 25.0330, longitude: 121.5654 }
-            ],
-            languages: [
-                { id: 'l_mandarin', name: 'Mandarin (中文)', native_name: '我愛你', romanization: 'Wǒ ài nǐ', translation: 'I love you', audio_url: 'https://actions.google.com/sounds/v1/ambiences/morning_birds.ogg' }
-            ],
-            people: [
-                { id: 'p1', name: 'MINI (如果看到這個代表資料庫連線失敗或無資料)', avatar_url: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150', country_id: 'c_tw', city_id: 'ci_taipei', language_id: 'l_mandarin', active: true }
-            ]
+            countries: [{ id: 'c_tw', name: 'Taiwan', name_en: 'Taiwan', flag: '🇹🇼', lat: 23.6978, lng: 120.9605, zoom: 8 }],
+            cities: [{ id: 'ci_taipei', country_id: 'c_tw', name: 'Taipei', name_en: 'Taipei', latitude: 25.0330, longitude: 121.5654 }],
+            languages: [{ id: 'l_mandarin', name: 'Mandarin', native_name: '我愛你', romanization: 'Wǒ ài nǐ', audio_url: '' }],
+            people: [{ id: 'p1', name: 'MINI (DB Unreachable)', avatar_url: 'https://placehold.co/150x150/ffe4e6/f43f5e?text=M', country_id: 'c_tw', city_id: 'ci_taipei', language_id: 'l_mandarin', active: true }]
         };
 
         let appData = JSON.parse(JSON.stringify(demoData));
         let map;
         let markersLayer = L.layerGroup();
-        let currentSelectedPerson = null;
         let activeCityForBubble = null;
         let activeCountryId = null;
         let activeLanguageFilter = 'all';
+        let currentMapLevel = 'world'; 
+
+        // Audio Player State
         let currentAudioPlayer = null;
-        let currentMapLevel = 'world'; // 'world' | 'country' | 'city'
+        let currentActiveBtnId = null;
+        let currentActiveIconId = null;
+        let currentActiveTextId = null;
 
         // ==========================================
-        // 2. 初始化地圖與資料取得
+        // 2. MAP INITIALIZATION & DATA FETCHING
         // ==========================================
         async function initMap() {
             map = L.map('map', {
-                zoomControl: false,
-                attributionControl: false,
-                minZoom: 3,
-                maxZoom: 16,
-                maxBounds: [[-85, -180], [85, 180]],
-                maxBoundsViscosity: 1.0
+                zoomControl: false, attributionControl: false, minZoom: 3, maxZoom: 16,
+                maxBounds: [[-85, -180], [85, 180]], maxBoundsViscosity: 1.0
             }).setView([20.0, 0.0], 3);
 
-            window.dayTileLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
-                maxZoom: 16, minZoom: 3, noWrap: true
-            });
-
-            window.nightTileLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
-                maxZoom: 16, minZoom: 3, noWrap: true
-            });
+            window.dayTileLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', { maxZoom: 16, minZoom: 3, noWrap: true });
+            window.nightTileLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}', { maxZoom: 16, minZoom: 3, noWrap: true });
 
             if (document.documentElement.classList.contains('dark')) {
                 window.nightTileLayer.addTo(map);
@@ -298,8 +230,8 @@
 
             map.on('move zoom', updateBubblePosition);
             
-            // 啟動即時資料更新監聽
-            setupRealtimeUpdates();
+            // Replaced WebSocket with Polling for environment stability
+            setInterval(fetchAppDataSilently, 10000); 
         }
 
         async function fetchAppData() {
@@ -312,63 +244,46 @@
                     supabaseClient.from('people').select('*')
                 ]);
                 
-                // 強制將真實資料庫的資料覆蓋上去 (即使是空的也覆蓋)
                 if (coRes.data) appData.countries = coRes.data;
                 if (ciRes.data) appData.cities = ciRes.data;
                 if (lRes.data) appData.languages = lRes.data;
                 if (pRes.data) appData.people = pRes.data;
                 
-                // 若連線成功，顯示左上角的綠燈
                 document.getElementById('liveSyncDot').classList.remove('hidden');
             } catch (err) {
-                console.log('Using local seed data due to Supabase fetch error:', err);
+                console.warn('Using local seed data due to Supabase fetch error:', err);
+            }
+        }
+
+        // Silent fetch for polling (updates UI without re-flying map camera)
+        async function fetchAppDataSilently() {
+            await fetchAppData();
+            if (currentMapLevel === 'world') {
+                renderWorldView(activeLanguageFilter);
+            } else if (currentMapLevel === 'country') {
+                renderCountryView(activeCountryId);
+            } else if (currentMapLevel === 'city' && activeCityForBubble) {
+                const updatedCity = appData.cities.find(c => c.id === activeCityForBubble.id);
+                const cityPeople = appData.people.filter(p => p.active && p.city_id === updatedCity.id);
+                // Update popup contents silently if open
+                if (!document.getElementById('cityPopupCard').classList.contains('hidden')) {
+                    showCityPopup(updatedCity, cityPeople);
+                }
             }
         }
 
         // ==========================================
-        // 3. Supabase Realtime 即時更新功能
-        // ==========================================
-        function setupRealtimeUpdates() {
-            if (!supabaseClient) return;
-            
-            supabaseClient
-                .channel('public:people')
-                .on('postgres_changes', { event: '*', schema: 'public', table: 'people' }, (payload) => {
-                    console.log('後台資料有更新了！即時重新整理畫面...', payload);
-                    
-                    // 重新抓取資料並繪製
-                    fetchAppData().then(() => {
-                        if (currentMapLevel === 'world') {
-                            renderWorldView(activeLanguageFilter);
-                        } else if (currentMapLevel === 'country') {
-                            flyToCountry(activeCountryId);
-                        } else if (currentMapLevel === 'city' && activeCityForBubble) {
-                            const updatedCity = appData.cities.find(c => c.id === activeCityForBubble.id);
-                            const cityPeople = appData.people.filter(p => p.active && p.city_id === updatedCity.id);
-                            handleCityClick(updatedCity, cityPeople);
-                        }
-                    });
-                })
-                .subscribe();
-        }
-
-        // ==========================================
-        // 4. 地圖渲染邏輯
+        // 3. MAP RENDERING LOGIC
         // ==========================================
         function renderWorldView(filterLang = 'all') {
             markersLayer.clearLayers();
             currentMapLevel = 'world';
             activeCountryId = null;
-            closeCityPeopleCard();
-            closePersonBubble();
+            closeCityPopup();
             updateBreadcrumb();
 
             const activePeople = appData.people.filter(p => p.active);
-            const activeCityIds = new Set(
-                activePeople
-                    .filter(p => filterLang === 'all' || p.language_id === filterLang)
-                    .map(p => p.city_id)
-            );
+            const activeCityIds = new Set(activePeople.filter(p => filterLang === 'all' || p.language_id === filterLang).map(p => p.city_id));
 
             appData.cities.forEach(city => {
                 if (!activeCityIds.has(city.id)) return;
@@ -376,33 +291,21 @@
                 const cityPeople = activePeople.filter(p => p.city_id === city.id && (filterLang === 'all' || p.language_id === filterLang));
                 if (cityPeople.length === 0) return;
 
-                const heartHtml = `
-                    <div class="city-heart-marker" title="${city.name}">
-                        ♥
-                    </div>
-                `;
-
                 const icon = L.divIcon({
                     className: 'custom-heart-icon',
-                    html: heartHtml,
-                    iconSize: [28, 28],
-                    iconAnchor: [14, 14]
+                    html: `<div class="city-heart-marker" title="${city.name_en || city.name}">♥</div>`,
+                    iconSize: [28, 28], iconAnchor: [14, 14]
                 });
 
                 const marker = L.marker([city.latitude, city.longitude], { icon });
-
                 marker.bindTooltip(`
                     <div class="p-1 font-sans text-xs">
-                        <div class="font-bold text-slate-900 dark:text-white text-sm">📍 ${city.name}</div>
-                        <div class="text-day-pink font-semibold">${country ? country.flag + ' ' + country.name : ''}</div>
+                        <div class="font-bold text-slate-900 dark:text-white text-sm">📍 ${city.name_en || city.name}</div>
+                        <div class="text-day-pink font-semibold">${country ? country.flag + ' ' + (country.name_en || country.name) : ''}</div>
                         <div class="text-slate-500 text-[11px] mt-0.5">${cityPeople.length} people here</div>
                     </div>
                 `, { direction: 'top', offset: [0, -8] });
-
-                marker.on('click', () => {
-                    handleCityClick(city, cityPeople);
-                });
-
+                marker.on('click', () => handleCityClick(city, cityPeople));
                 markersLayer.addLayer(marker);
             });
         }
@@ -410,45 +313,59 @@
         function flyToCountry(countryId) {
             const country = appData.countries.find(c => c.id === countryId);
             if (!country) return;
-
+            
             currentMapLevel = 'country';
             activeCountryId = country.id;
-            closeCityPeopleCard();
-            closePersonBubble();
+            closeCityPopup();
             updateBreadcrumb();
-
-            map.flyTo([country.lat, country.lng], country.zoom, { duration: 1.4 });
-
+            
             const activePeople = appData.people.filter(p => p.active && p.country_id === countryId);
             const countryCityIds = new Set(activePeople.map(p => p.city_id));
+            const citiesInCountry = appData.cities.filter(c => c.country_id === countryId && countryCityIds.has(c.id));
+
+            // 動態視角對焦邏輯
+            if (country.lat !== undefined && country.lng !== undefined && country.lat !== null) {
+                // 如果資料庫有手動設定國家的 lat/lng，直接飛往該座標
+                map.flyTo([country.lat, country.lng], country.zoom || 6, { duration: 1.4 });
+            } else if (citiesInCountry.length > 0) {
+                // 如果沒有國家座標，自動依據城市計算適當的鏡頭範圍
+                if (citiesInCountry.length === 1) {
+                    // 只有一個城市時，直接對準並放大
+                    map.flyTo([citiesInCountry[0].latitude, citiesInCountry[0].longitude], 7, { duration: 1.4 });
+                } else {
+                    // 有多個城市時，自動縮放以包含所有城市
+                    const bounds = L.latLngBounds(citiesInCountry.map(c => [c.latitude, c.longitude]));
+                    map.flyToBounds(bounds, { padding: [80, 80], maxZoom: 8, duration: 1.4 });
+                }
+            }
+
+            renderCountryView(countryId);
+        }
+
+        function renderCountryView(countryId) {
+            const activePeople = appData.people.filter(p => p.active && p.country_id === countryId);
+            const countryCityIds = new Set(activePeople.map(p => p.city_id));
+            const country = appData.countries.find(c => c.id === countryId);
 
             markersLayer.clearLayers();
             appData.cities.filter(c => c.country_id === countryId && countryCityIds.has(c.id)).forEach(city => {
                 const cityPeople = activePeople.filter(p => p.city_id === city.id);
                 if (cityPeople.length === 0) return;
 
-                const heartHtml = `
-                    <div class="city-heart-marker" title="${city.name}">
-                        ♥
-                    </div>
-                `;
                 const icon = L.divIcon({
                     className: 'custom-heart-icon',
-                    html: heartHtml,
-                    iconSize: [28, 28],
-                    iconAnchor: [14, 14]
+                    html: `<div class="city-heart-marker" title="${city.name_en || city.name}">♥</div>`,
+                    iconSize: [28, 28], iconAnchor: [14, 14]
                 });
                 const marker = L.marker([city.latitude, city.longitude], { icon });
                 marker.bindTooltip(`
                     <div class="p-1 font-sans text-xs">
-                        <div class="font-bold text-slate-900 dark:text-white text-sm">📍 ${city.name}</div>
-                        <div class="text-day-pink font-semibold">${country.flag} ${country.name}</div>
+                        <div class="font-bold text-slate-900 dark:text-white text-sm">📍 ${city.name_en || city.name}</div>
+                        <div class="text-day-pink font-semibold">${country.flag} ${country.name_en || country.name}</div>
                         <div class="text-slate-500 text-[11px] mt-0.5">${cityPeople.length} people here</div>
                     </div>
                 `, { direction: 'top', offset: [0, -8] });
-                marker.on('click', () => {
-                    handleCityClick(city, cityPeople);
-                });
+                marker.on('click', () => handleCityClick(city, cityPeople));
                 markersLayer.addLayer(marker);
             });
         }
@@ -457,103 +374,79 @@
             currentMapLevel = 'city';
             activeCityForBubble = city;
             updateBreadcrumb();
-
             map.flyTo([city.latitude, city.longitude], 11, { duration: 1.2 });
-
-            if (cityPeople.length === 1) {
-                closeCityPeopleCard();
-                openPersonBubble(cityPeople[0], city);
-            } else if (cityPeople.length > 1) {
-                closePersonBubble();
-                showCityPeopleCard(city, cityPeople);
-            }
+            showCityPopup(city, cityPeople);
         }
 
         // ==========================================
-        // 5. 彈出視窗與互動邏輯
+        // 4. UNIFIED POPUP & AUDIO LOGIC
         // ==========================================
-        function showCityPeopleCard(city, people) {
+        function showCityPopup(city, people) {
+            if (!people || people.length === 0) return;
             const country = appData.countries.find(c => c.id === city.country_id);
-            document.getElementById('cardCityName').innerText = `${country ? country.flag : ''} ${city.name}`;
-            document.getElementById('cardCityCount').innerText = `${people.length} people here`;
+            const firstPersonLang = appData.languages.find(l => l.id === people[0].language_id);
 
-            const listContainer = document.getElementById('cardPeopleAvatarList');
+            // Set Format: Country • City with Pin Icon
+            const countryName = country ? (country.name_en || country.name) : '';
+            const cityName = city.name_en || city.name;
+            const locText = `${countryName} • ${cityName}`;
+            
+            document.getElementById('popupLocation').innerText = locText;
+            
+            // Set Header Texts
+            document.getElementById('popupNativePhrase').innerText = firstPersonLang ? firstPersonLang.native_name : '我愛你';
+            document.getElementById('popupRomanization').innerText = firstPersonLang ? firstPersonLang.romanization : '';
+            document.getElementById('popupLanguageTag').innerText = firstPersonLang ? firstPersonLang.name : 'Language';
+
+            // Generate Audio Player List
+            const listContainer = document.getElementById('popupPeopleList');
             listContainer.innerHTML = '';
 
-            people.forEach(person => {
+            people.forEach((person, index) => {
+                const btnId = `playBtn_${index}`;
+                const iconId = `playIcon_${index}`;
+                const textId = `statusText_${index}`;
                 const lang = appData.languages.find(l => l.id === person.language_id);
-                const btn = document.createElement('button');
-                btn.className = 'flex items-center space-x-2.5 p-2 bg-slate-50 dark:bg-slate-800 hover:bg-day-pink/10 rounded-2xl border border-day-border dark:border-night-border transition group w-full text-left';
-                btn.onclick = () => {
-                    closeCityPeopleCard();
-                    openPersonBubble(person, city);
-                };
-                btn.innerHTML = `
-                    <img src="${person.avatar_url}" class="w-10 h-10 rounded-full object-cover border-2 border-day-pink shadow-sm" onerror="this.src='https://placehold.co/100x100/ffe4e6/f43f5e?text=👤'">
-                    <div class="overflow-hidden flex-1">
-                        <div class="font-bold text-xs text-day-text dark:text-night-text group-hover:text-day-pink transition truncate">${person.name}</div>
-                        <div class="text-[10px] text-day-muted truncate">${lang ? lang.native_name + ' (' + lang.translation + ')' : ''}</div>
+                const audioUrl = lang ? lang.audio_url : null;
+
+                const item = document.createElement('div');
+                item.className = 'flex items-center space-x-3 p-2.5 rounded-2xl hover:bg-slate-800/80 transition-colors group cursor-pointer';
+                item.onclick = () => playPersonAudio(audioUrl, btnId, iconId, textId);
+
+                item.innerHTML = `
+                    <div id="${btnId}" class="w-10 h-10 rounded-full bg-slate-800 border border-slate-600 flex items-center justify-center group-hover:border-day-pink group-hover:shadow-[0_0_12px_rgba(244,63,94,0.4)] transition-all shrink-0">
+                        <i id="${iconId}" class="fa-solid fa-play text-slate-300 group-hover:text-day-pink ml-0.5 text-xs"></i>
+                    </div>
+                    <div class="relative w-12 h-12 shrink-0">
+                        <div class="absolute inset-0 rounded-full bg-day-pink blur-sm opacity-0 group-hover:opacity-60 transition-opacity"></div>
+                        <img src="${person.avatar_url}" class="relative w-full h-full rounded-full object-cover border-[1.5px] border-transparent group-hover:border-day-pink transition-all" onerror="this.src='https://placehold.co/100x100/1e293b/f8fafc?text=👤'">
+                    </div>
+                    <div class="flex-1 overflow-hidden">
+                        <div class="font-bold text-sm text-white truncate">${person.name_en || person.name}</div>
+                        <div class="text-[10px] text-slate-400 flex items-center space-x-1.5 mt-0.5">
+                            <i class="fa-solid fa-microphone-lines text-slate-500"></i>
+                            <span id="${textId}" class="truncate">Voice Message</span>
+                        </div>
                     </div>
                 `;
-                listContainer.appendChild(btn);
+                listContainer.appendChild(item);
             });
 
-            const card = document.getElementById('cityPeopleCard');
+            const card = document.getElementById('cityPopupCard');
             card.classList.remove('hidden');
             positionElementOverCity(card, city.latitude, city.longitude);
         }
 
-        function closeCityPeopleCard() {
-            document.getElementById('cityPeopleCard').classList.add('hidden');
-        }
-
-        function openPersonBubble(person, city) {
-            currentSelectedPerson = person;
-            activeCityForBubble = city;
-
-            const country = appData.countries.find(c => c.id === person.country_id);
-            const lang = appData.languages.find(l => l.id === person.language_id);
-
-            document.getElementById('bubbleAvatar').src = person.avatar_url;
-            document.getElementById('bubbleName').innerText = person.name;
-            document.getElementById('bubbleCountryFlag').innerText = country ? country.flag : '🌎';
-            document.getElementById('bubbleCountryName').innerText = country ? country.name : '';
-            document.getElementById('bubbleCityName').innerText = city ? city.name + ' City' : '';
-
-            document.getElementById('bubbleLangName').innerText = lang ? lang.name : 'Love Phrase';
-            document.getElementById('bubbleLovePhrase').innerText = lang ? lang.native_name : '我愛你';
-            document.getElementById('bubbleRomanization').innerText = lang ? lang.romanization : '';
-            document.getElementById('bubbleTranslation').innerText = lang ? lang.translation : '';
-
-            const bubble = document.getElementById('personSpeechBubble');
-            bubble.classList.remove('hidden');
-            positionElementOverCity(bubble, city.latitude, city.longitude);
-        }
-
-        function closePersonBubble() {
-            document.getElementById('personSpeechBubble').classList.add('hidden');
-            if (currentAudioPlayer) {
-                currentAudioPlayer.pause();
-                currentAudioPlayer = null;
-            }
-            resetAudioBtn();
+        function closeCityPopup() {
+            document.getElementById('cityPopupCard').classList.add('hidden');
+            resetAudioState();
         }
 
         function returnToWorldView() {
-            closeCityPeopleCard();
-            closePersonBubble();
-
-            if (currentAudioPlayer) {
-                currentAudioPlayer.pause();
-                currentAudioPlayer = null;
-            }
-            resetAudioBtn();
-
-            currentSelectedPerson = null;
+            closeCityPopup();
             activeCityForBubble = null;
             activeCountryId = null;
             currentMapLevel = 'world';
-
             map.flyTo([20.0, 0.0], 3, { duration: 1.5 });
             renderWorldView(activeLanguageFilter);
             updateBreadcrumb();
@@ -565,24 +458,27 @@
             if (!trail) return;
 
             if (currentMapLevel === 'world') {
-                trail.innerHTML = `<span class="text-day-pink font-extrabold flex items-center space-x-1.5"><i class="fa-solid fa-earth-americas"></i><span>World View</span></span>`;
+                trail.innerHTML = `<span class="text-day-pink font-extrabold flex items-center space-x-1.5 tracking-wide"><i class="fa-solid fa-earth-americas"></i><span>World</span></span>`;
                 if (returnBtnContainer) returnBtnContainer.classList.add('hidden');
             } else if (currentMapLevel === 'country') {
                 const country = appData.countries.find(c => c.id === activeCountryId);
+                const countryName = country ? country.flag + ' ' + (country.name_en || country.name) : 'Country';
                 trail.innerHTML = `
-                    <button onclick="returnToWorldView()" class="hover:text-day-pink transition">World</button>
-                    <span class="text-day-muted">›</span>
-                    <span class="text-day-pink font-bold">${country ? country.flag + ' ' + country.name : 'Country'}</span>
+                    <button onclick="returnToWorldView()" class="hover:text-day-pink transition-colors font-semibold">World</button>
+                    <span class="text-slate-400/50">›</span>
+                    <span class="text-day-pink font-bold">${countryName}</span>
                 `;
                 if (returnBtnContainer) returnBtnContainer.classList.remove('hidden');
             } else if (currentMapLevel === 'city') {
                 const country = appData.countries.find(c => c.id === activeCityForBubble?.country_id);
+                const countryName = country ? country.flag + ' ' + (country.name_en || country.name) : 'Country';
+                const cityName = activeCityForBubble ? (activeCityForBubble.name_en || activeCityForBubble.name) : 'City';
                 trail.innerHTML = `
-                    <button onclick="returnToWorldView()" class="hover:text-day-pink transition">World</button>
-                    <span class="text-day-muted">›</span>
-                    <button onclick="flyToCountry('${country?.id}')" class="hover:text-day-pink transition">${country ? country.flag + ' ' + country.name : 'Country'}</button>
-                    <span class="text-day-muted">›</span>
-                    <span class="text-day-pink font-bold">📍 ${activeCityForBubble ? activeCityForBubble.name : 'City'}</span>
+                    <button onclick="returnToWorldView()" class="hover:text-day-pink transition-colors font-semibold">World</button>
+                    <span class="text-slate-400/50">›</span>
+                    <button onclick="flyToCountry('${country?.id}')" class="hover:text-day-pink transition-colors font-semibold">${countryName}</button>
+                    <span class="text-slate-400/50">›</span>
+                    <span class="text-day-pink font-bold">📍 ${cityName}</span>
                 `;
                 if (returnBtnContainer) returnBtnContainer.classList.remove('hidden');
             }
@@ -598,53 +494,71 @@
 
         function updateBubblePosition() {
             if (!activeCityForBubble) return;
-            const bubble = document.getElementById('personSpeechBubble');
-            if (!bubble.classList.contains('hidden')) {
-                positionElementOverCity(bubble, activeCityForBubble.latitude, activeCityForBubble.longitude);
-            }
-            const card = document.getElementById('cityPeopleCard');
+            const card = document.getElementById('cityPopupCard');
             if (!card.classList.contains('hidden')) {
                 positionElementOverCity(card, activeCityForBubble.latitude, activeCityForBubble.longitude);
             }
         }
 
-        function playPersonAudio() {
-            if (!currentSelectedPerson) return;
-            const lang = appData.languages.find(l => l.id === currentSelectedPerson.language_id);
-            if (!lang || !lang.audio_url) {
-                alert('目前尚未提供真人語音檔案');
+        function playPersonAudio(audioUrl, btnId, iconId, textId) {
+            if (!audioUrl) {
+                console.warn('No audio file provided.');
                 return;
             }
 
-            if (currentAudioPlayer) {
-                currentAudioPlayer.pause();
+            resetAudioState();
+
+            currentAudioPlayer = new Audio(audioUrl);
+            currentActiveBtnId = btnId;
+            currentActiveIconId = iconId;
+            currentActiveTextId = textId;
+
+            const btn = document.getElementById(btnId);
+            const icon = document.getElementById(iconId);
+            const text = document.getElementById(textId);
+
+            if (btn) btn.classList.add('animate-pulse', 'border-day-pink', 'shadow-[0_0_12px_rgba(244,63,94,0.4)]');
+            if (icon) {
+                icon.className = 'fa-solid fa-volume-high text-day-pink text-xs';
+                icon.classList.remove('ml-0.5'); // center volume icon visually
             }
-
-            currentAudioPlayer = new Audio(lang.audio_url);
-            const btn = document.getElementById('audioPlayBtn');
-            const icon = document.getElementById('audioIcon');
-            const text = document.getElementById('audioBtnText');
-
-            if (btn) btn.classList.add('animate-pulse');
-            if (icon) icon.className = 'fa-solid fa-volume-high text-day-yellow';
-            if (text) text.innerText = '播放中...';
+            if (text) {
+                text.innerText = 'Playing...';
+                text.classList.add('text-day-pink');
+            }
 
             currentAudioPlayer.play().catch(e => {
                 console.warn('Audio play failed:', e);
-                resetAudioBtn();
+                resetAudioState();
             });
 
-            currentAudioPlayer.onended = resetAudioBtn;
-            currentAudioPlayer.onerror = resetAudioBtn;
+            currentAudioPlayer.onended = resetAudioState;
+            currentAudioPlayer.onerror = resetAudioState;
         }
 
-        function resetAudioBtn() {
-            const btn = document.getElementById('audioPlayBtn');
-            const icon = document.getElementById('audioIcon');
-            const text = document.getElementById('audioBtnText');
-            if (btn) btn.classList.remove('animate-pulse');
-            if (icon) icon.className = 'fa-solid fa-volume-high';
-            if (text) text.innerText = '🔊 播放真人語音';
+        function resetAudioState() {
+            if (currentAudioPlayer) {
+                currentAudioPlayer.pause();
+                currentAudioPlayer = null;
+            }
+            if (currentActiveBtnId) {
+                const btn = document.getElementById(currentActiveBtnId);
+                const icon = document.getElementById(currentActiveIconId);
+                const text = document.getElementById(currentActiveTextId);
+                
+                if (btn) btn.classList.remove('animate-pulse', 'border-day-pink', 'shadow-[0_0_12px_rgba(244,63,94,0.4)]');
+                if (icon) {
+                    icon.className = 'fa-solid fa-play text-slate-300 group-hover:text-day-pink ml-0.5 text-xs';
+                }
+                if (text) {
+                    text.innerText = 'Voice Message';
+                    text.classList.remove('text-day-pink');
+                }
+                
+                currentActiveBtnId = null;
+                currentActiveIconId = null;
+                currentActiveTextId = null;
+            }
         }
 
         function renderCountryCarousel() {
@@ -653,11 +567,8 @@
 
             appData.countries.forEach(country => {
                 const btn = document.createElement('button');
-                btn.className = 'flex items-center space-x-2 px-4 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-day-pink/10 border border-day-border dark:border-night-border rounded-2xl text-xs font-bold text-day-text dark:text-night-text shrink-0 transition hover:scale-105 shadow-sm';
-                btn.innerHTML = `
-                    <span class="text-base">${country.flag}</span>
-                    <span>${country.name}</span>
-                `;
+                btn.className = 'flex items-center space-x-2 px-4 py-2 bg-white dark:bg-slate-800 hover:bg-day-pink/10 border border-day-border dark:border-slate-700 rounded-full text-[13px] font-bold text-day-text dark:text-night-text shrink-0 transition-all hover:scale-105 shadow-sm hover:border-day-pink/50';
+                btn.innerHTML = `<span class="text-base">${country.flag}</span><span>${country.name_en || country.name}</span>`;
                 btn.onclick = () => flyToCountry(country.id);
                 carousel.appendChild(btn);
             });
@@ -669,7 +580,7 @@
             appData.languages.forEach(l => {
                 const opt = document.createElement('option');
                 opt.value = l.id;
-                opt.textContent = `${l.name} (${l.native_name})`;
+                opt.textContent = l.name;
                 select.appendChild(opt);
             });
         }
@@ -705,9 +616,7 @@
             document.getElementById('themeIcon').className = 'fa-solid fa-moon text-night-yellow';
         }
 
-        window.onload = () => {
-            initMap();
-        };
+        window.onload = initMap;
     </script>
 </body>
 </html>
