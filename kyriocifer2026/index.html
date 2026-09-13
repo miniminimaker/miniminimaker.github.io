@@ -4,16 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LOVE AROUND THE WORLD ♡</title>
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Leaflet CSS & JS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-    <!-- Google Fonts: Plus Jakarta Sans -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <!-- Supabase JS Client -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     
     <script>
@@ -44,7 +39,6 @@
             filter: brightness(0.9) contrast(1.08) saturate(0.75);
         }
 
-        /* Glowing Heart Marker */
         @keyframes heart-gentle-pulse {
             0%, 100% { transform: scale(1); filter: drop-shadow(0 0 6px rgba(251, 191, 36, 0.7)); }
             50% { transform: scale(1.22); filter: drop-shadow(0 0 14px rgba(251, 191, 36, 0.95)); }
@@ -63,7 +57,6 @@
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-        /* Glowing Text specific to Love Phrase */
         .glow-pink-text {
             text-shadow: 0 0 16px rgba(244, 63, 94, 0.6);
         }
@@ -101,10 +94,8 @@
     <main class="flex-1 relative overflow-hidden flex flex-col">
         <div id="map" class="w-full h-full absolute inset-0 z-10"></div>
 
-        <!-- Glassmorphic Breadcrumb Overlay -->
         <div id="breadcrumbOverlay" class="absolute top-4 left-4 z-20 flex flex-col sm:flex-row sm:items-center gap-3 bg-slate-900/80 backdrop-blur-md px-5 py-2.5 rounded-full border border-slate-700 shadow-xl text-xs font-semibold pointer-events-auto">
             <div id="breadcrumbTrail" class="flex items-center space-x-2 text-slate-300">
-                <!-- Injected via JS -->
             </div>
             <div id="quickReturnBtnContainer" class="hidden sm:pl-3 sm:border-l sm:border-slate-700">
                 <button onclick="returnToWorldView()" class="hover:bg-day-pink/20 text-day-pink rounded-full px-2 py-0.5 text-[11px] font-bold transition flex items-center space-x-1.5">
@@ -114,16 +105,13 @@
             </div>
         </div>
 
-        <!-- Unified Dark City & Person Popup Card -->
         <div id="cityPopupCard" class="absolute z-30 bg-[#121826] border border-slate-700/80 rounded-[28px] shadow-2xl p-6 w-[340px] hidden transform -translate-x-1/2 -translate-y-full mb-4 pointer-events-auto animate-in fade-in zoom-in-95 duration-200">
-            <!-- Downward Arrow -->
             <div class="absolute -bottom-2.5 left-1/2 transform -translate-x-1/2 w-5 h-5 bg-[#121826] border-r border-b border-slate-700/80 rotate-45"></div>
             
             <button onclick="closeCityPopup()" class="absolute top-4 right-4 w-7 h-7 rounded-full bg-slate-800 hover:bg-slate-700 flex items-center justify-center text-slate-400 transition" title="Close">
                 <i class="fa-solid fa-xmark text-xs"></i>
             </button>
 
-            <!-- Card Header (Location & Love Phrase) -->
             <div class="flex flex-col items-center text-center pb-4 border-b border-slate-800">
                 <div class="text-[10px] text-slate-400 font-bold uppercase tracking-[0.15em] flex items-center space-x-1 mb-3">
                     <i class="fa-solid fa-location-dot text-day-pink"></i>
@@ -138,26 +126,21 @@
                 </div>
             </div>
 
-            <!-- Scrollable Audio People List -->
             <div id="popupPeopleList" class="flex flex-col gap-1 mt-3 max-h-48 overflow-y-auto py-1 no-scrollbar">
-                <!-- Rows Injected via JS -->
             </div>
         </div>
 
-        <!-- Bottom Country Carousel -->
         <div class="absolute bottom-0 inset-x-0 z-20 bg-slate-900/90 backdrop-blur-md border-t border-slate-800 py-3 px-4 flex items-center justify-between shadow-lg">
             <div class="text-xs font-bold text-slate-400 hidden md:flex items-center space-x-2 shrink-0 pr-3 uppercase tracking-wider">
                 <span class="w-2 h-2 rounded-full bg-day-pink animate-pulse shadow-[0_0_5px_#f43f5e]"></span>
                 <span>Hear "I love you" from around the world ♡ :</span>
             </div>
             <div id="countryCarousel" class="flex items-center space-x-2.5 overflow-x-auto no-scrollbar py-1 flex-1 px-1">
-                <!-- Injected via JS -->
             </div>
         </div>
     </main>
 
     <script>
-        // 1. SUPABASE DATABASE CONNECTION
         const YOUR_SUPABASE_URL = 'https://sxuwpcvdnbzettdmrclo.supabase.co';
         const YOUR_SUPABASE_ANON_KEY = 'sb_publishable_YIg5VkT5PG3vZ6zIwTWZhA_Vf9v3Zq6';
         let supabaseClient = null;
@@ -170,7 +153,6 @@
             console.warn('Supabase initialization failed:', e);
         }
 
-        // Demo Data Fallback
         const demoData = {
             countries: [{ id: 'c_tw', name: 'Taiwan', name_en: 'Taiwan', flag: '🇹🇼' }],
             cities: [{ id: 'ci_taipei', country_id: 'c_tw', name: 'Taipei', name_en: 'Taipei', latitude: 25.0330, longitude: 121.5654 }],
@@ -186,7 +168,6 @@
         let activeLanguageFilter = 'all';
         let currentMapLevel = 'world'; 
         
-        // Audio State variables
         let currentAudioPlayer = null;
         let currentActiveBtnId = null;
         let currentActiveIconId = null;
@@ -215,8 +196,38 @@
 
             map.on('move zoom', updateBubblePosition);
             
-            // Polling approach: Fetch data every 10 seconds silently
             setInterval(fetchAppDataSilent, 10000);
+        }
+
+        function preprocessData() {
+            appData.people.forEach(person => {
+                if (person.country_id && !person.city_id) {
+                    const virtualCityId = 'virtual_city_' + person.country_id;
+                    let virtualCity = appData.cities.find(c => c.id === virtualCityId);
+                    
+                    if (!virtualCity) {
+                        const country = appData.countries.find(c => c.id === person.country_id);
+                        if (country) {
+                            const lat = (country.latitude !== null && country.latitude !== undefined) ? country.latitude : 0;
+                            const lng = (country.longitude !== null && country.longitude !== undefined) ? country.longitude : 0;
+                            
+                            virtualCity = {
+                                id: virtualCityId,
+                                country_id: country.id,
+                                name: 'Somewhere in ' + (country.name_en || country.name || 'Country'),
+                                name_en: 'Somewhere in ' + (country.name_en || country.name || 'Country'),
+                                latitude: lat,
+                                longitude: lng
+                            };
+                            appData.cities.push(virtualCity);
+                        }
+                    }
+                    
+                    if (virtualCity) {
+                        person.city_id = virtualCity.id;
+                    }
+                }
+            });
         }
 
         async function fetchAppData() {
@@ -234,6 +245,8 @@
                 if (lRes.data) appData.languages = lRes.data;
                 if (pRes.data) appData.people = pRes.data;
                 
+                preprocessData();
+
                 document.getElementById('liveSyncDot').classList.remove('hidden');
             } catch (err) { console.log('Data fetch err:', err); }
         }
@@ -243,10 +256,11 @@
             if (currentMapLevel === 'world') {
                 renderWorldView(activeLanguageFilter);
             } else if (currentMapLevel === 'city' && activeCityForBubble) {
-                // If a popup is open, silently refresh its content without moving map
                 const updatedCity = appData.cities.find(c => c.id === activeCityForBubble.id);
-                const cityPeople = appData.people.filter(p => p.active && p.city_id === updatedCity.id);
-                if (cityPeople.length > 0) showCityPopup(updatedCity, cityPeople, true); // true = silent refresh
+                if (updatedCity) {
+                    const cityPeople = appData.people.filter(p => p.active && p.city_id === updatedCity.id);
+                    if (cityPeople.length > 0) showCityPopup(updatedCity, cityPeople, true);
+                }
             }
         }
 
@@ -268,7 +282,6 @@
                 const cityPeople = activePeople.filter(p => p.city_id === city.id && (filterLang === 'all' || p.language_id === filterLang));
                 if (cityPeople.length === 0) return;
                 
-                // Fallback to name if name_en is empty
                 const cityName = city.name_en || city.name;
                 const countryName = country ? (country.name_en || country.name) : '';
 
@@ -302,7 +315,6 @@
             const countryCityIds = new Set(activePeople.map(p => p.city_id));
             const activeCities = appData.cities.filter(c => c.country_id === countryId && countryCityIds.has(c.id));
 
-            // Auto Zoom Bounding Box Logic
             if (activeCities.length > 0) {
                 const bounds = L.latLngBounds(activeCities.map(c => [c.latitude, c.longitude]));
                 map.flyToBounds(bounds, { padding: [80, 80], maxZoom: 6, duration: 1.5 });
@@ -344,15 +356,12 @@
         function showCityPopup(city, people, isSilent = false) {
             activeCityForBubble = city;
             
-            // Priority: name_en -> fallback: name
             const country = appData.countries.find(c => c.id === city.country_id);
             const cityName = city.name_en || city.name || '';
             const countryName = country ? (country.name_en || country.name) : '';
             
-            // Assume language of first person represents the card header
             const lang = appData.languages.find(l => l.id === people[0].language_id);
             
-            // Refined DB matching for Love Phrase
             const lovePhrase = lang ? (lang.love_phrase || lang.native_name) : 'I love you';
             const romanization = lang ? (lang.romanization || '') : '';
             const langName = lang ? (lang.name_en || lang.name || 'Language') : 'Language';
@@ -363,12 +372,10 @@
             document.getElementById('popupLanguageTag').innerText = langName;
 
             const listContainer = document.getElementById('popupPeopleList');
-            if (!isSilent) listContainer.innerHTML = ''; // Prevent wipe out on silent refresh
+            if (!isSilent) listContainer.innerHTML = ''; 
             
-            // Only rebuild rows if not refreshing silently, or build carefully
             let newHtml = '';
             people.forEach(p => {
-                // Find user specific audio or fallback to language default audio
                 const pLang = appData.languages.find(l => l.id === p.language_id);
                 const audioUrl = p.audio_url || (pLang ? pLang.audio_url : '');
                 
@@ -410,13 +417,12 @@
                 return;
             }
 
-            // Pause if clicking the currently active button
             if (currentActiveBtnId === btnId && currentAudioPlayer) {
                 resetAudioState();
                 return;
             }
 
-            resetAudioState(); // Reset others first
+            resetAudioState(); 
 
             currentAudioPlayer = new Audio(audioUrl);
             currentActiveBtnId = btnId;
@@ -480,7 +486,7 @@
             const latLng = L.latLng(lat, lng);
             const point = map.latLngToContainerPoint(latLng);
             element.style.left = `${point.x}px`;
-            element.style.top = `${point.y - 10}px`; // slight offset
+            element.style.top = `${point.y - 10}px`;
         }
 
         function updateBubblePosition() {
