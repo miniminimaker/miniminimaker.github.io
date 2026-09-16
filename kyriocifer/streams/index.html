@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh-TW" class="h-full">
 <head>
+    <link rel="preconnect" href="https://script.google.com" crossorigin>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://cdnjs.cloudflare.com">
@@ -135,7 +136,9 @@
 
             <div class="flex flex-wrap items-center justify-between gap-3 text-xs vmuted dark:dark-mode-muted px-1">
                 <div id="sheet-filters" class="flex flex-wrap items-center gap-2"></div>
-                <div id="sync-status" class="font-medium hidden"></div>
+                <div id="sync-status" class="font-medium hidden">
+                    <i class="fa-solid fa-cloud-arrow-down fa-fade text-vaccent mr-1"></i> Syncing in background...
+                </div>
             </div>
         </div>
 
@@ -162,7 +165,8 @@
         const CONFIG = {
             API_URL: "https://script.google.com/macros/s/AKfycbyPCf9bam7EYO5aq6ZXh7YfyvYeV5fleJJK63gQ-kRv5mCcus25mpsat9y5zXISo6ciHg/exec",
             TIMEZONE: "Asia/Taipei",
-            REFRESH_INTERVAL: 5 * 60 * 1000 
+            REFRESH_INTERVAL: 5 * 60 * 1000,
+            CACHE_KEY: "kyrio_schedule_cache" // 新增 Cache Key
         };
 
         const app = {
@@ -187,28 +191,45 @@
             },
 
             fetchData: async function(isManual = false) {
-                if (this.data.length === 0) {
-                    this.showState('<i class="fa-solid fa-circle-notch fa-spin text-2xl text-vaccent"></i>', 'Loading data, please wait...｜讀取資料中...');
+                let hasRenderedFromCache = false;
+
+                // 1. 優先嘗試從 LocalStorage 讀取快取並「秒速」渲染
+                const cachedDataStr = localStorage.getItem(CONFIG.CACHE_KEY);
+                if (cachedDataStr) {
+                    try {
+                        const cachedEvents = JSON.parse(cachedDataStr);
+                        if (cachedEvents && cachedEvents.length > 0) {
+                            this.processAndRender(cachedEvents, true); // true 代表是初次從快取載入
+                            hasRenderedFromCache = true;
+                        }
+                    } catch (e) {
+                        console.warn("Failed to parse cached data:", e);
+                    }
                 }
 
+                if (!hasRenderedFromCache && this.data.length === 0) {
+                    this.showState('<i class="fa-solid fa-circle-notch fa-spin text-2xl text-vaccent"></i>', 'Loading data, please wait...｜讀取資料中...');
+                } else if (hasRenderedFromCache) {
+                    // 如果有舊畫面，在背景更新時稍微提示使用者 (可選)
+                    const syncStatus = document.getElementById('sync-status');
+                    if(syncStatus) syncStatus.classList.remove('hidden');
+                }
+
+                // 2. 依然在背景去發送 API 請求最新資料 (Stale-While-Revalidate)
                 try {
                     const res = await fetch(CONFIG.API_URL);
                     const result = await res.json();
                     
                     if (result.success) {
-                        this.processData(result.events || []);
+                        const newDataStr = JSON.stringify(result.events || []);
                         
-                        if (!this.currentSheetFilter && this.sheets.size > 0) {
-                            this.currentSheetFilter = Array.from(this.sheets)[0];
-                        }
-                        
-                        this.renderSheetFilters();
-                        this.render();
-
-                        if (!this.hasScrolledToToday && !this.isSubathonTab(this.currentSheetFilter) && !this.searchQuery) {
-                            setTimeout(() => {
-                                this.scrollToToday();
-                            }, 200);
+                        // 3. 比對新資料與快取資料是否不同，不同才需要重新渲染，避免畫面閃爍
+                        if (newDataStr !== cachedDataStr) {
+                            // 更新快取
+                            localStorage.setItem(CONFIG.CACHE_KEY, newDataStr);
+                            
+                            // 更新畫面 (非初次，不強迫捲動到今日)
+                            this.processAndRender(result.events || [], !hasRenderedFromCache);
                         }
                     } else {
                         throw new Error("API returned failure status.");
@@ -218,6 +239,27 @@
                     if (this.data.length === 0) {
                         this.showState('<i class="fa-solid fa-triangle-exclamation text-rose-600 dark:text-rose-400 text-3xl"></i>', 'Data load failed. Please refresh.｜資料載入失敗，請重新整理。');
                     }
+                } finally {
+                    const syncStatus = document.getElementById('sync-status');
+                    if(syncStatus) syncStatus.classList.add('hidden');
+                }
+            },
+
+            // 整合原本的 process 邏輯，方便快取與新資料共用呼叫
+            processAndRender: function(eventsRaw, shouldScroll = false) {
+                this.processData(eventsRaw);
+                
+                if (!this.currentSheetFilter && this.sheets.size > 0) {
+                    this.currentSheetFilter = Array.from(this.sheets)[0];
+                }
+                
+                this.renderSheetFilters();
+                this.render();
+
+                if (shouldScroll && !this.hasScrolledToToday && !this.isSubathonTab(this.currentSheetFilter) && !this.searchQuery) {
+                    setTimeout(() => {
+                        this.scrollToToday();
+                    }, 200);
                 }
             },
 
