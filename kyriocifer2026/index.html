@@ -508,7 +508,7 @@
 
                 autoScrollInterval = setInterval(() => {
                     if (!isCarouselHovered && carousel) {
-                        carousel.scrollLeft += 0.5; // Slower speed (0.5px per tick)
+                        carousel.scrollLeft += 0.2; // Slower speed (0.2px per tick)
                         if (carousel.scrollLeft >= carousel.scrollWidth / 3) {
                             carousel.scrollLeft = 0;
                         }
