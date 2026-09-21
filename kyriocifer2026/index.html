@@ -18,10 +18,6 @@
                 extend: {
                     fontFamily: { sans: ['"Plus Jakarta Sans"', 'sans-serif'] },
                     colors: {
-                        day: {
-                            bg: '#FFFDF9', sky: '#8EDFF2', pink: '#FF6F91', lavender: '#A78BFA',
-                            text: '#26345D', muted: '#69738F', border: '#F1EFEA'
-                        },
                         night: {
                             bg: '#080D1A', sky: '#111827', pink: '#F43F5E', lavender: '#8B5CF6',
                             yellow: '#FBBF24', text: '#F8FAFC', muted: '#94A3B8', border: '#1E293B'
@@ -66,13 +62,12 @@
 
     <header class="bg-slate-900/80 backdrop-blur-md border-b border-night-border px-4 py-3 flex items-center justify-center z-40 shrink-0">
         <div class="flex items-center space-x-3 cursor-pointer group" onclick="returnToWorldView()">
-            <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-day-pink to-day-yellow flex items-center justify-center shadow-md shadow-day-pink/20 group-hover:scale-105 transition">
+            <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-night-pink to-night-yellow flex items-center justify-center shadow-md shadow-night-pink/20 group-hover:scale-105 transition">
                 <i class="fa-solid fa-earth-americas text-white text-lg"></i>
             </div>
             <div>
-                <h1 id="headerTitle" class="font-extrabold text-base sm:text-lg bg-gradient-to-r from-day-pink to-day-lavender bg-clip-text text-transparent flex items-center gap-1.5 uppercase tracking-wide">
+                <h1 id="headerTitle" class="font-extrabold text-base sm:text-lg bg-gradient-to-r from-night-pink to-night-lavender bg-clip-text text-transparent flex items-center gap-1.5 uppercase tracking-wide">
                     LOVE AROUND THE WORLD ♡
-                    <span id="liveSyncDot" class="hidden w-2 h-2 rounded-full bg-green-500 animate-pulse shadow-[0_0_5px_#22c55e]" title="Live Sync Active"></span>
                 </h1>
                 <p class="text-xs text-night-muted">Light up the world, hear the languages of love ✨</p>
             </div>
@@ -91,7 +86,6 @@
         <div id="cityPopupCard" class="absolute z-30 bg-[#121826] border border-slate-700/80 rounded-[28px] shadow-2xl p-6 w-[340px] hidden transform -translate-x-1/2 -translate-y-full mb-4 pointer-events-auto animate-in fade-in zoom-in-95 duration-200">
             <div class="absolute -bottom-2.5 left-1/2 transform -translate-x-1/2 w-5 h-5 bg-[#121826] border-r border-b border-slate-700/80 rotate-45"></div>
             
-            <!-- Popup Top-Left Navigation (Earth & Country Back) -->
             <div class="absolute top-4 left-4 flex items-center space-x-1.5">
                 <button onclick="returnToWorldView()" class="w-7 h-7 rounded-full bg-slate-800/80 hover:bg-slate-700 flex items-center justify-center text-slate-400 hover:text-white transition" title="Back to World">
                     <i class="fa-solid fa-earth-americas text-[11px]"></i>
@@ -101,14 +95,13 @@
                 </button>
             </div>
 
-            <!-- Popup Top-Right Close -->
             <button onclick="closeCityPopup()" class="absolute top-4 right-4 w-7 h-7 rounded-full bg-slate-800/80 hover:bg-slate-700 flex items-center justify-center text-slate-400 hover:text-white transition" title="Close">
                 <i class="fa-solid fa-xmark text-xs"></i>
             </button>
 
             <div class="flex flex-col items-center text-center pb-4 border-b border-slate-800 mt-2">
                 <div class="text-[10px] text-slate-400 font-bold uppercase tracking-[0.15em] flex items-center space-x-1 mb-3">
-                    <i class="fa-solid fa-location-dot text-day-pink"></i>
+                    <i class="fa-solid fa-location-dot text-night-pink"></i>
                     <span id="popupLocation">COUNTRY • CITY</span>
                 </div>
                 
@@ -120,17 +113,12 @@
                 </div>
             </div>
 
-            <!-- People List Container -->
             <div id="popupPeopleList" class="flex flex-col gap-1.5 mt-3 max-h-48 overflow-y-auto py-1 no-scrollbar">
             </div>
         </div>
 
-        <div class="absolute bottom-0 inset-x-0 z-20 bg-slate-900/90 backdrop-blur-md border-t border-slate-800 py-3 px-4 flex items-center justify-between shadow-lg">
-            <div class="text-xs font-bold text-slate-400 hidden md:flex items-center space-x-2 shrink-0 pr-3 uppercase tracking-wider">
-                <span class="w-2 h-2 rounded-full bg-day-pink animate-pulse shadow-[0_0_5px_#f43f5e]"></span>
-                <span>Hear "I love you" from around the world ♡ :</span>
-            </div>
-            <div id="countryCarousel" class="flex items-center space-x-2.5 overflow-x-auto no-scrollbar py-1 flex-1 px-1">
+        <div class="absolute bottom-0 inset-x-0 z-20 bg-slate-900/90 backdrop-blur-md border-t border-slate-800 py-3 px-4 overflow-hidden shadow-lg">
+            <div id="countryCarousel" class="flex items-center space-x-2.5 overflow-x-auto no-scrollbar py-1 px-1 whitespace-nowrap">
             </div>
         </div>
     </main>
@@ -165,6 +153,8 @@
         let currentAudioPlayer = null;
         let currentActiveBtnId = null;
         let currentActiveIconId = null;
+        let autoScrollInterval = null;
+        let isCarouselHovered = false;
 
         async function initMap() {
             map = L.map('map', {
@@ -172,7 +162,6 @@
                 maxBounds: [[-85, -180], [85, 180]], maxBoundsViscosity: 1.0
             }).setView([20.0, 0.0], 3);
 
-            // 僅保留夜晚模式圖層
             window.nightTileLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}', { maxZoom: 16, minZoom: 3, noWrap: true });
             window.nightTileLayer.addTo(map);
 
@@ -236,8 +225,6 @@
                 if (pRes.data) appData.people = pRes.data;
                 
                 preprocessData();
-
-                document.getElementById('liveSyncDot').classList.remove('hidden');
             } catch (err) { console.log('Data fetch err:', err); }
         }
 
@@ -280,7 +267,7 @@
                 marker.bindTooltip(`
                     <div class="p-1 font-sans text-xs">
                         <div class="font-bold text-slate-900 dark:text-white text-sm">📍 ${cityName}</div>
-                        <div class="text-day-pink font-semibold">${country ? country.flag + ' ' + countryName : ''}</div>
+                        <div class="text-night-pink font-semibold">${country ? country.flag + ' ' + countryName : ''}</div>
                         <div class="text-slate-500 text-[11px] mt-0.5">${cityPeople.length} people here</div>
                     </div>
                 `, { direction: 'top', offset: [0, -8] });
@@ -323,7 +310,7 @@
                 marker.bindTooltip(`
                     <div class="p-1 font-sans text-xs">
                         <div class="font-bold text-slate-900 dark:text-white text-sm">📍 ${cityName}</div>
-                        <div class="text-day-pink font-semibold">${country.flag} ${countryName}</div>
+                        <div class="text-night-pink font-semibold">${country.flag} ${countryName}</div>
                         <div class="text-slate-500 text-[11px] mt-0.5">${cityPeople.length} people here</div>
                     </div>
                 `, { direction: 'top', offset: [0, -8] });
@@ -369,20 +356,18 @@
                 const hasAudio = !!(audioUrl && audioUrl !== 'undefined' && audioUrl.trim() !== '');
                 
                 if (hasAudio) {
-                    // 滿版區塊設計 (有語音)
                     newHtml += `
                         <div class="flex items-center justify-between bg-slate-800/40 p-2.5 rounded-2xl hover:bg-slate-800/80 border border-transparent hover:border-slate-700 transition cursor-pointer group" onclick="playPersonAudio('${audioUrl}', 'playBtn_${p.id}', 'playIcon_${p.id}')">
                             <div class="flex items-center space-x-3 overflow-hidden">
-                                <img src="${p.avatar_url}" class="w-10 h-10 rounded-full object-cover border-[1.5px] border-slate-600 group-hover:border-day-pink transition shadow-sm shrink-0" onerror="this.src='https://placehold.co/100x100/1e293b/f43f5e?text=U'">
-                                <div class="text-[14px] font-bold text-white group-hover:text-day-pink transition truncate">${p.name}</div>
+                                <img src="${p.avatar_url}" class="w-10 h-10 rounded-full object-cover border-[1.5px] border-slate-600 group-hover:border-night-pink transition shadow-sm shrink-0" onerror="this.src='https://placehold.co/100x100/1e293b/f43f5e?text=U'">
+                                <div class="text-[14px] font-bold text-white group-hover:text-night-pink transition truncate">${p.name}</div>
                             </div>
-                            <button id="playBtn_${p.id}" class="w-9 h-9 rounded-full bg-slate-800 group-hover:bg-day-pink/20 border border-slate-600 group-hover:border-day-pink flex items-center justify-center transition shrink-0 shadow-inner ml-2">
-                                <i id="playIcon_${p.id}" class="fa-solid fa-play text-slate-300 group-hover:text-day-pink ml-0.5 text-xs transition"></i>
+                            <button id="playBtn_${p.id}" class="w-9 h-9 rounded-full bg-slate-800 group-hover:bg-night-pink/20 border border-slate-600 group-hover:border-night-pink flex items-center justify-center transition shrink-0 shadow-inner ml-2">
+                                <i id="playIcon_${p.id}" class="fa-solid fa-play text-slate-300 group-hover:text-night-pink ml-0.5 text-xs transition"></i>
                             </button>
                         </div>
                     `;
                 } else {
-                    // 滿版區塊設計 (無語音淡化)
                     newHtml += `
                         <div class="flex items-center justify-between bg-slate-800/20 p-2.5 rounded-2xl border border-transparent transition">
                             <div class="flex items-center space-x-3 overflow-hidden">
@@ -426,8 +411,8 @@
             const btn = document.getElementById(btnId);
             const icon = document.getElementById(iconId);
 
-            if (btn) btn.classList.add('animate-pulse', 'border-day-pink', 'shadow-[0_0_12px_rgba(244,63,94,0.4)]');
-            if (icon) icon.className = 'fa-solid fa-pause text-day-pink ml-0.5 text-xs';
+            if (btn) btn.classList.add('animate-pulse', 'border-night-pink', 'shadow-[0_0_12px_rgba(244,63,94,0.4)]');
+            if (icon) icon.className = 'fa-solid fa-pause text-night-pink ml-0.5 text-xs';
 
             currentAudioPlayer.play().catch(e => {
                 console.warn('Audio play failed:', e);
@@ -447,8 +432,8 @@
                 const btn = document.getElementById(currentActiveBtnId);
                 const icon = document.getElementById(currentActiveIconId);
                 
-                if (btn) btn.classList.remove('animate-pulse', 'border-day-pink', 'shadow-[0_0_12px_rgba(244,63,94,0.4)]');
-                if (icon) icon.className = 'fa-solid fa-play text-slate-300 group-hover:text-day-pink ml-0.5 text-xs';
+                if (btn) btn.classList.remove('animate-pulse', 'border-night-pink', 'shadow-[0_0_12px_rgba(244,63,94,0.4)]');
+                if (icon) icon.className = 'fa-solid fa-play text-slate-300 group-hover:text-night-pink ml-0.5 text-xs';
                 
                 currentActiveBtnId = null;
                 currentActiveIconId = null;
@@ -485,9 +470,8 @@
             if (!trail) return;
 
             if (currentMapLevel === 'world') {
-                trail.innerHTML = `<span class="text-white font-extrabold flex items-center space-x-1.5 tracking-wide"><i class="fa-solid fa-earth-americas text-day-pink"></i><span>World View</span></span>`;
+                trail.innerHTML = `<button onclick="returnToWorldView()" class="text-white font-extrabold flex items-center space-x-1.5 tracking-wide hover:text-night-pink transition cursor-pointer"><i class="fa-solid fa-earth-americas text-night-pink"></i><span>World View</span></button>`;
             } else {
-                // 如果是 country 或是 city 級別，導覽列一律只顯示到國家
                 const targetCountryId = currentMapLevel === 'city' ? activeCityForBubble?.country_id : activeCountryId;
                 const country = appData.countries.find(c => c.id === targetCountryId);
                 const countryName = country ? (country.name_en || country.name) : 'Country';
@@ -495,7 +479,7 @@
                 trail.innerHTML = `
                     <button onclick="returnToWorldView()" class="hover:text-white transition flex items-center gap-1.5"><i class="fa-solid fa-earth-americas text-[10px]"></i> World</button>
                     <span class="text-slate-600">›</span>
-                    <button onclick="flyToCountry('${country?.id}')" class="text-white font-bold tracking-wide hover:text-day-pink transition">${country ? country.flag + ' ' + countryName : 'Country'}</button>
+                    <button onclick="flyToCountry('${country?.id}')" class="text-white font-bold tracking-wide hover:text-night-pink transition">${country ? country.flag + ' ' + countryName : 'Country'}</button>
                 `;
             }
         }
@@ -503,14 +487,34 @@
         function renderCountryCarousel() {
             const carousel = document.getElementById('countryCarousel');
             carousel.innerHTML = '';
-            appData.countries.forEach(country => {
+            
+            // Duplicate array for seamless infinite looping
+            const loopCountries = [...appData.countries, ...appData.countries, ...appData.countries];
+            
+            loopCountries.forEach(country => {
                 const countryName = country.name_en || country.name;
                 const btn = document.createElement('button');
-                btn.className = 'flex items-center space-x-2 px-5 py-2 bg-slate-800 border border-slate-700 hover:border-day-pink/50 rounded-full text-xs font-bold text-slate-200 shrink-0 transition hover:scale-105 shadow-sm';
+                btn.className = 'flex items-center space-x-2 px-5 py-2 bg-slate-800 border border-slate-700 hover:border-night-pink/50 rounded-full text-xs font-bold text-slate-200 shrink-0 transition hover:scale-105 shadow-sm cursor-pointer';
                 btn.innerHTML = `<span class="text-base">${country.flag}</span><span>${countryName}</span>`;
                 btn.onclick = () => flyToCountry(country.id);
                 carousel.appendChild(btn);
             });
+
+            if (!autoScrollInterval) {
+                carousel.addEventListener('mouseenter', () => { isCarouselHovered = true; });
+                carousel.addEventListener('mouseleave', () => { isCarouselHovered = false; });
+                carousel.addEventListener('touchstart', () => { isCarouselHovered = true; }, { passive: true });
+                carousel.addEventListener('touchend', () => { isCarouselHovered = false; }, { passive: true });
+
+                autoScrollInterval = setInterval(() => {
+                    if (!isCarouselHovered && carousel) {
+                        carousel.scrollLeft += 0.5; // Slower speed (0.5px per tick)
+                        if (carousel.scrollLeft >= carousel.scrollWidth / 3) {
+                            carousel.scrollLeft = 0;
+                        }
+                    }
+                }, 20);
+            }
         }
 
         window.onload = () => initMap();
