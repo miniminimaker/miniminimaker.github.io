@@ -157,7 +157,7 @@
             countries: [{ id: 'c_tw', name: 'Taiwan', name_en: 'Taiwan', flag: '🇹🇼' }],
             cities: [{ id: 'ci_taipei', country_id: 'c_tw', name: 'Taipei', name_en: 'Taipei', latitude: 25.0330, longitude: 121.5654 }],
             languages: [{ id: 'l_mandarin', name: 'Mandarin', native_name: '中文', love_phrase: '我愛你', romanization: 'Wǒ ài nǐ' }],
-            people: [{ id: 'p1', name: 'MINI (Connecting...)', avatar_url: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150', country_id: 'c_tw', city_id: 'ci_taipei', language_id: 'l_mandarin', active: true }]
+            people: [{ id: 'p1', name: 'MINI (No Audio)', avatar_url: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150', country_id: 'c_tw', city_id: 'ci_taipei', language_id: 'l_mandarin', active: true }]
         };
 
         let appData = JSON.parse(JSON.stringify(demoData));
@@ -379,23 +379,40 @@
                 const pLang = appData.languages.find(l => l.id === p.language_id);
                 const audioUrl = p.audio_url || (pLang ? pLang.audio_url : '');
                 
-                newHtml += `
-                    <div class="flex items-center space-x-3 p-2 rounded-2xl hover:bg-white/5 transition cursor-pointer group" onclick="playPersonAudio('${audioUrl}', 'playBtn_${p.id}', 'playIcon_${p.id}', 'playText_${p.id}')">
-                        <button id="playBtn_${p.id}" class="w-10 h-10 rounded-full bg-slate-800/50 group-hover:bg-day-pink/20 border border-slate-700 group-hover:border-day-pink flex items-center justify-center transition shrink-0 shadow-inner">
-                            <i id="playIcon_${p.id}" class="fa-solid fa-play text-slate-300 group-hover:text-day-pink ml-0.5 text-xs transition"></i>
-                        </button>
-                        
-                        <img src="${p.avatar_url}" class="w-12 h-12 rounded-full object-cover border-[1.5px] border-slate-600 group-hover:border-day-pink transition shadow-sm" onerror="this.src='https://placehold.co/100x100/1e293b/f43f5e?text=U'">
-                        
-                        <div class="flex-1 overflow-hidden">
-                            <div class="text-[13px] font-bold text-white group-hover:text-day-pink transition truncate">${p.name}</div>
-                            <div class="text-[10px] text-slate-400 flex items-center space-x-1 mt-0.5">
-                                <i class="fa-solid fa-microphone-lines"></i>
-                                <span id="playText_${p.id}">Voice Message</span>
+                // 【重要修改】判斷使用者是否有提供語音檔案
+                const hasAudio = !!(audioUrl && audioUrl !== 'undefined' && audioUrl.trim() !== '');
+                
+                if (hasAudio) {
+                    // 有語音的樣式：顯示播放鍵及粉色互動效果
+                    newHtml += `
+                        <div class="flex items-center space-x-3 p-2 rounded-2xl hover:bg-white/5 transition cursor-pointer group" onclick="playPersonAudio('${audioUrl}', 'playBtn_${p.id}', 'playIcon_${p.id}', 'playText_${p.id}')">
+                            <button id="playBtn_${p.id}" class="w-10 h-10 rounded-full bg-slate-800/50 group-hover:bg-day-pink/20 border border-slate-700 group-hover:border-day-pink flex items-center justify-center transition shrink-0 shadow-inner">
+                                <i id="playIcon_${p.id}" class="fa-solid fa-play text-slate-300 group-hover:text-day-pink ml-0.5 text-xs transition"></i>
+                            </button>
+                            
+                            <img src="${p.avatar_url}" class="w-12 h-12 rounded-full object-cover border-[1.5px] border-slate-600 group-hover:border-day-pink transition shadow-sm" onerror="this.src='https://placehold.co/100x100/1e293b/f43f5e?text=U'">
+                            
+                            <div class="flex-1 overflow-hidden">
+                                <div class="text-[13px] font-bold text-white group-hover:text-day-pink transition truncate">${p.name}</div>
+                                <div class="text-[10px] text-slate-400 flex items-center space-x-1 mt-0.5">
+                                    <i class="fa-solid fa-microphone-lines"></i>
+                                    <span id="playText_${p.id}">Voice Message</span>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                `;
+                    `;
+                } else {
+                    // 【重要修改】無語音的樣式：移除對話框與文字留言標籤，僅保留頭像與名稱，視覺更純粹
+                    newHtml += `
+                        <div class="flex items-center space-x-3 p-2 rounded-2xl transition">
+                            <img src="${p.avatar_url}" class="w-12 h-12 rounded-full object-cover border-[1.5px] border-slate-700/60 transition shadow-sm opacity-70" onerror="this.src='https://placehold.co/100x100/1e293b/f43f5e?text=U'">
+                            
+                            <div class="flex-1 overflow-hidden">
+                                <div class="text-[14px] font-bold text-slate-400 truncate">${p.name}</div>
+                            </div>
+                        </div>
+                    `;
+                }
             });
             listContainer.innerHTML = newHtml;
 
@@ -413,7 +430,6 @@
 
         function playPersonAudio(audioUrl, btnId, iconId, textId) {
             if (!audioUrl || audioUrl === 'undefined') {
-                alert('Audio file is not provided yet.');
                 return;
             }
 
