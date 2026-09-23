@@ -90,13 +90,13 @@
             border: 1px solid rgba(255, 255, 255, 0.08);
         }
 
-        /* 動畫設定 */
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         .animate-fade-in { animation: fadeIn 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards; opacity: 0; }
         .delay-100 { animation-delay: 0.1s; }
         .delay-300 { animation-delay: 0.3s; }
         .delay-500 { animation-delay: 0.5s; }
         .delay-700 { animation-delay: 0.7s; }
+        .delay-900 { animation-delay: 0.9s; }
         
         @keyframes splashFadeOut { 
             0% { opacity: 1; transform: scale(1); } 
@@ -110,13 +110,11 @@
     <!-- 開場動畫 -->
     <div id="splashScreen" class="fixed inset-0 z-[2000] bg-[#030712] flex flex-col items-center justify-center transition-all duration-1000 pointer-events-auto">
         <div class="flex flex-col items-center justify-center space-y-6">
-            <!-- LOGO 發光進場 -->
             <div class="w-24 h-24 rounded-full bg-gradient-to-br from-slate-50 to-slate-200 flex items-center justify-center shadow-[0_0_30px_rgba(244,63,94,0.4)] p-1.5 animate-fade-in delay-100 relative">
                 <div class="absolute inset-0 rounded-full border border-white/40"></div>
                 <img src="https://miniminimaker.github.io/kyriocifer2026/logo.png" class="w-full h-full object-contain relative z-10 rounded-full">
             </div>
             
-            <!-- 文字依序進場 -->
             <div class="text-center flex flex-col items-center mt-4">
                 <p class="text-[10px] text-brand-pink font-bold tracking-[0.4em] uppercase mb-3 animate-fade-in delay-300">
                     "I love you" in different languages
@@ -129,10 +127,8 @@
                 </p>
             </div>
             
-            <!-- 下方裝飾線 -->
             <div class="w-12 h-0.5 bg-brand-pink rounded-full mt-6 shadow-[0_0_10px_rgba(244,63,94,0.8)] animate-fade-in delay-700"></div>
             
-            <!-- 專案標籤 -->
             <div class="mt-8 text-[10px] text-slate-500/70 font-semibold tracking-[0.25em] animate-fade-in delay-900">
                 #miniminiproject
             </div>
@@ -141,11 +137,8 @@
 
     <!-- 頂部滿寬橫幅 -->
     <header class="w-full bg-[#0b101e] border-b border-white/5 z-50 shrink-0 py-5 sm:py-6 px-6 shadow-xl flex items-center justify-between relative shadow-black/50">
-        
-        <!-- 左側佔位符 (為了讓中央完美對齊) -->
         <div class="flex-1 flex justify-start"></div>
 
-        <!-- 正中央標題區塊 -->
         <div class="flex items-center justify-center cursor-pointer transition-transform hover:scale-[1.01] duration-300" onclick="returnToWorldView()">
             <div class="w-[64px] h-[64px] rounded-full bg-gradient-to-br from-slate-50 to-slate-200 flex items-center justify-center p-1 relative shadow-[0_0_15px_rgba(244,63,94,0.25)] shrink-0">
                 <img src="https://miniminimaker.github.io/kyriocifer2026/logo.png" alt="Logo" class="w-full h-full object-contain relative z-10 rounded-full">
@@ -163,7 +156,6 @@
             </div>
         </div>
 
-        <!-- 右側功能按鈕區 -->
         <div class="flex-1 flex justify-end gap-3 sm:gap-4">
             <button onclick="openGuide()" class="flex items-center justify-center gap-2 px-3 sm:px-4 py-2 bg-white/5 hover:bg-brand-pink/20 border border-white/10 rounded-full text-slate-300 hover:text-white transition-all duration-300 group shadow-glass">
                 <i class="fa-solid fa-circle-question group-hover:text-brand-pink transition-colors text-sm"></i>
@@ -171,22 +163,19 @@
             </button>
             <button onclick="togglePeopleList()" class="flex items-center justify-center gap-2 px-3 sm:px-4 py-2 bg-white/5 hover:bg-brand-pink/20 border border-white/10 rounded-full text-slate-300 hover:text-white transition-all duration-300 group shadow-glass">
                 <i class="fa-solid fa-address-book group-hover:text-brand-pink transition-colors text-sm"></i>
-                <span class="text-[10px] font-bold uppercase tracking-wider hidden sm:block">Voices</span>
+                <span class="text-[10px] font-bold uppercase tracking-wider hidden sm:block">Kaleidoscope</span>
             </button>
         </div>
     </header>
 
     <main class="flex-1 relative overflow-hidden flex flex-col w-full bg-[#030712]">
-        
         <div id="map" class="w-full h-full absolute inset-0 z-10"></div>
 
-        <!-- 麵包屑導航 (左上角) -->
         <div id="breadcrumbOverlay" class="absolute top-4 sm:top-6 left-4 sm:left-6 z-20 pointer-events-auto transition-opacity duration-300">
             <div id="breadcrumbTrail" class="glass-panel shadow-glass rounded-full px-4 py-2 flex items-center space-x-2 text-[11px] font-semibold tracking-wide">
             </div>
         </div>
 
-        <!-- 城市氣泡卡片 -->
         <div id="cityPopupCard" class="absolute z-30 glass-panel shadow-glass rounded-[24px] p-1 w-[320px] hidden transform -translate-x-1/2 -translate-y-full mb-6 pointer-events-auto transition-all duration-300 opacity-0 scale-95 origin-bottom">
             <div class="absolute -bottom-3 left-1/2 transform -translate-x-1/2 flex items-start justify-center w-6 h-4 overflow-hidden">
                 <div class="w-4 h-4 bg-slate-900/80 backdrop-blur-xl border-r border-b border-white/10 transform rotate-45 -translate-y-2.5 rounded-sm"></div>
@@ -221,24 +210,19 @@
             </div>
         </div>
 
-        <!-- 下方跑馬燈 與 版權宣告 -->
         <div class="absolute bottom-6 sm:bottom-8 inset-x-0 z-20 flex flex-col items-center pointer-events-none px-4">
-            
-            <!-- 國家跑馬燈 -->
             <div class="glass-panel shadow-glass rounded-full py-1.5 px-3 overflow-hidden pointer-events-auto max-w-4xl w-full relative mb-3">
                 <div class="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-[rgba(15,23,42,0.8)] to-transparent z-10 pointer-events-none rounded-l-full"></div>
                 <div class="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-[rgba(15,23,42,0.8)] to-transparent z-10 pointer-events-none rounded-r-full"></div>
                 <div id="countryCarousel" class="flex items-center py-1 overflow-x-auto no-scrollbar cursor-grab active:cursor-grabbing w-full"></div>
             </div>
 
-            <!-- 版權宣告 -->
             <div class="pointer-events-auto text-[10px] text-slate-500/70 tracking-widest font-medium text-center">
                 © <a href="https://x.com/miniminimaker" target="_blank" class="text-brand-pink hover:text-brand-pink/80 transition-colors duration-300">miniminimaker</a>
             </div>
         </div>
     </main>
 
-    <!-- 使用指南彈窗 (Guide Modal) -->
     <div id="guideModal" class="fixed inset-0 z-[1000] hidden items-center justify-center pointer-events-auto">
         <div class="absolute inset-0 bg-[#030712]/70 backdrop-blur-sm transition-opacity" onclick="closeGuide()"></div>
         
@@ -259,7 +243,7 @@
                     </div>
                     <div>
                         <span class="text-white font-bold block mb-1 text-[13px] uppercase tracking-wide">Click the Hearts</span>
-                        <span class="text-xs text-slate-400">Click on the glowing hearts on the map to discover the city and voices.</span>
+                        <span class="text-xs text-slate-400">Click on the glowing hearts on the map to discover the city and Kaleidoscopes.</span>
                     </div>
                 </div>
                 <div class="flex items-start gap-4 p-3 rounded-2xl bg-white/[0.03] border border-white/5 hover:border-white/10 transition-colors">
@@ -267,7 +251,7 @@
                         <i class="fa-solid fa-play text-brand-pink text-xs ml-0.5"></i>
                     </div>
                     <div>
-                        <span class="text-white font-bold block mb-1 text-[13px] uppercase tracking-wide">Play the Voices</span>
+                        <span class="text-white font-bold block mb-1 text-[13px] uppercase tracking-wide">Play Audio</span>
                         <span class="text-xs text-slate-400">Inside the popup, click the play button to hear "I love you" in their language.</span>
                     </div>
                 </div>
@@ -285,19 +269,18 @@
                         <i class="fa-solid fa-address-book text-brand-lavender text-xs"></i>
                     </div>
                     <div>
-                        <span class="text-white font-bold block mb-1 text-[13px] uppercase tracking-wide">All Participants</span>
-                        <span class="text-xs text-slate-400">Click "VOICES" on the top right to see the full list and instantly jump to their location.</span>
+                        <span class="text-white font-bold block mb-1 text-[13px] uppercase tracking-wide">All Kaleidoscopes</span>
+                        <span class="text-xs text-slate-400">Click "Kaleidoscope" on the top right to see the full list and instantly jump to their location.</span>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- 所有聲音名單側邊欄 -->
     <div id="peopleSidebar" class="fixed top-[104px] sm:top-[112px] right-0 h-[calc(100%-104px)] sm:h-[calc(100%-112px)] w-[300px] sm:w-[360px] bg-[#0b101e]/95 backdrop-blur-2xl border-l border-white/10 z-[100] transform translate-x-full transition-transform duration-500 flex flex-col shadow-2xl pointer-events-auto">
         <div class="flex justify-between items-center px-6 py-6 border-b border-white/10 shrink-0">
             <div>
-                <h2 class="text-white font-black text-[16px] tracking-widest uppercase">All Voices</h2>
+                <h2 class="text-white font-black text-[16px] tracking-widest uppercase">All Kaleidoscopes</h2>
                 <p class="text-brand-pink text-[9px] font-bold tracking-[0.25em] uppercase mt-1" id="totalVoicesCount">0 Participants</p>
             </div>
             <button onclick="togglePeopleList()" class="w-8 h-8 rounded-full bg-white/5 hover:bg-brand-pink/20 border border-white/10 hover:border-brand-pink flex items-center justify-center text-slate-400 hover:text-white transition duration-200">
@@ -473,17 +456,15 @@
         }
 
         function preprocessData() {
-            // 1. 自動轉換兩位數英文代碼為 Emoji 國旗
             appData.countries.forEach(country => {
                 if (country.flag && country.flag.length === 2 && /^[a-zA-Z]+$/.test(country.flag)) {
                     const codePoints = country.flag.toUpperCase().split('').map(char => 127397 + char.charCodeAt(0));
                     country.flag = String.fromCodePoint(...codePoints);
                 } else if (!country.flag) {
-                    country.flag = '🌍'; // 若無國旗則顯示預設地球
+                    country.flag = '🌍';
                 }
             });
 
-            // 2. 處理虛擬城市
             appData.people.forEach(person => {
                 if (person.country_id && !person.city_id) {
                     const virtualCityId = 'virtual_city_' + person.country_id;
@@ -542,11 +523,12 @@
             const icon = L.divIcon({ className: 'bg-transparent border-0', html: html, iconSize: [32, 32], iconAnchor: [16, 16] });
             const marker = L.marker([city.latitude, city.longitude], { icon });
 
+            const countText = cityPeople.length > 1 ? `${cityPeople.length} Kaleidoscopes` : `${cityPeople.length} Kaleidoscope`;
             marker.bindTooltip(`
                 <div class="font-sans flex flex-col items-center">
                     <div class="font-bold text-white text-[13px] tracking-wide mb-0.5">${cityName}</div>
                     <div class="text-slate-300 text-[10px] uppercase tracking-widest font-medium">${country ? country.flag + ' ' + countryName : ''}</div>
-                    <div class="text-brand-pink text-[10px] font-bold mt-1 bg-brand-pink/10 px-2 py-0.5 rounded-full">${cityPeople.length} Voice${cityPeople.length>1?'s':''}</div>
+                    <div class="text-brand-pink text-[10px] font-bold mt-1 bg-brand-pink/10 px-2 py-0.5 rounded-full">${countText}</div>
                 </div>
             `, { direction: 'top', offset: [0, -10], className: 'glass-tooltip' });
 
@@ -586,7 +568,6 @@
                 const bounds = L.latLngBounds(activeCities.map(c => [c.latitude, c.longitude]));
                 map.flyToBounds(bounds, { padding: [100, 100], maxZoom: 6, duration: 1.5 });
             } else if (country.latitude && country.longitude) {
-                // 防呆機制：若該國尚無人參與，但有座標，則飛往該國中心點
                 map.flyTo([country.latitude, country.longitude], 5, { duration: 1.5 });
             }
 
@@ -764,7 +745,6 @@
             let isDragging = false, startX, scrollLeft;
             if (autoScrollInterval) clearInterval(autoScrollInterval);
 
-            // 速度減半：改為 40ms 更新一次
             autoScrollInterval = setInterval(() => {
                 if (!isCarouselHovered && !isDragging) {
                     carousel.scrollLeft += 0.5;
@@ -798,7 +778,6 @@
 
         window.onload = () => {
             initMap();
-            // 5.5秒後觸發轉場，1.2秒動畫結束後移除 Splash Screen 讓下方可以點擊
             setTimeout(() => {
                 const splash = document.getElementById('splashScreen');
                 if (splash) {
