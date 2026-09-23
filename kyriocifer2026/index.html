@@ -112,22 +112,22 @@
 </head>
 <body class="h-full bg-night-bg text-night-text flex flex-col overflow-hidden">
 
-    <header class="absolute top-4 sm:top-6 inset-x-0 z-40 flex justify-center px-4 pointer-events-none">
-        <div class="bg-slate-900/80 backdrop-blur-xl border border-slate-700/60 p-2.5 sm:p-3 rounded-full flex flex-row items-center pointer-events-auto transition-all duration-500 hover:scale-[1.02] shadow-[0_8px_32px_rgba(0,0,0,0.5)] hover:bg-slate-900/95 max-w-max cursor-pointer group" onclick="returnToWorldView()">
+    <header class="w-full bg-slate-900/90 backdrop-blur-xl border-b border-slate-700/60 z-50 shrink-0 py-5 sm:py-6 px-4 shadow-lg flex items-center justify-center pointer-events-auto">
+        <div class="flex flex-row items-center cursor-pointer transition-transform duration-300 hover:scale-[1.02]" onclick="returnToWorldView()">
             
-            <div class="w-12 h-12 sm:w-[56px] sm:h-[56px] rounded-full bg-gradient-to-br from-slate-50 to-slate-200 flex items-center justify-center shadow-[0_0_20px_rgba(244,63,94,0.3)] group-hover:shadow-[0_0_28px_rgba(244,63,94,0.4)] transition-shadow duration-500 shrink-0 p-0.5 relative ml-1 sm:ml-2">
+            <div class="w-14 h-14 sm:w-[64px] sm:h-[64px] rounded-full bg-gradient-to-br from-slate-50 to-slate-200 flex items-center justify-center shadow-[0_0_15px_rgba(244,63,94,0.3)] shrink-0 p-1 relative">
                 <div class="absolute inset-0 rounded-full border border-white/40"></div>
                 <img src="https://miniminimaker.github.io/kyriocifer2026/logo.png" alt="Kyrio Cifer Logo" class="w-full h-full object-contain rounded-full relative z-10">
             </div>
 
-            <div class="flex flex-col items-center text-center ml-3 sm:ml-4 mr-4 sm:mr-6 justify-center">
-                <p class="text-[8px] sm:text-[9px] text-brand-pink font-bold tracking-[0.25em] uppercase mb-0.5 opacity-90">
+            <div class="flex flex-col text-left ml-4 sm:ml-5 justify-center">
+                <p class="text-[8px] sm:text-[9.5px] text-brand-pink font-bold tracking-[0.35em] sm:tracking-[0.38em] uppercase mb-2 opacity-90 w-full">
                     "I love you" in different languages
                 </p>
-                <h1 id="headerTitle" class="font-black text-[15px] sm:text-[18px] text-white tracking-wider uppercase leading-none mb-1">
+                <h1 id="headerTitle" class="font-black text-[16px] sm:text-[19px] text-white tracking-widest uppercase leading-none mb-2.5">
                     Kyrio Cifer 2nd Anniversary
                 </h1>
-                <p class="text-[10px] sm:text-[12px] text-slate-400 font-medium italic tracking-widest leading-none">
+                <p class="text-[10px] sm:text-[12px] text-slate-400 font-medium italic tracking-wider leading-none">
                     We Met Because of You, We Gather Because of Love.
                 </p>
             </div>
@@ -138,7 +138,7 @@
     <main class="flex-1 relative overflow-hidden flex flex-col">
         <div id="map" class="w-full h-full absolute inset-0 z-10"></div>
 
-        <div id="breadcrumbOverlay" class="absolute top-24 sm:top-6 left-4 sm:left-6 z-20 pointer-events-auto transition-opacity duration-300">
+        <div id="breadcrumbOverlay" class="absolute top-4 sm:top-5 left-4 sm:left-6 z-20 pointer-events-auto transition-opacity duration-300">
             <div id="breadcrumbTrail" class="glass-panel shadow-glass rounded-full px-4 py-2 flex items-center space-x-2 text-[11px] font-semibold tracking-wide">
             </div>
         </div>
@@ -457,9 +457,9 @@
                     `;
                 } else {
                     newHtml += `
-                        <div class="flex items-center justify-between p-2.5 rounded-2xl border border-transparent opacity-60">
+                        <div class="flex items-center justify-between p-2.5 rounded-2xl border border-transparent">
                             <div class="flex items-center space-x-3 overflow-hidden">
-                                <img src="${p.avatar_url}" class="w-9 h-9 rounded-full object-cover border border-white/10 shrink-0 grayscale opacity-70" onerror="this.src='https://placehold.co/100x100/1e293b/f43f5e?text=U'">
+                                <img src="${p.avatar_url}" class="w-9 h-9 rounded-full object-cover border border-white/10 shrink-0" onerror="this.src='https://placehold.co/100x100/1e293b/f43f5e?text=U'">
                                 <div class="text-[13px] font-medium text-slate-400 truncate">${p.name}</div>
                             </div>
                         </div>
@@ -640,7 +640,7 @@
                         carousel.scrollLeft = 0;
                     }
                 }
-            }, 20);
+            }, 40);
 
             carousel.addEventListener('mouseenter', () => isCarouselHovered = true);
             carousel.addEventListener('mouseleave', () => {
