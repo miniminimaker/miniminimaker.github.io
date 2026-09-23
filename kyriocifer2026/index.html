@@ -4,11 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Kyrio Cifer 2nd Anniversary 2026</title>
+    
+    <!-- Scripts & Fonts -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     
     <script>
@@ -22,7 +24,7 @@
                             pink: '#F43F5E',
                             lavender: '#A78BFA',
                             yellow: '#FBBF24',
-                            dark: '#030712',
+                            dark: '#0b101e',
                             glass: 'rgba(15, 23, 42, 0.65)'
                         }
                     },
@@ -41,39 +43,23 @@
             background-color: #030712;
         }
         
-        .leaflet-container { 
-            background: #030712 !important; 
-            outline: none;
-        }
+        .leaflet-container { background: #030712 !important; outline: none; }
         .leaflet-control-zoom {
-            border: none !important;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.5) !important;
-            border-radius: 12px !important;
-            overflow: hidden;
-            margin-bottom: 80px !important;
+            border: none !important; box-shadow: 0 4px 12px rgba(0,0,0,0.5) !important;
+            border-radius: 12px !important; overflow: hidden; margin-bottom: 80px !important;
         }
         .leaflet-control-zoom a {
-            background-color: rgba(15, 23, 42, 0.8) !important;
-            color: #fff !important;
-            border-color: rgba(255,255,255,0.1) !important;
-            backdrop-filter: blur(8px);
+            background-color: rgba(15, 23, 42, 0.8) !important; color: #fff !important;
+            border-color: rgba(255,255,255,0.1) !important; backdrop-filter: blur(8px);
         }
-        .leaflet-control-zoom a:hover {
-            background-color: rgba(30, 41, 59, 0.9) !important;
-        }
+        .leaflet-control-zoom a:hover { background-color: rgba(30, 41, 59, 0.9) !important; }
         
         .leaflet-tooltip.glass-tooltip {
-            background: rgba(15, 23, 42, 0.75);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.4);
-            padding: 8px 12px;
+            background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1); color: white; border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.4); padding: 8px 12px;
         }
-        .leaflet-tooltip-top.glass-tooltip:before {
-            border-top-color: rgba(15, 23, 42, 0.75);
-        }
+        .leaflet-tooltip-top.glass-tooltip:before { border-top-color: rgba(15, 23, 42, 0.75); }
 
         @keyframes heart-gentle-pulse {
             0%, 100% { transform: scale(1); filter: drop-shadow(0 0 8px rgba(251, 191, 36, 0.6)); }
@@ -82,15 +68,12 @@
 
         .city-heart-marker {
             animation: heart-gentle-pulse 2.5s infinite ease-in-out;
-            cursor: pointer;
-            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.3s ease;
-            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; display: flex; align-items: center; justify-content: center;
             color: #FBBF24; font-size: 22px; user-select: none; font-weight: 800;
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.3s ease;
         }
         .city-heart-marker:hover {
-            transform: scale(1.4) translateY(-2px); 
-            filter: drop-shadow(0 0 25px rgba(251, 191, 36, 1));
-            z-index: 1000 !important;
+            transform: scale(1.4) translateY(-2px); filter: drop-shadow(0 0 25px rgba(251, 191, 36, 1)); z-index: 1000 !important;
         }
 
         .no-scrollbar::-webkit-scrollbar { display: none; }
@@ -103,46 +86,102 @@
 
         .glow-text-pink { text-shadow: 0 0 24px rgba(244, 63, 94, 0.7); }
         .glass-panel {
-            background: var(--tw-colors-brand-glass);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
+            background: var(--tw-colors-brand-glass); backdrop-filter: blur(16px);
             border: 1px solid rgba(255, 255, 255, 0.08);
         }
+
+        /* 動畫設定 */
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-fade-in { animation: fadeIn 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards; opacity: 0; }
+        .delay-100 { animation-delay: 0.1s; }
+        .delay-300 { animation-delay: 0.3s; }
+        .delay-500 { animation-delay: 0.5s; }
+        .delay-700 { animation-delay: 0.7s; }
+        
+        @keyframes splashFadeOut { 
+            0% { opacity: 1; transform: scale(1); } 
+            100% { opacity: 0; transform: scale(1.05); pointer-events: none; visibility: hidden; } 
+        }
+        .splash-exit { animation: splashFadeOut 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
     </style>
 </head>
-<body class="h-full bg-night-bg text-night-text flex flex-col overflow-hidden">
+<body class="h-full bg-slate-950 flex flex-col overflow-hidden text-slate-100">
 
-    <header class="w-full bg-slate-900/90 backdrop-blur-xl border-b border-slate-700/60 z-50 shrink-0 py-5 sm:py-6 px-4 shadow-lg flex items-center justify-center pointer-events-auto">
-        <div class="flex flex-row items-center cursor-pointer transition-transform duration-300 hover:scale-[1.02]" onclick="returnToWorldView()">
-            
-            <div class="w-14 h-14 sm:w-[64px] sm:h-[64px] rounded-full bg-gradient-to-br from-slate-50 to-slate-200 flex items-center justify-center shadow-[0_0_15px_rgba(244,63,94,0.3)] shrink-0 p-1 relative">
+    <!-- 開場動畫 -->
+    <div id="splashScreen" class="fixed inset-0 z-[2000] bg-[#030712] flex flex-col items-center justify-center transition-all duration-1000 pointer-events-auto">
+        <div class="flex flex-col items-center justify-center space-y-6">
+            <!-- LOGO 發光進場 -->
+            <div class="w-24 h-24 rounded-full bg-gradient-to-br from-slate-50 to-slate-200 flex items-center justify-center shadow-[0_0_30px_rgba(244,63,94,0.4)] p-1.5 animate-fade-in delay-100 relative">
                 <div class="absolute inset-0 rounded-full border border-white/40"></div>
-                <img src="https://miniminimaker.github.io/kyriocifer2026/logo.png" alt="Kyrio Cifer Logo" class="w-full h-full object-contain rounded-full relative z-10">
+                <img src="https://miniminimaker.github.io/kyriocifer2026/logo.png" class="w-full h-full object-contain relative z-10 rounded-full">
             </div>
-
-            <div class="flex flex-col text-left ml-4 sm:ml-5 justify-center">
-                <p class="text-[8px] sm:text-[9.5px] text-brand-pink font-bold tracking-[0.35em] sm:tracking-[0.38em] uppercase mb-2 opacity-90 w-full">
+            
+            <!-- 文字依序進場 -->
+            <div class="text-center flex flex-col items-center mt-4">
+                <p class="text-[10px] text-brand-pink font-bold tracking-[0.4em] uppercase mb-3 animate-fade-in delay-300">
                     "I love you" in different languages
                 </p>
-                <h1 id="headerTitle" class="font-black text-[16px] sm:text-[19px] text-white tracking-widest uppercase leading-none mb-2.5">
+                <h1 class="font-black text-2xl tracking-widest text-white uppercase mb-3 animate-fade-in delay-500">
                     Kyrio Cifer 2nd Anniversary
                 </h1>
-                <p class="text-[10px] sm:text-[12px] text-slate-400 font-medium italic tracking-wider leading-none">
+                <p class="text-xs text-slate-400 font-medium italic tracking-widest animate-fade-in delay-700">
                     We Met Because of You, We Gather Because of Love.
                 </p>
             </div>
             
+            <!-- 下方裝飾線 -->
+            <div class="w-12 h-0.5 bg-brand-pink rounded-full mt-6 shadow-[0_0_10px_rgba(244,63,94,0.8)] animate-fade-in delay-700"></div>
+        </div>
+    </div>
+
+    <!-- 頂部滿寬橫幅 -->
+    <header class="w-full bg-[#0b101e] border-b border-white/5 z-50 shrink-0 py-5 sm:py-6 px-6 shadow-xl flex items-center justify-between relative shadow-black/50">
+        
+        <!-- 左側佔位符 (為了讓中央完美對齊) -->
+        <div class="flex-1 flex justify-start"></div>
+
+        <!-- 正中央標題區塊 -->
+        <div class="flex items-center justify-center cursor-pointer transition-transform hover:scale-[1.01] duration-300" onclick="returnToWorldView()">
+            <div class="w-[64px] h-[64px] rounded-full bg-gradient-to-br from-slate-50 to-slate-200 flex items-center justify-center p-1 relative shadow-[0_0_15px_rgba(244,63,94,0.25)] shrink-0">
+                <img src="https://miniminimaker.github.io/kyriocifer2026/logo.png" alt="Logo" class="w-full h-full object-contain relative z-10 rounded-full">
+            </div>
+            <div class="flex flex-col text-left ml-5 justify-center">
+                <p class="text-[9.5px] text-brand-pink font-bold tracking-[0.38em] uppercase mb-2 opacity-90 leading-none">
+                    "I love you" in different languages
+                </p>
+                <h1 class="font-black text-[22px] text-white tracking-wider uppercase leading-none mb-2.5 drop-shadow-sm">
+                    Kyrio Cifer 2nd Anniversary
+                </h1>
+                <p class="text-[12px] text-slate-400 font-medium italic tracking-wide leading-none">
+                    We Met Because of You, We Gather Because of Love.
+                </p>
+            </div>
+        </div>
+
+        <!-- 右側功能按鈕區 -->
+        <div class="flex-1 flex justify-end gap-3 sm:gap-4">
+            <button onclick="openGuide()" class="flex items-center justify-center gap-2 px-3 sm:px-4 py-2 bg-white/5 hover:bg-brand-pink/20 border border-white/10 rounded-full text-slate-300 hover:text-white transition-all duration-300 group shadow-glass">
+                <i class="fa-solid fa-circle-question group-hover:text-brand-pink transition-colors text-sm"></i>
+                <span class="text-[10px] font-bold uppercase tracking-wider hidden sm:block">Guide</span>
+            </button>
+            <button onclick="togglePeopleList()" class="flex items-center justify-center gap-2 px-3 sm:px-4 py-2 bg-white/5 hover:bg-brand-pink/20 border border-white/10 rounded-full text-slate-300 hover:text-white transition-all duration-300 group shadow-glass">
+                <i class="fa-solid fa-address-book group-hover:text-brand-pink transition-colors text-sm"></i>
+                <span class="text-[10px] font-bold uppercase tracking-wider hidden sm:block">Voices</span>
+            </button>
         </div>
     </header>
 
-    <main class="flex-1 relative overflow-hidden flex flex-col">
+    <main class="flex-1 relative overflow-hidden flex flex-col w-full bg-[#030712]">
+        
         <div id="map" class="w-full h-full absolute inset-0 z-10"></div>
 
-        <div id="breadcrumbOverlay" class="absolute top-4 sm:top-5 left-4 sm:left-6 z-20 pointer-events-auto transition-opacity duration-300">
+        <!-- 麵包屑導航 (左上角) -->
+        <div id="breadcrumbOverlay" class="absolute top-4 sm:top-6 left-4 sm:left-6 z-20 pointer-events-auto transition-opacity duration-300">
             <div id="breadcrumbTrail" class="glass-panel shadow-glass rounded-full px-4 py-2 flex items-center space-x-2 text-[11px] font-semibold tracking-wide">
             </div>
         </div>
 
+        <!-- 城市氣泡卡片 -->
         <div id="cityPopupCard" class="absolute z-30 glass-panel shadow-glass rounded-[24px] p-1 w-[320px] hidden transform -translate-x-1/2 -translate-y-full mb-6 pointer-events-auto transition-all duration-300 opacity-0 scale-95 origin-bottom">
             <div class="absolute -bottom-3 left-1/2 transform -translate-x-1/2 flex items-start justify-center w-6 h-4 overflow-hidden">
                 <div class="w-4 h-4 bg-slate-900/80 backdrop-blur-xl border-r border-b border-white/10 transform rotate-45 -translate-y-2.5 rounded-sm"></div>
@@ -151,14 +190,14 @@
             <div class="bg-gradient-to-b from-white/[0.05] to-transparent rounded-[20px] p-5">
                 <div class="flex justify-between items-center mb-3">
                     <div class="flex space-x-2">
-                        <button onclick="returnToWorldView()" class="w-8 h-8 rounded-full bg-white/5 hover:bg-white/10 border border-white/5 hover:border-white/20 flex items-center justify-center text-slate-400 hover:text-white transition duration-200" title="Back to World">
+                        <button onclick="returnToWorldView()" class="w-8 h-8 rounded-full bg-white/5 hover:bg-white/10 border border-white/5 hover:border-white/20 flex items-center justify-center text-slate-400 hover:text-white transition duration-200">
                             <i class="fa-solid fa-earth-americas text-[11px]"></i>
                         </button>
-                        <button onclick="flyToCountry(activeCityForBubble?.country_id)" class="w-8 h-8 rounded-full bg-white/5 hover:bg-white/10 border border-white/5 hover:border-white/20 flex items-center justify-center text-slate-400 hover:text-white transition duration-200" title="Back to Country">
+                        <button onclick="flyToCountry(activeCityForBubble?.country_id)" class="w-8 h-8 rounded-full bg-white/5 hover:bg-white/10 border border-white/5 hover:border-white/20 flex items-center justify-center text-slate-400 hover:text-white transition duration-200">
                             <i class="fa-solid fa-arrow-left text-[11px]"></i>
                         </button>
                     </div>
-                    <button onclick="closeCityPopup()" class="w-8 h-8 rounded-full bg-white/5 hover:bg-brand-pink/20 hover:text-brand-pink border border-white/5 hover:border-brand-pink/30 flex items-center justify-center text-slate-400 transition duration-200" title="Close">
+                    <button onclick="closeCityPopup()" class="w-8 h-8 rounded-full bg-white/5 hover:bg-brand-pink/20 hover:text-brand-pink border border-white/5 hover:border-brand-pink/30 flex items-center justify-center text-slate-400 transition duration-200">
                         <i class="fa-solid fa-xmark text-sm"></i>
                     </button>
                 </div>
@@ -167,13 +206,9 @@
                     <div class="text-[9px] text-brand-yellow font-bold uppercase tracking-[0.2em] mb-2 bg-brand-yellow/10 px-2 py-0.5 rounded-sm">
                         <span id="popupLocation">COUNTRY • CITY</span>
                     </div>
-                    
                     <div id="popupLovePhrase" class="text-4xl font-extrabold text-white glow-text-pink mb-1 tracking-tight">我愛你</div>
                     <div id="popupRomanization" class="text-xs font-medium text-slate-400 mb-3 tracking-widest uppercase">Wǒ ài nǐ</div>
-                    
-                    <div id="popupLanguageTag" class="bg-white/5 border border-white/10 rounded-full px-4 py-1 text-[10px] text-slate-300 font-semibold tracking-wider">
-                        Mandarin
-                    </div>
+                    <div id="popupLanguageTag" class="bg-white/5 border border-white/10 rounded-full px-4 py-1 text-[10px] text-slate-300 font-semibold tracking-wider">Mandarin</div>
                 </div>
 
                 <div id="popupPeopleList" class="flex flex-col gap-2 mt-4 max-h-[180px] overflow-y-auto custom-scrollbar pr-1">
@@ -181,20 +216,92 @@
             </div>
         </div>
 
-        <div class="absolute bottom-7 sm:bottom-9 inset-x-0 z-20 flex justify-center pointer-events-none px-4">
-            <div class="glass-panel shadow-glass rounded-full py-2 px-3 overflow-hidden pointer-events-auto max-w-4xl w-full relative">
+        <!-- 下方跑馬燈 與 版權宣告 -->
+        <div class="absolute bottom-6 sm:bottom-8 inset-x-0 z-20 flex flex-col items-center pointer-events-none px-4">
+            
+            <!-- 國家跑馬燈 -->
+            <div class="glass-panel shadow-glass rounded-full py-1.5 px-3 overflow-hidden pointer-events-auto max-w-4xl w-full relative mb-3">
                 <div class="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-[rgba(15,23,42,0.8)] to-transparent z-10 pointer-events-none rounded-l-full"></div>
                 <div class="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-[rgba(15,23,42,0.8)] to-transparent z-10 pointer-events-none rounded-r-full"></div>
-                
-                <div id="countryCarousel" class="flex items-center py-1 overflow-x-auto no-scrollbar cursor-grab active:cursor-grabbing w-full">
+                <div id="countryCarousel" class="flex items-center py-1 overflow-x-auto no-scrollbar cursor-grab active:cursor-grabbing w-full"></div>
+            </div>
+
+            <!-- 版權宣告 -->
+            <div class="pointer-events-auto text-[10px] text-slate-500/70 tracking-widest font-medium text-center">
+                © <a href="https://x.com/miniminimaker" target="_blank" class="hover:text-brand-pink transition-colors duration-300">miniminimaker</a>
+            </div>
+        </div>
+    </main>
+
+    <!-- 使用指南彈窗 (Guide Modal) -->
+    <div id="guideModal" class="fixed inset-0 z-[1000] hidden items-center justify-center pointer-events-auto">
+        <div class="absolute inset-0 bg-[#030712]/70 backdrop-blur-sm transition-opacity" onclick="closeGuide()"></div>
+        
+        <div id="guideContent" class="glass-panel shadow-2xl rounded-[28px] p-6 sm:p-8 max-w-md w-[90%] relative transform scale-95 opacity-0 transition-all duration-300 flex flex-col border border-white/10">
+            <div class="flex justify-between items-center mb-6 border-b border-white/10 pb-4">
+                <h2 class="text-white font-black text-sm sm:text-base tracking-widest uppercase flex items-center gap-2">
+                    <i class="fa-solid fa-map-location-dot text-brand-yellow"></i> How to Explore
+                </h2>
+                <button onclick="closeGuide()" class="w-8 h-8 rounded-full bg-white/5 hover:bg-brand-pink/20 border border-white/10 hover:border-brand-pink flex items-center justify-center text-slate-400 hover:text-white transition duration-200">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            
+            <div class="space-y-4 text-sm text-slate-300 font-medium">
+                <div class="flex items-start gap-4 p-3 rounded-2xl bg-white/[0.03] border border-white/5 hover:border-white/10 transition-colors">
+                    <div class="w-8 h-8 rounded-full bg-brand-yellow/10 flex items-center justify-center shrink-0 mt-0.5 border border-brand-yellow/20">
+                        <span class="text-brand-yellow font-black text-lg leading-none">♥</span>
+                    </div>
+                    <div>
+                        <span class="text-white font-bold block mb-1 text-[13px] uppercase tracking-wide">Click the Hearts</span>
+                        <span class="text-xs text-slate-400">Click on the glowing hearts on the map to discover the city and voices.</span>
+                    </div>
+                </div>
+                <div class="flex items-start gap-4 p-3 rounded-2xl bg-white/[0.03] border border-white/5 hover:border-white/10 transition-colors">
+                    <div class="w-8 h-8 rounded-full bg-brand-pink/10 flex items-center justify-center shrink-0 mt-0.5 border border-brand-pink/20">
+                        <i class="fa-solid fa-play text-brand-pink text-xs ml-0.5"></i>
+                    </div>
+                    <div>
+                        <span class="text-white font-bold block mb-1 text-[13px] uppercase tracking-wide">Play the Voices</span>
+                        <span class="text-xs text-slate-400">Inside the popup, click the play button to hear "I love you" in their language.</span>
+                    </div>
+                </div>
+                <div class="flex items-start gap-4 p-3 rounded-2xl bg-white/[0.03] border border-white/5 hover:border-white/10 transition-colors">
+                    <div class="w-8 h-8 rounded-full bg-blue-400/10 flex items-center justify-center shrink-0 mt-0.5 border border-blue-400/20">
+                        <i class="fa-solid fa-left-right text-blue-400 text-xs"></i>
+                    </div>
+                    <div>
+                        <span class="text-white font-bold block mb-1 text-[13px] uppercase tracking-wide">Explore Countries</span>
+                        <span class="text-xs text-slate-400">Drag or swipe the bottom carousel to quickly browse and fly to different countries.</span>
+                    </div>
+                </div>
+                <div class="flex items-start gap-4 p-3 rounded-2xl bg-white/[0.03] border border-white/5 hover:border-white/10 transition-colors">
+                    <div class="w-8 h-8 rounded-full bg-brand-lavender/10 flex items-center justify-center shrink-0 mt-0.5 border border-brand-lavender/20">
+                        <i class="fa-solid fa-address-book text-brand-lavender text-xs"></i>
+                    </div>
+                    <div>
+                        <span class="text-white font-bold block mb-1 text-[13px] uppercase tracking-wide">All Participants</span>
+                        <span class="text-xs text-slate-400">Click "VOICES" on the top right to see the full list and instantly jump to their location.</span>
+                    </div>
                 </div>
             </div>
         </div>
+    </div>
 
-        <div class="absolute bottom-1.5 sm:bottom-2 left-1/2 transform -translate-x-1/2 z-20 pointer-events-auto text-[10px] sm:text-[11px] text-slate-500/70 tracking-widest font-medium text-center w-full">
-            © <a href="https://x.com/miniminimaker" target="_blank" class="text-brand-pink hover:text-pink-400 font-semibold transition-colors duration-300">miniminimaker</a>
+    <!-- 所有聲音名單側邊欄 -->
+    <div id="peopleSidebar" class="fixed top-[104px] sm:top-[112px] right-0 h-[calc(100%-104px)] sm:h-[calc(100%-112px)] w-[300px] sm:w-[360px] bg-[#0b101e]/95 backdrop-blur-2xl border-l border-white/10 z-[100] transform translate-x-full transition-transform duration-500 flex flex-col shadow-2xl pointer-events-auto">
+        <div class="flex justify-between items-center px-6 py-6 border-b border-white/10 shrink-0">
+            <div>
+                <h2 class="text-white font-black text-[16px] tracking-widest uppercase">All Voices</h2>
+                <p class="text-brand-pink text-[9px] font-bold tracking-[0.25em] uppercase mt-1" id="totalVoicesCount">0 Participants</p>
+            </div>
+            <button onclick="togglePeopleList()" class="w-8 h-8 rounded-full bg-white/5 hover:bg-brand-pink/20 border border-white/10 hover:border-brand-pink flex items-center justify-center text-slate-400 hover:text-white transition duration-200">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
         </div>
-    </main>
+        <div id="allPeopleSidebarList" class="flex-1 overflow-y-auto custom-scrollbar p-4 space-y-2 pb-24">
+        </div>
+    </div>
 
     <script>
         const YOUR_SUPABASE_URL = 'https://sxuwpcvdnbzettdmrclo.supabase.co';
@@ -205,9 +312,7 @@
             if (typeof supabase !== 'undefined' && YOUR_SUPABASE_URL && YOUR_SUPABASE_ANON_KEY) {
                 supabaseClient = supabase.createClient(YOUR_SUPABASE_URL, YOUR_SUPABASE_ANON_KEY);
             }
-        } catch (e) {
-            console.warn('Supabase initialization failed:', e);
-        }
+        } catch (e) { console.warn('Supabase init failed:', e); }
 
         const demoData = {
             countries: [
@@ -226,9 +331,9 @@
                 { id: 'l_fr', name: 'French', native_name: 'Français', love_phrase: 'Je t\'aime', romanization: 'Je t\'aime' }
             ],
             people: [
-                { id: 'p1', name: 'MINI (Connecting...)', avatar_url: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&q=80', country_id: 'c_tw', city_id: 'ci_taipei', language_id: 'l_mandarin', active: true },
-                { id: 'p2', name: 'Sakura', avatar_url: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&q=80', country_id: 'c_jp', city_id: 'ci_tokyo', language_id: 'l_jp', active: true },
-                { id: 'p3', name: 'Camille', avatar_url: 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=150&q=80', country_id: 'c_fr', city_id: 'ci_paris', language_id: 'l_fr', active: true }
+                { id: 'p1', name: 'MINI (Connecting...)', avatar_url: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150', country_id: 'c_tw', city_id: 'ci_taipei', language_id: 'l_mandarin', active: true },
+                { id: 'p2', name: 'Sakura', avatar_url: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150', country_id: 'c_jp', city_id: 'ci_tokyo', language_id: 'l_jp', active: true },
+                { id: 'p3', name: 'Camille', avatar_url: 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=150', country_id: 'c_fr', city_id: 'ci_paris', language_id: 'l_fr', active: true }
             ]
         };
 
@@ -242,8 +347,100 @@
         let currentAudioPlayer = null;
         let currentActiveBtnId = null;
         let currentActiveIconId = null;
+        
         let autoScrollInterval = null;
         let isCarouselHovered = false;
+        let isPeopleListOpen = false;
+
+        function togglePeopleList() {
+            const sidebar = document.getElementById('peopleSidebar');
+            isPeopleListOpen = !isPeopleListOpen;
+            if (isPeopleListOpen) {
+                sidebar.classList.remove('translate-x-full');
+                renderAllPeopleList();
+            } else {
+                sidebar.classList.add('translate-x-full');
+            }
+        }
+
+        function openGuide() {
+            const modal = document.getElementById('guideModal');
+            const content = document.getElementById('guideContent');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            void modal.offsetWidth; 
+            content.classList.remove('scale-95', 'opacity-0');
+            content.classList.add('scale-100', 'opacity-100');
+        }
+
+        function closeGuide() {
+            const modal = document.getElementById('guideModal');
+            const content = document.getElementById('guideContent');
+            content.classList.remove('scale-100', 'opacity-100');
+            content.classList.add('scale-95', 'opacity-0');
+            setTimeout(() => {
+                modal.classList.remove('flex');
+                modal.classList.add('hidden');
+            }, 300);
+        }
+
+        function renderAllPeopleList() {
+            const container = document.getElementById('allPeopleSidebarList');
+            const activePeople = appData.people.filter(p => p.active);
+            document.getElementById('totalVoicesCount').innerText = `${activePeople.length} PARTICIPANTS`;
+
+            const groupedByCountry = {};
+            activePeople.forEach(p => {
+                if (!groupedByCountry[p.country_id]) groupedByCountry[p.country_id] = [];
+                groupedByCountry[p.country_id].push(p);
+            });
+
+            let html = '';
+            for (const countryId in groupedByCountry) {
+                const country = appData.countries.find(c => c.id === countryId);
+                const countryName = country ? (country.name_en || country.name) : 'Unknown';
+                const flag = country ? country.flag : '🌍';
+
+                html += `
+                    <div class="mb-5">
+                        <div class="flex items-center gap-2 mb-2 px-1">
+                            <span class="text-base">${flag}</span>
+                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em]">${countryName}</span>
+                            <div class="h-[1px] bg-white/10 flex-1 ml-2"></div>
+                        </div>
+                        <div class="flex flex-col gap-1.5">
+                `;
+                groupedByCountry[countryId].forEach(p => {
+                    const city = appData.cities.find(c => c.id === p.city_id);
+                    const cityName = city ? (city.name_en || city.name) : 'Unknown City';
+                    html += `
+                        <div class="flex items-center justify-between p-2.5 rounded-xl bg-white/[0.03] hover:bg-white/[0.08] border border-transparent hover:border-white/10 transition-all cursor-pointer group"
+                             onclick="flyToPerson('${p.city_id}')">
+                            <div class="flex items-center gap-3">
+                                <img src="${p.avatar_url}" class="w-9 h-9 rounded-full object-cover border border-slate-700 group-hover:border-brand-pink transition-colors shrink-0" onerror="this.src='https://placehold.co/100x100/1e293b/f43f5e?text=U'">
+                                <div class="flex flex-col overflow-hidden">
+                                    <span class="text-[13px] font-bold text-slate-200 group-hover:text-white transition-colors truncate">${p.name}</span>
+                                    <span class="text-[9px] text-slate-500 uppercase tracking-wider truncate">${cityName}</span>
+                                </div>
+                            </div>
+                            <div class="w-6 h-6 rounded-full bg-white/5 group-hover:bg-brand-pink/20 flex items-center justify-center transition-colors shrink-0">
+                                <i class="fa-solid fa-location-arrow text-slate-500 group-hover:text-brand-pink text-[9px] transform -rotate-45 transition-colors"></i>
+                            </div>
+                        </div>
+                    `;
+                });
+                html += `</div></div>`;
+            }
+            container.innerHTML = html;
+        }
+
+        function flyToPerson(cityId) {
+            const city = appData.cities.find(c => c.id === cityId);
+            if (!city) return;
+            const cityPeople = appData.people.filter(p => p.active && p.city_id === cityId);
+            if (isPeopleListOpen) togglePeopleList();
+            handleCityClick(city, cityPeople);
+        }
 
         async function initMap() {
             map = L.map('map', {
@@ -252,11 +449,9 @@
                 zoomAnimation: true, fadeAnimation: true, markerZoomAnimation: true
             }).setView([20.0, 0.0], 3);
 
-            window.nightTileLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}', { 
-                maxZoom: 16, minZoom: 3, noWrap: true,
-                className: 'map-tiles'
-            });
-            window.nightTileLayer.addTo(map);
+            L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}', { 
+                maxZoom: 16, minZoom: 3, noWrap: true 
+            }).addTo(map);
 
             L.control.zoom({ position: 'bottomright' }).addTo(map);
             markersLayer.addTo(map);
@@ -267,9 +462,7 @@
             updateBreadcrumb();
 
             map.on('move zoom', updateBubblePosition);
-            map.on('click', () => {
-                if (activeCityForBubble) closeCityPopup();
-            });
+            map.on('click', () => { if (activeCityForBubble) closeCityPopup(); });
             
             setInterval(fetchAppDataSilent, 15000);
         }
@@ -279,20 +472,14 @@
                 if (person.country_id && !person.city_id) {
                     const virtualCityId = 'virtual_city_' + person.country_id;
                     let virtualCity = appData.cities.find(c => c.id === virtualCityId);
-                    
                     if (!virtualCity) {
                         const country = appData.countries.find(c => c.id === person.country_id);
                         if (country) {
-                            const lat = (country.latitude !== null && country.latitude !== undefined) ? country.latitude : 0;
-                            const lng = (country.longitude !== null && country.longitude !== undefined) ? country.longitude : 0;
-                            
                             virtualCity = {
-                                id: virtualCityId,
-                                country_id: country.id,
-                                name: 'Somewhere in ' + (country.name_en || country.name || 'Country'),
-                                name_en: 'Somewhere in ' + (country.name_en || country.name || 'Country'),
-                                latitude: lat,
-                                longitude: lng
+                                id: virtualCityId, country_id: country.id,
+                                name: 'Somewhere in ' + (country.name_en || country.name),
+                                name_en: 'Somewhere in ' + (country.name_en || country.name),
+                                latitude: country.latitude || 0, longitude: country.longitude || 0
                             };
                             appData.cities.push(virtualCity);
                         }
@@ -311,21 +498,18 @@
                     supabaseClient.from('languages').select('*'),
                     supabaseClient.from('people').select('*')
                 ]);
-                
                 if (coRes.data?.length) appData.countries = coRes.data;
                 if (ciRes.data?.length) appData.cities = ciRes.data;
                 if (lRes.data?.length) appData.languages = lRes.data;
                 if (pRes.data?.length) appData.people = pRes.data;
-                
                 preprocessData();
-            } catch (err) { console.log('Data fetch err:', err); }
+            } catch (err) {}
         }
 
         async function fetchAppDataSilent() {
             await fetchAppData();
-            if (currentMapLevel === 'world') {
-                renderWorldView();
-            } else if (currentMapLevel === 'city' && activeCityForBubble) {
+            if (currentMapLevel === 'world') { renderWorldView(); }
+            else if (currentMapLevel === 'city' && activeCityForBubble) {
                 const updatedCity = appData.cities.find(c => c.id === activeCityForBubble.id);
                 if (updatedCity) {
                     const cityPeople = appData.people.filter(p => p.active && p.city_id === updatedCity.id);
@@ -338,31 +522,26 @@
         function createMarker(city, country, cityPeople) {
             const cityName = city.name_en || city.name;
             const countryName = country ? (country.name_en || country.name) : '';
-            const heartHtml = `<div class="city-heart-marker" title="${cityName}">♥</div>`;
-            const icon = L.divIcon({ className: 'bg-transparent border-0', html: heartHtml, iconSize: [32, 32], iconAnchor: [16, 16] });
+            const html = `<div class="city-heart-marker" title="${cityName}">♥</div>`;
+            const icon = L.divIcon({ className: 'bg-transparent border-0', html: html, iconSize: [32, 32], iconAnchor: [16, 16] });
             const marker = L.marker([city.latitude, city.longitude], { icon });
 
             marker.bindTooltip(`
                 <div class="font-sans flex flex-col items-center">
                     <div class="font-bold text-white text-[13px] tracking-wide mb-0.5">${cityName}</div>
                     <div class="text-slate-300 text-[10px] uppercase tracking-widest font-medium">${country ? country.flag + ' ' + countryName : ''}</div>
-                    <div class="text-brand-pink text-[10px] font-bold mt-1 bg-brand-pink/10 px-2 py-0.5 rounded-full">${cityPeople.length} Kaleidoscope Here${cityPeople.length>1?'s':''}</div>
+                    <div class="text-brand-pink text-[10px] font-bold mt-1 bg-brand-pink/10 px-2 py-0.5 rounded-full">${cityPeople.length} Voice${cityPeople.length>1?'s':''}</div>
                 </div>
-            `, { direction: 'top', offset: [0, -10], className: 'glass-tooltip', opacity: 1 });
+            `, { direction: 'top', offset: [0, -10], className: 'glass-tooltip' });
 
-            marker.on('click', (e) => {
-                L.DomEvent.stopPropagation(e);
-                handleCityClick(city, cityPeople);
-            });
+            marker.on('click', (e) => { L.DomEvent.stopPropagation(e); handleCityClick(city, cityPeople); });
             return marker;
         }
 
         function renderWorldView() {
             markersLayer.clearLayers();
-            currentMapLevel = 'world';
-            activeCountryId = null;
-            closeCityPopup();
-            updateBreadcrumb();
+            currentMapLevel = 'world'; activeCountryId = null;
+            closeCityPopup(); updateBreadcrumb();
 
             const activePeople = appData.people.filter(p => p.active);
             const activeCityIds = new Set(activePeople.map(p => p.city_id));
@@ -371,9 +550,7 @@
                 if (!activeCityIds.has(city.id)) return;
                 const country = appData.countries.find(c => c.id === city.country_id);
                 const cityPeople = activePeople.filter(p => p.city_id === city.id);
-                if (cityPeople.length === 0) return;
-                
-                markersLayer.addLayer(createMarker(city, country, cityPeople));
+                if (cityPeople.length > 0) markersLayer.addLayer(createMarker(city, country, cityPeople));
             });
         }
 
@@ -382,10 +559,8 @@
             const country = appData.countries.find(c => c.id === countryId);
             if (!country) return;
 
-            currentMapLevel = 'country';
-            activeCountryId = country.id;
-            closeCityPopup();
-            updateBreadcrumb();
+            currentMapLevel = 'country'; activeCountryId = country.id;
+            closeCityPopup(); updateBreadcrumb();
 
             const activePeople = appData.people.filter(p => p.active && p.country_id === countryId);
             const countryCityIds = new Set(activePeople.map(p => p.city_id));
@@ -393,46 +568,32 @@
 
             if (activeCities.length > 0) {
                 const bounds = L.latLngBounds(activeCities.map(c => [c.latitude, c.longitude]));
-                map.flyToBounds(bounds, { padding: [100, 100], maxZoom: 6, duration: 1.5, easeLinearity: 0.25 });
+                map.flyToBounds(bounds, { padding: [100, 100], maxZoom: 6, duration: 1.5 });
             }
 
             markersLayer.clearLayers();
             activeCities.forEach(city => {
                 const cityPeople = activePeople.filter(p => p.city_id === city.id);
-                if (cityPeople.length === 0) return;
-                markersLayer.addLayer(createMarker(city, country, cityPeople));
+                if (cityPeople.length > 0) markersLayer.addLayer(createMarker(city, country, cityPeople));
             });
         }
 
         function handleCityClick(city, cityPeople) {
-            currentMapLevel = 'city';
-            activeCityForBubble = city;
+            currentMapLevel = 'city'; activeCityForBubble = city;
             updateBreadcrumb();
-            
-            const targetLatLng = L.latLng(city.latitude, city.longitude);
-            map.flyTo(targetLatLng, 10, { duration: 1.2, easeLinearity: 0.25 });
-            
-            setTimeout(() => {
-                showCityPopup(city, cityPeople);
-            }, 600);
+            map.flyTo([city.latitude, city.longitude], 10, { duration: 1.2 });
+            setTimeout(() => showCityPopup(city, cityPeople), 600);
         }
 
         function showCityPopup(city, people, isSilent = false) {
             activeCityForBubble = city;
-            
             const country = appData.countries.find(c => c.id === city.country_id);
-            const cityName = city.name_en || city.name || '';
-            const countryName = country ? (country.name_en || country.name) : '';
-            
             const lang = appData.languages.find(l => l.id === people[0].language_id);
-            const lovePhrase = lang ? (lang.love_phrase || lang.native_name) : 'I love you';
-            const romanization = lang ? (lang.romanization || '') : '';
-            const langName = lang ? (lang.name_en || lang.name || 'Language') : 'Language';
 
-            document.getElementById('popupLocation').innerText = `${countryName} • ${cityName}`;
-            document.getElementById('popupLovePhrase').innerText = lovePhrase;
-            document.getElementById('popupRomanization').innerText = romanization;
-            document.getElementById('popupLanguageTag').innerText = langName;
+            document.getElementById('popupLocation').innerText = `${country ? country.name_en : ''} • ${city.name_en || city.name}`;
+            document.getElementById('popupLovePhrase').innerText = lang ? (lang.love_phrase || lang.native_name) : 'I love you';
+            document.getElementById('popupRomanization').innerText = lang ? lang.romanization || '' : '';
+            document.getElementById('popupLanguageTag').innerText = lang ? (lang.name_en || lang.name) : 'Language';
 
             const listContainer = document.getElementById('popupPeopleList');
             if (!isSilent) listContainer.innerHTML = ''; 
@@ -445,12 +606,12 @@
                 
                 if (hasAudio) {
                     newHtml += `
-                        <div class="flex items-center justify-between bg-white/[0.03] p-2.5 rounded-2xl hover:bg-white/[0.08] border border-transparent hover:border-white/10 transition-all duration-300 cursor-pointer group" onclick="playPersonAudio('${audioUrl}', 'playBtn_${p.id}', 'playIcon_${p.id}')">
+                        <div class="flex items-center justify-between bg-white/[0.03] p-2.5 rounded-2xl hover:bg-white/[0.08] border border-transparent hover:border-white/10 transition-all cursor-pointer group" onclick="playPersonAudio('${audioUrl}', 'playBtn_${p.id}', 'playIcon_${p.id}')">
                             <div class="flex items-center space-x-3 overflow-hidden">
-                                <img src="${p.avatar_url}" class="w-9 h-9 rounded-full object-cover border border-white/20 group-hover:border-brand-pink transition-colors duration-300 shadow-sm shrink-0" onerror="this.src='https://placehold.co/100x100/1e293b/f43f5e?text=U'">
+                                <img src="${p.avatar_url}" class="w-9 h-9 rounded-full object-cover border border-white/20 group-hover:border-brand-pink transition-colors shrink-0" onerror="this.src='https://placehold.co/100x100/1e293b/f43f5e?text=U'">
                                 <div class="text-[13px] font-semibold text-slate-200 group-hover:text-white transition-colors truncate">${p.name}</div>
                             </div>
-                            <button id="playBtn_${p.id}" class="w-8 h-8 rounded-full bg-white/5 group-hover:bg-brand-pink border border-white/10 group-hover:border-brand-pink flex items-center justify-center transition-all duration-300 shrink-0 shadow-inner ml-2">
+                            <button id="playBtn_${p.id}" class="w-8 h-8 rounded-full bg-white/5 group-hover:bg-brand-pink border border-white/10 group-hover:border-brand-pink flex items-center justify-center transition-all shrink-0 ml-2">
                                 <i id="playIcon_${p.id}" class="fa-solid fa-play text-slate-300 group-hover:text-white ml-0.5 text-[10px] transition-colors"></i>
                             </button>
                         </div>
@@ -483,87 +644,56 @@
             const card = document.getElementById('cityPopupCard');
             card.classList.remove('opacity-100', 'scale-100');
             card.classList.add('opacity-0', 'scale-95');
-            setTimeout(() => {
-                card.classList.add('hidden');
-            }, 300);
+            setTimeout(() => card.classList.add('hidden'), 300);
             resetAudioState();
         }
 
-        function playPersonAudio(audioUrl, btnId, iconId) {
-            if (!audioUrl || audioUrl === 'undefined') return;
-
-            if (currentActiveBtnId === btnId && currentAudioPlayer) {
-                resetAudioState();
-                return;
-            }
+        function playPersonAudio(url, btnId, iconId) {
+            if (!url || url === 'undefined') return;
+            if (currentActiveBtnId === btnId && currentAudioPlayer) return resetAudioState();
 
             resetAudioState(); 
-
-            currentAudioPlayer = new Audio(audioUrl);
+            currentAudioPlayer = new Audio(url);
             currentActiveBtnId = btnId;
             currentActiveIconId = iconId;
 
             const btn = document.getElementById(btnId);
             const icon = document.getElementById(iconId);
-
-            if (btn) {
-                btn.classList.replace('bg-brand-pink', 'bg-white');
-                btn.classList.add('animate-pulse', 'shadow-glow-pink');
-            }
+            if (btn) btn.classList.add('bg-white', 'animate-pulse', 'shadow-glow-pink');
             if (icon) icon.className = 'fa-solid fa-pause text-brand-pink text-[10px]';
 
-            currentAudioPlayer.play().catch(e => {
-                console.warn('Audio play failed:', e);
-                resetAudioState();
-            });
-
+            currentAudioPlayer.play().catch(e => resetAudioState());
             currentAudioPlayer.onended = resetAudioState;
             currentAudioPlayer.onerror = resetAudioState;
         }
 
         function resetAudioState() {
-            if (currentAudioPlayer) {
-                currentAudioPlayer.pause();
-                currentAudioPlayer = null;
-            }
+            if (currentAudioPlayer) { currentAudioPlayer.pause(); currentAudioPlayer = null; }
             if (currentActiveBtnId) {
                 const btn = document.getElementById(currentActiveBtnId);
                 const icon = document.getElementById(currentActiveIconId);
-                
-                if (btn) {
-                    btn.classList.remove('animate-pulse', 'shadow-glow-pink', 'bg-white');
-                    btn.classList.add('bg-brand-pink');
-                }
+                if (btn) btn.classList.remove('bg-white', 'animate-pulse', 'shadow-glow-pink');
                 if (icon) icon.className = 'fa-solid fa-play text-slate-300 group-hover:text-white ml-0.5 text-[10px] transition-colors';
-                
-                currentActiveBtnId = null;
-                currentActiveIconId = null;
+                currentActiveBtnId = currentActiveIconId = null;
             }
         }
 
         function returnToWorldView() {
-            closeCityPopup();
-            currentMapLevel = 'world';
-            activeCityForBubble = null;
-            activeCountryId = null;
-            map.flyTo([20.0, 0.0], 3, { duration: 1.5, easeLinearity: 0.25 });
+            closeCityPopup(); currentMapLevel = 'world'; activeCityForBubble = activeCountryId = null;
+            map.flyTo([20.0, 0.0], 3, { duration: 1.5 });
             renderWorldView();
         }
 
         function positionElementOverCity(element, lat, lng) {
             if (!map) return;
-            const latLng = L.latLng(lat, lng);
-            const point = map.latLngToContainerPoint(latLng);
-            element.style.left = `${point.x}px`;
-            element.style.top = `${point.y - 16}px`;
+            const point = map.latLngToContainerPoint(L.latLng(lat, lng));
+            element.style.left = `${point.x}px`; element.style.top = `${point.y - 16}px`;
         }
 
         function updateBubblePosition() {
             if (!activeCityForBubble) return;
             const card = document.getElementById('cityPopupCard');
-            if (!card.classList.contains('hidden')) {
-                positionElementOverCity(card, activeCityForBubble.latitude, activeCityForBubble.longitude);
-            }
+            if (!card.classList.contains('hidden')) positionElementOverCity(card, activeCityForBubble.latitude, activeCityForBubble.longitude);
         }
 
         function updateBreadcrumb() {
@@ -572,19 +702,14 @@
             if (!trail) return;
 
             if (currentMapLevel === 'world') {
-                container.style.opacity = '0';
-                container.style.pointerEvents = 'none';
+                container.style.opacity = '0'; container.style.pointerEvents = 'none';
             } else {
-                container.style.opacity = '1';
-                container.style.pointerEvents = 'auto';
-                const targetCountryId = currentMapLevel === 'city' ? activeCityForBubble?.country_id : activeCountryId;
-                const country = appData.countries.find(c => c.id === targetCountryId);
-                const countryName = country ? (country.name_en || country.name) : 'Country';
-                
+                container.style.opacity = '1'; container.style.pointerEvents = 'auto';
+                const c = appData.countries.find(c => c.id === (currentMapLevel === 'city' ? activeCityForBubble?.country_id : activeCountryId));
                 trail.innerHTML = `
                     <button onclick="returnToWorldView()" class="text-slate-400 hover:text-white transition-colors flex items-center gap-1.5"><i class="fa-solid fa-earth-americas text-[10px]"></i></button>
                     <span class="text-slate-600">/</span>
-                    <button onclick="flyToCountry('${country?.id}')" class="text-white font-bold hover:text-brand-pink transition-colors">${country ? country.flag + ' ' + countryName : 'Country'}</button>
+                    <button onclick="flyToCountry('${c?.id}')" class="text-white font-bold hover:text-brand-pink transition-colors">${c ? c.flag + ' ' + (c.name_en || c.name) : 'Country'}</button>
                 `;
             }
         }
@@ -595,99 +720,74 @@
             
             let baseCountries = [...appData.countries];
             if (baseCountries.length > 0) {
-                while (baseCountries.length < 15) {
-                    baseCountries = [...baseCountries, ...appData.countries];
-                }
+                while (baseCountries.length < 15) baseCountries = [...baseCountries, ...appData.countries];
             }
             
             const group = document.createElement('div');
             group.className = 'flex items-center space-x-3 pr-3 shrink-0';
             
             baseCountries.forEach(country => {
-                const countryName = country.name_en || country.name;
                 const btn = document.createElement('button');
                 btn.className = 'flex items-center space-x-2 px-4 py-1.5 bg-white/[0.03] hover:bg-white/10 border border-white/5 hover:border-white/20 rounded-full text-[11px] font-bold text-slate-300 hover:text-white shrink-0 transition-all duration-300 cursor-pointer group';
-                btn.innerHTML = `<span class="text-sm group-hover:scale-110 transition-transform">${country.flag}</span><span class="uppercase tracking-wide">${countryName}</span>`;
+                btn.innerHTML = `<span class="text-sm group-hover:scale-110 transition-transform">${country.flag}</span><span class="uppercase tracking-wide">${country.name_en || country.name}</span>`;
                 
                 let isDraggingBtn = false;
                 btn.addEventListener('mousedown', () => isDraggingBtn = false);
                 btn.addEventListener('mousemove', () => isDraggingBtn = true);
-                btn.addEventListener('mouseup', () => {
-                    if (!isDraggingBtn) flyToCountry(country.id);
-                });
-
+                btn.addEventListener('mouseup', () => { if (!isDraggingBtn) flyToCountry(country.id); });
                 group.appendChild(btn);
             });
-            
             carousel.appendChild(group);
-
             setupCarouselInteraction(carousel);
         }
 
-        let isDragging = false;
-        let startX;
-        let scrollLeft;
-
         function setupCarouselInteraction(carousel) {
-            if (autoScrollInterval) {
-                clearInterval(autoScrollInterval);
-            }
+            let isDragging = false, startX, scrollLeft;
+            if (autoScrollInterval) clearInterval(autoScrollInterval);
 
+            // 速度減半：改為 40ms 更新一次
             autoScrollInterval = setInterval(() => {
                 if (!isCarouselHovered && !isDragging) {
                     carousel.scrollLeft += 0.5;
-                    if (carousel.scrollLeft >= (carousel.scrollWidth - carousel.clientWidth) - 5) {
-                        carousel.scrollLeft = 0;
-                    }
+                    if (carousel.scrollLeft >= (carousel.scrollWidth - carousel.clientWidth) - 5) carousel.scrollLeft = 0;
                 }
             }, 40);
 
             carousel.addEventListener('mouseenter', () => isCarouselHovered = true);
-            carousel.addEventListener('mouseleave', () => {
-                isCarouselHovered = false;
-                isDragging = false;
-            });
-
+            carousel.addEventListener('mouseleave', () => { isCarouselHovered = false; isDragging = false; });
+            
             carousel.addEventListener('mousedown', (e) => {
-                isDragging = true;
-                isCarouselHovered = true;
-                startX = e.pageX - carousel.offsetLeft;
-                scrollLeft = carousel.scrollLeft;
+                isDragging = true; isCarouselHovered = true;
+                startX = e.pageX - carousel.offsetLeft; scrollLeft = carousel.scrollLeft;
             });
-            
-            carousel.addEventListener('mouseup', () => {
-                isDragging = false;
-            });
-            
+            carousel.addEventListener('mouseup', () => isDragging = false);
             carousel.addEventListener('mousemove', (e) => {
-                if (!isDragging) return;
-                e.preventDefault();
-                const x = e.pageX - carousel.offsetLeft;
-                const walk = (x - startX) * 2;
-                carousel.scrollLeft = scrollLeft - walk;
+                if (!isDragging) return; e.preventDefault();
+                carousel.scrollLeft = scrollLeft - ((e.pageX - carousel.offsetLeft) - startX) * 2;
             });
 
             carousel.addEventListener('touchstart', (e) => {
-                isDragging = true;
-                isCarouselHovered = true;
-                startX = e.touches[0].pageX - carousel.offsetLeft;
-                scrollLeft = carousel.scrollLeft;
+                isDragging = true; isCarouselHovered = true;
+                startX = e.touches[0].pageX - carousel.offsetLeft; scrollLeft = carousel.scrollLeft;
             }, {passive: true});
-
-            carousel.addEventListener('touchend', () => {
-                isDragging = false;
-                isCarouselHovered = false;
-            });
-
+            carousel.addEventListener('touchend', () => { isDragging = false; isCarouselHovered = false; });
             carousel.addEventListener('touchmove', (e) => {
                 if (!isDragging) return;
-                const x = e.touches[0].pageX - carousel.offsetLeft;
-                const walk = (x - startX) * 2;
-                carousel.scrollLeft = scrollLeft - walk;
+                carousel.scrollLeft = scrollLeft - ((e.touches[0].pageX - carousel.offsetLeft) - startX) * 2;
             }, {passive: true});
         }
 
-        window.onload = () => initMap();
+        window.onload = () => {
+            initMap();
+            // 5.5秒後觸發轉場，1.2秒動畫結束後移除 Splash Screen 讓下方可以點擊
+            setTimeout(() => {
+                const splash = document.getElementById('splashScreen');
+                if (splash) {
+                    splash.classList.add('splash-exit');
+                    setTimeout(() => splash.remove(), 1200); 
+                }
+            }, 5500);
+        };
     </script>
 </body>
 </html>
