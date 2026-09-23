@@ -468,6 +468,17 @@
         }
 
         function preprocessData() {
+            // 1. 自動轉換兩位數英文代碼為 Emoji 國旗
+            appData.countries.forEach(country => {
+                if (country.flag && country.flag.length === 2 && /^[a-zA-Z]+$/.test(country.flag)) {
+                    const codePoints = country.flag.toUpperCase().split('').map(char => 127397 + char.charCodeAt(0));
+                    country.flag = String.fromCodePoint(...codePoints);
+                } else if (!country.flag) {
+                    country.flag = '🌍'; // 若無國旗則顯示預設地球
+                }
+            });
+
+            // 2. 處理虛擬城市
             appData.people.forEach(person => {
                 if (person.country_id && !person.city_id) {
                     const virtualCityId = 'virtual_city_' + person.country_id;
@@ -569,6 +580,9 @@
             if (activeCities.length > 0) {
                 const bounds = L.latLngBounds(activeCities.map(c => [c.latitude, c.longitude]));
                 map.flyToBounds(bounds, { padding: [100, 100], maxZoom: 6, duration: 1.5 });
+            } else if (country.latitude && country.longitude) {
+                // 防呆機制：若該國尚無人參與，但有座標，則飛往該國中心點
+                map.flyTo([country.latitude, country.longitude], 5, { duration: 1.5 });
             }
 
             markersLayer.clearLayers();
