@@ -107,7 +107,6 @@
 </head>
 <body class="h-full bg-slate-950 flex flex-col overflow-hidden text-slate-100">
 
-    <!-- 開場動畫 -->
     <div id="splashScreen" class="fixed inset-0 z-[2000] bg-[#030712] flex flex-col items-center justify-center transition-all duration-1000 pointer-events-auto">
         <div class="flex flex-col items-center justify-center space-y-6">
             <div class="w-24 h-24 rounded-full bg-gradient-to-br from-slate-50 to-slate-200 flex items-center justify-center shadow-[0_0_30px_rgba(244,63,94,0.4)] p-1.5 animate-fade-in delay-100 relative">
@@ -135,7 +134,6 @@
         </div>
     </div>
 
-    <!-- 頂部滿寬橫幅 -->
     <header class="w-full bg-[#0b101e] border-b border-white/5 z-50 shrink-0 py-5 sm:py-6 px-6 shadow-xl flex items-center justify-between relative shadow-black/50">
         <div class="flex-1 flex justify-start"></div>
 
@@ -143,11 +141,12 @@
             <div class="w-[64px] h-[64px] rounded-full bg-gradient-to-br from-slate-50 to-slate-200 flex items-center justify-center p-1 relative shadow-[0_0_15px_rgba(244,63,94,0.25)] shrink-0">
                 <img src="https://miniminimaker.github.io/kyriocifer2026/logo.png" alt="Logo" class="w-full h-full object-contain relative z-10 rounded-full">
             </div>
-            <div class="flex flex-col text-left ml-5 justify-center">
+            
+            <div class="flex flex-col text-center items-center ml-5 justify-center w-max">
                 <p class="text-[9.5px] text-brand-pink font-bold tracking-[0.38em] uppercase mb-2 opacity-90 leading-none">
                     "I love you" in different languages
                 </p>
-                <h1 class="font-black text-[22px] text-white tracking-wider uppercase leading-none mb-2.5 drop-shadow-sm">
+                <h1 class="font-black text-[22px] text-white tracking-[0.15em] uppercase leading-none mb-2.5 drop-shadow-sm">
                     Kyrio Cifer 2nd Anniversary
                 </h1>
                 <p class="text-[12px] text-slate-400 font-medium italic tracking-wide leading-none">
@@ -252,7 +251,7 @@
                     </div>
                     <div>
                         <span class="text-white font-bold block mb-1 text-[13px] uppercase tracking-wide">Play Audio</span>
-                        <span class="text-xs text-slate-400">Inside the popup, click the play button to hear "I love you" in their language.</span>
+                        <span class="text-xs text-slate-400">Inside the popup, click the play button to hear "I love you" in their language. <span class="italic text-slate-500 opacity-90 inline-block mt-0.5">(Some are shy, so there is no audio.)</span></span>
                     </div>
                 </div>
                 <div class="flex items-start gap-4 p-3 rounded-2xl bg-white/[0.03] border border-white/5 hover:border-white/10 transition-colors">
@@ -273,6 +272,15 @@
                         <span class="text-xs text-slate-400">Click "Kaleidoscope" on the top right to see the full list and instantly jump to their location.</span>
                     </div>
                 </div>
+            </div>
+
+            <div class="mt-4 pt-4 border-t border-white/10 text-center flex flex-col gap-1.5">
+                <p class="text-[10px] text-slate-400 italic tracking-wide leading-relaxed px-2">
+                    This pertains to a fan-made project organized by MINIMINI and is not an official event of Kyrio Cifer.
+                </p>
+                <a href="https://x.com/miniminimaker" target="_blank" class="inline-block text-[10px] text-brand-pink hover:text-brand-pink/80 font-bold tracking-[0.25em] transition-colors duration-300 mt-1">
+                    #miniminiproject
+                </a>
             </div>
         </div>
     </div>
