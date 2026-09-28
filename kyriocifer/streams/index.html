@@ -167,7 +167,7 @@
             ARCHIVE_API_URL: "https://script.google.com/macros/s/AKfycbySeKbZ2qGgnS3R9NDI7cA367qQwZP109yNb68ydoEYqfYrhTmjB57-HYZD3KPmOdpqnA/exec",
             TIMEZONE: "Asia/Taipei",
             REFRESH_INTERVAL: 5 * 60 * 1000,
-            CACHE_KEY: "kyrio_schedule_cache_v4"
+            CACHE_KEY: "kyrio_schedule_cache_v6"
         };
 
         const app = {
@@ -194,7 +194,6 @@
             fetchData: async function(isManual = false) {
                 let hasRenderedFromCache = false;
 
-                // 1. 優先嘗試從 LocalStorage 讀取快取並「秒速」渲染
                 const cachedDataStr = localStorage.getItem(CONFIG.CACHE_KEY);
                 if (cachedDataStr) {
                     try {
@@ -215,7 +214,6 @@
                     if(syncStatus) syncStatus.classList.remove('hidden');
                 }
 
-                // 2. 同時從主表格與封存表格抓取資料
                 try {
                     const [mainRes, archiveRes] = await Promise.all([
                         fetch(CONFIG.MAIN_API_URL).catch(() => null),
@@ -240,7 +238,6 @@
 
                     if (allEvents.length > 0) {
                         const newDataStr = JSON.stringify(allEvents);
-                        
                         if (newDataStr !== cachedDataStr) {
                             localStorage.setItem(CONFIG.CACHE_KEY, newDataStr);
                             this.processAndRender(allEvents, !hasRenderedFromCache);
@@ -509,11 +506,39 @@
                 const container = document.getElementById('sheet-filters');
                 if (!container) return;
 
-                const sheetsArray = Array.from(this.sheets); 
+                let sheetsArray = Array.from(this.sheets); 
                 if (sheetsArray.length === 0) {
                     container.innerHTML = '';
                     return;
                 }
+
+                // 智慧排序：當前月份排最前 ➔ 年份由新到舊 ➔ Subathon 類型的分頁排在最後
+                sheetsArray.sort((a, b) => {
+                    const isSubA = this.isSubathonTab(a);
+                    const isSubB = this.isSubathonTab(b);
+
+                    if (isSubA !== isSubB) {
+                        return isSubA ? 1 : -1;
+                    }
+
+                    const getWeight = (name) => {
+                        const lower = name.toLowerCase();
+                        if (lower.includes('sep') || lower.includes('9月') || lower.includes('current')) return 300;
+                        if (lower.includes('2026')) return 200;
+                        if (lower.includes('2025')) return 150;
+                        if (lower.includes('2024')) return 100;
+                        return 50;
+                    };
+
+                    const weightA = getWeight(a);
+                    const weightB = getWeight(b);
+
+                    if (weightA !== weightB) {
+                        return weightB - weightA;
+                    }
+
+                    return b.localeCompare(a);
+                });
 
                 let html = '';
                 sheetsArray.forEach(sheet => {
