@@ -105,19 +105,11 @@
             border: 1px solid rgba(255, 255, 255, 0.08);
         }
 
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .animate-fade-in { animation: fadeIn 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards; opacity: 0; }
-        .delay-100 { animation-delay: 0.1s; }
-        .delay-300 { animation-delay: 0.3s; }
-        .delay-500 { animation-delay: 0.5s; }
-        .delay-700 { animation-delay: 0.7s; }
-        .delay-900 { animation-delay: 0.9s; }
-        
         @keyframes splashFadeOut { 
-            0% { opacity: 1; transform: scale(1); } 
-            100% { opacity: 0; transform: scale(1.05); pointer-events: none; visibility: hidden; } 
+            0% { opacity: 1; transform: scale(1) translateZ(0); } 
+            100% { opacity: 0; transform: scale(1.05) translateZ(0); pointer-events: none; visibility: hidden; } 
         }
-        .splash-exit { animation: splashFadeOut 1800ms cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+        .splash-exit { animation: splashFadeOut 1800ms cubic-bezier(0.4, 0, 0.2, 1) forwards; will-change: opacity, transform; }
     </style>
 </head>
 <body class="h-full bg-slate-950 flex flex-col overflow-hidden text-slate-100">
@@ -372,8 +364,8 @@
         };
 
         let appData = JSON.parse(JSON.stringify(demoData));
-        let map;
-        let markersLayer = L.layerGroup();
+        let map = null;
+        let markersLayer = null;
         let activeCityForBubble = null;
         let activeCountryId = null;
         let currentMapLevel = 'world'; 
@@ -385,6 +377,12 @@
         let autoScrollInterval = null;
         let isCarouselHovered = false;
         let isPeopleListOpen = false;
+
+        // Preload GIFs for instant playback without lag
+        const preloadedOpenGif = new Image();
+        preloadedOpenGif.src = 'https://miniminimaker.github.io/kyriocifer2026/open.gif';
+        const preloadedIntroGif = new Image();
+        preloadedIntroGif.src = 'https://miniminimaker.github.io/kyriocifer2026/intro.gif';
 
         function togglePeopleList() {
             const sidebar = document.getElementById('peopleSidebar');
@@ -497,6 +495,7 @@
         }
 
         async function initMap() {
+            if (map) return;
             map = L.map('map', {
                 zoomControl: false, attributionControl: false, minZoom: 3, maxZoom: 16,
                 maxBounds: [[-85, -180], [85, 180]], maxBoundsViscosity: 1.0,
@@ -508,7 +507,7 @@
             }).addTo(map);
 
             L.control.zoom({ position: 'bottomright' }).addTo(map);
-            markersLayer.addTo(map);
+            markersLayer = L.layerGroup().addTo(map);
 
             await fetchAppData();
             renderWorldView();
@@ -603,6 +602,7 @@
         }
 
         function renderWorldView() {
+            if (!markersLayer) return;
             markersLayer.clearLayers();
             currentMapLevel = 'world'; activeCountryId = null;
             closeCityPopup(); updateBreadcrumb();
@@ -637,10 +637,10 @@
                 map.flyTo([country.latitude, country.longitude], 5, { duration: 1.5 });
             }
 
-            markersLayer.clearLayers();
+            if (markersLayer) markersLayer.clearLayers();
             activeCities.forEach(city => {
                 const cityPeople = activePeople.filter(p => p.city_id === city.id);
-                if (cityPeople.length > 0) markersLayer.addLayer(createMarker(city, country, cityPeople));
+                if (cityPeople.length > 0 && markersLayer) markersLayer.addLayer(createMarker(city, country, cityPeople));
             });
         }
 
@@ -746,7 +746,7 @@
 
         function returnToWorldView() {
             closeCityPopup(); currentMapLevel = 'world'; activeCityForBubble = activeCountryId = null;
-            map.flyTo([20.0, 0.0], 3, { duration: 1.5 });
+            if (map) map.flyTo([20.0, 0.0], 3, { duration: 1.5 });
             renderWorldView();
         }
 
@@ -858,7 +858,10 @@
                 const splash = document.getElementById('splashScreen');
                 if (splash) {
                     splash.classList.add('splash-exit');
-                    setTimeout(() => splash.remove(), 1800); 
+                    setTimeout(() => {
+                        splash.remove();
+                        initMap(); // Lazy initialize map after opening animation completes for silky smooth performance
+                    }, 1800); 
                 }
             }, 8000);
         }
@@ -867,10 +870,12 @@
             if (document.getElementById('introModal')) return;
             const modal = document.createElement('div');
             modal.id = 'introModal';
-            modal.className = 'fixed inset-0 z-[2000] bg-[#030712] flex flex-col items-center justify-center transition-opacity duration-500 opacity-0 pointer-events-auto cursor-pointer';
+            modal.className = 'fixed inset-0 z-[2000] bg-[#030712] flex flex-col items-center justify-center transition-opacity duration-700 opacity-0 pointer-events-auto cursor-pointer';
+            modal.style.willChange = 'opacity';
+            modal.style.transform = 'translateZ(0)';
             modal.innerHTML = `
                 <div class="absolute inset-0 bg-[#030712] flex items-center justify-center p-6">
-                    <img src="https://miniminimaker.github.io/kyriocifer2026/intro.gif?t=` + Date.now() + `" class="w-full max-w-xl sm:max-w-2xl md:max-w-4xl h-auto max-h-[85vh] object-contain" alt="Intro Animation">
+                    <img src="https://miniminimaker.github.io/kyriocifer2026/intro.gif" class="w-full max-w-xl sm:max-w-2xl md:max-w-4xl h-auto max-h-[85vh] object-contain" alt="Intro Animation">
                 </div>
                 <div class="absolute bottom-8 z-30 text-[11px] text-slate-400 font-semibold tracking-widest bg-slate-900/80 px-4 py-2 rounded-full border border-white/10 backdrop-blur-md pointer-events-none">
                     Click anywhere to return
@@ -878,14 +883,13 @@
             `;
             modal.onclick = () => {
                 modal.style.opacity = '0';
-                setTimeout(() => modal.remove(), 500);
+                setTimeout(() => modal.remove(), 700);
             };
             document.body.appendChild(modal);
             requestAnimationFrame(() => modal.style.opacity = '1');
         }
 
         window.onload = () => {
-            initMap();
             runIntroSequence();
         };
     </script>
