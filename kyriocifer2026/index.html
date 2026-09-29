@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Kyrio Cifer 2nd Anniversary 2026</title>
     
-    <!-- Scripts & Fonts -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -41,6 +40,22 @@
         body { 
             font-family: 'Plus Jakarta Sans', sans-serif; 
             background-color: #030712;
+        }
+        
+        .butterfly-icon {
+            display: inline-block;
+            width: 1em;
+            height: 1em;
+            background-color: currentColor;
+            -webkit-mask-image: url('https://miniminimaker.github.io/kyriocifer2026/icon.png');
+            mask-image: url('https://miniminimaker.github.io/kyriocifer2026/icon.png');
+            -webkit-mask-size: contain;
+            mask-size: contain;
+            -webkit-mask-repeat: no-repeat;
+            mask-repeat: no-repeat;
+            -webkit-mask-position: center;
+            mask-position: center;
+            vertical-align: middle;
         }
         
         .leaflet-container { background: #030712 !important; outline: none; }
@@ -92,44 +107,48 @@
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         .animate-fade-in { animation: fadeIn 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards; opacity: 0; }
-        .delay-100 { animation-delay: 0.1s; }
-        .delay-300 { animation-delay: 0.3s; }
-        .delay-500 { animation-delay: 0.5s; }
-        .delay-700 { animation-delay: 0.7s; }
-        .delay-900 { animation-delay: 0.9s; }
         
         @keyframes splashFadeOut { 
             0% { opacity: 1; transform: scale(1); } 
             100% { opacity: 0; transform: scale(1.05); pointer-events: none; visibility: hidden; } 
         }
-        .splash-exit { animation: splashFadeOut 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+        .splash-exit { animation: splashFadeOut 1.5s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
     </style>
 </head>
 <body class="h-full bg-slate-950 flex flex-col overflow-hidden text-slate-100">
 
+    <!-- STREAMING_CHUNK:Rendering opening animation sequence (6s GIF -> Title -> Website)... -->
     <div id="splashScreen" class="fixed inset-0 z-[2000] bg-[#030712] flex flex-col items-center justify-center transition-all duration-1000 pointer-events-auto">
-        <div class="flex flex-col items-center justify-center space-y-6">
-            <div class="w-24 h-24 rounded-full bg-gradient-to-br from-slate-50 to-slate-200 flex items-center justify-center shadow-[0_0_30px_rgba(244,63,94,0.4)] p-1.5 animate-fade-in delay-100 relative">
-                <div class="absolute inset-0 rounded-full border border-white/40"></div>
-                <img src="https://miniminimaker.github.io/kyriocifer2026/logo.png" class="w-full h-full object-contain relative z-10 rounded-full">
-            </div>
-            
-            <div class="text-center flex flex-col items-center mt-4">
-                <p class="text-[10px] text-brand-pink font-bold tracking-[0.4em] uppercase mb-3 animate-fade-in delay-300">
-                    "I love you" in different languages
-                </p>
-                <h1 class="font-black text-2xl tracking-widest text-white uppercase mb-3 animate-fade-in delay-500">
-                    Kyrio Cifer 2nd Anniversary
-                </h1>
-                <p class="text-xs text-slate-400 font-medium italic tracking-widest animate-fade-in delay-700">
-                    We Met Because of You, We Gather Because of Love.
-                </p>
-            </div>
-            
-            <div class="w-12 h-0.5 bg-brand-pink rounded-full mt-6 shadow-[0_0_10px_rgba(244,63,94,0.8)] animate-fade-in delay-700"></div>
-            
-            <div class="mt-8 text-[10px] text-slate-500/70 font-semibold tracking-[0.25em] animate-fade-in delay-900">
-                #miniminiproject
+        <!-- 1. GIF 播放層 (符合網頁框架大小，響應式自動縮放) -->
+        <div id="splashGifLayer" class="absolute inset-0 bg-[#030712] flex items-center justify-center transition-opacity duration-1000 z-20 p-6">
+            <img src="https://miniminimaker.github.io/kyriocifer2026/open.gif" class="w-full max-w-xs sm:max-w-md md:max-w-lg h-auto max-h-[80vh] object-contain" alt="Opening Animation">
+        </div>
+
+        <!-- 2. 標題文字層 -->
+        <div id="splashTextLayer" class="absolute inset-0 bg-[#030712] flex flex-col items-center justify-center opacity-0 transition-opacity duration-1000 pointer-events-none z-10 p-6">
+            <div class="flex flex-col items-center justify-center space-y-6">
+                <div class="w-24 h-24 rounded-full bg-gradient-to-br from-slate-50 to-slate-200 flex items-center justify-center shadow-[0_0_30px_rgba(244,63,94,0.4)] p-1.5 relative">
+                    <div class="absolute inset-0 rounded-full border border-white/40"></div>
+                    <img src="https://miniminimaker.github.io/kyriocifer2026/logo.png" class="w-full h-full object-contain relative z-10 rounded-full">
+                </div>
+                
+                <div class="text-center flex flex-col items-center mt-4">
+                    <p class="text-[10px] text-brand-pink font-bold tracking-[0.4em] uppercase mb-3">
+                        "I love you" in different languages
+                    </p>
+                    <h1 class="font-black text-2xl tracking-widest text-white uppercase mb-3">
+                        Kyrio Cifer 2nd Anniversary
+                    </h1>
+                    <p class="text-xs text-slate-400 font-medium italic tracking-widest">
+                        We Met Because of You, We Gather Because of Love.
+                    </p>
+                </div>
+                
+                <div class="w-12 h-0.5 bg-brand-pink rounded-full mt-6 shadow-[0_0_10px_rgba(244,63,94,0.8)]"></div>
+                
+                <div class="mt-8 text-[10px] text-slate-500/70 font-semibold tracking-[0.25em]">
+                    #miniminiproject
+                </div>
             </div>
         </div>
     </div>
@@ -161,7 +180,7 @@
                 <span class="text-[10px] font-bold uppercase tracking-wider hidden sm:block">Guide</span>
             </button>
             <button onclick="togglePeopleList()" class="flex items-center justify-center gap-2 px-3 sm:px-4 py-2 bg-white/5 hover:bg-brand-pink/20 border border-white/10 rounded-full text-slate-300 hover:text-white transition-all duration-300 group shadow-glass">
-                <i class="fa-solid fa-address-book group-hover:text-brand-pink transition-colors text-sm"></i>
+                <span class="butterfly-icon text-slate-300 group-hover:text-brand-pink transition-colors text-sm"></span>
                 <span class="text-[10px] font-bold uppercase tracking-wider hidden sm:block">Kaleidoscope</span>
             </button>
         </div>
@@ -225,7 +244,7 @@
     <div id="guideModal" class="fixed inset-0 z-[1000] hidden items-center justify-center pointer-events-auto">
         <div class="absolute inset-0 bg-[#030712]/70 backdrop-blur-sm transition-opacity" onclick="closeGuide()"></div>
         
-        <div id="guideContent" class="glass-panel shadow-2xl rounded-[28px] p-6 sm:p-8 max-w-lg w-[92%] sm:w-[500px] relative transform scale-95 opacity-0 transition-all duration-300 flex flex-col border border-white/10">
+        <div id="guideContent" class="glass-panel shadow-2xl rounded-[28px] p-6 sm:p-9 max-w-lg w-[92%] sm:w-[540px] relative transform scale-95 opacity-0 transition-all duration-300 flex flex-col border border-white/10">
             <div class="flex justify-between items-center mb-6 border-b border-white/10 pb-4">
                 <h2 class="text-white font-black text-sm sm:text-base tracking-widest uppercase flex items-center gap-2">
                     <i class="fa-solid fa-map-location-dot text-brand-yellow"></i> How to Explore
@@ -283,7 +302,7 @@
                 <!-- 5. All Kaleidoscopes -->
                 <div class="flex items-start gap-4 p-3.5 rounded-2xl bg-white/[0.03] border border-white/5 hover:border-white/10 transition-colors">
                     <div class="w-8 h-8 rounded-full bg-brand-lavender/10 flex items-center justify-center shrink-0 mt-0.5 border border-brand-lavender/20">
-                        <i class="fa-solid fa-address-book text-brand-lavender text-xs"></i>
+                        <span class="butterfly-icon text-brand-lavender text-xs"></span>
                     </div>
                     <div>
                         <span class="text-white font-bold block mb-1 text-[13px] uppercase tracking-wide">All Kaleidoscopes</span>
@@ -292,8 +311,8 @@
                 </div>
             </div>
 
-            <div class="mt-5 pt-4 border-t border-white/10 text-center flex flex-col gap-1.5">
-                <p class="text-[10px] text-slate-400 italic tracking-[0.15em] leading-relaxed px-2">
+            <div class="mt-6 pt-4 border-t border-white/10 text-center flex flex-col gap-1.5">
+                <p class="text-[10px] text-slate-400 italic tracking-[0.12em] leading-relaxed px-4">
                     This pertains to a fan-made project organized by MINIMINI and is not an official event of Kyrio Cifer.
                 </p>
                 <a href="https://x.com/miniminimaker" target="_blank" class="inline-block text-[10px] text-brand-pink hover:text-brand-pink/80 font-bold tracking-[0.25em] transition-colors duration-300 mt-1">
@@ -409,11 +428,31 @@
                 groupedByCountry[p.country_id].push(p);
             });
 
+            const countryIds = Object.keys(groupedByCountry);
+            countryIds.sort((aId, bId) => {
+                const countryA = appData.countries.find(c => c.id === aId);
+                const countryB = appData.countries.find(c => c.id === bId);
+                const nameA = countryA ? (countryA.name_en || countryA.name) : '';
+                const nameB = countryB ? (countryB.name_en || countryB.name) : '';
+                
+                if (nameA.toLowerCase() === 'taiwan') return -1;
+                if (nameB.toLowerCase() === 'taiwan') return 1;
+                return nameA.localeCompare(nameB, undefined, { sensitivity: 'accent', numeric: true });
+            });
+
             let html = '';
-            for (const countryId in groupedByCountry) {
+            countryIds.forEach(countryId => {
                 const country = appData.countries.find(c => c.id === countryId);
                 const countryName = country ? (country.name_en || country.name) : 'Unknown';
                 const flag = country ? country.flag : '🌍';
+
+                groupedByCountry[countryId].sort((a, b) => {
+                    const isMiniA = a.name.toUpperCase().includes('MINI');
+                    const isMiniB = b.name.toUpperCase().includes('MINI');
+                    if (isMiniA && !isMiniB) return -1;
+                    if (!isMiniA && isMiniB) return 1;
+                    return a.name.localeCompare(b.name, undefined, { sensitivity: 'accent', numeric: true });
+                });
 
                 html += `
                     <div class="mb-5">
@@ -444,7 +483,7 @@
                     `;
                 });
                 html += `</div></div>`;
-            }
+            });
             container.innerHTML = html;
         }
 
@@ -804,13 +843,27 @@
 
         window.onload = () => {
             initMap();
+            
+            // Step 1: GIF plays for exactly 6 seconds, then fade out GIF and fade in Title text layer
+            setTimeout(() => {
+                const gifLayer = document.getElementById('splashGifLayer');
+                const textLayer = document.getElementById('splashTextLayer');
+                if (gifLayer && textLayer) {
+                    gifLayer.style.opacity = '0';
+                    gifLayer.style.pointerEvents = 'none';
+                    textLayer.style.opacity = '1';
+                    textLayer.style.pointerEvents = 'auto';
+                }
+            }, 6000);
+
+            // Step 2: Title text layer displays for 4.5s, then fade out entire splash screen
             setTimeout(() => {
                 const splash = document.getElementById('splashScreen');
                 if (splash) {
                     splash.classList.add('splash-exit');
-                    setTimeout(() => splash.remove(), 1200); 
+                    setTimeout(() => splash.remove(), 1500); 
                 }
-            }, 5500);
+            }, 11000);
         };
     </script>
 </body>
