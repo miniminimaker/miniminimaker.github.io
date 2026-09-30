@@ -37,25 +37,15 @@
     </script>
 
     <style>
-        body { 
-            font-family: 'Plus Jakarta Sans', sans-serif; 
-            background-color: #030712;
-        }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #030712; }
         
         .butterfly-icon {
-            display: inline-block;
-            width: 1em;
-            height: 1em;
-            background-color: currentColor;
+            display: inline-block; width: 1em; height: 1em; background-color: currentColor;
             -webkit-mask-image: url('https://miniminimaker.github.io/kyriocifer2026/icon.png');
             mask-image: url('https://miniminimaker.github.io/kyriocifer2026/icon.png');
-            -webkit-mask-size: contain;
-            mask-size: contain;
-            -webkit-mask-repeat: no-repeat;
-            mask-repeat: no-repeat;
-            -webkit-mask-position: center;
-            mask-position: center;
-            vertical-align: middle;
+            -webkit-mask-size: contain; mask-size: contain;
+            -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+            -webkit-mask-position: center; mask-position: center; vertical-align: middle;
         }
         
         .leaflet-container { background: #030712 !important; outline: none; }
@@ -428,8 +418,11 @@
                 const nameA = countryA ? (countryA.name_en || countryA.name) : '';
                 const nameB = countryB ? (countryB.name_en || countryB.name) : '';
                 
-                if (nameA.toLowerCase() === 'taiwan') return -1;
-                if (nameB.toLowerCase() === 'taiwan') return 1;
+                const isTaiwanA = nameA.toLowerCase().includes('taiwan');
+                const isTaiwanB = nameB.toLowerCase().includes('taiwan');
+                
+                if (isTaiwanA && !isTaiwanB) return -1;
+                if (!isTaiwanA && isTaiwanB) return 1;
                 return nameA.localeCompare(nameB, undefined, { sensitivity: 'accent', numeric: true });
             });
 
