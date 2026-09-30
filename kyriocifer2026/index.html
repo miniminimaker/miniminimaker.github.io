@@ -200,36 +200,32 @@
             </div>
         </div>
 
-        <div id="cityPopupCard" class="absolute z-30 glass-panel shadow-glass rounded-[24px] p-1 w-[320px] hidden transform -translate-x-1/2 -translate-y-full mb-6 pointer-events-auto transition-all duration-300 opacity-0 scale-95 origin-bottom">
-            <div class="absolute -bottom-3 left-1/2 transform -translate-x-1/2 flex items-start justify-center w-6 h-4 overflow-hidden">
-                <div class="w-4 h-4 bg-slate-900/80 backdrop-blur-xl border-r border-b border-white/10 transform rotate-45 -translate-y-2.5 rounded-sm"></div>
-            </div>
+        <div id="cityPopupCard" class="fixed top-1/2 left-1/2 z-[100] glass-panel shadow-glass rounded-[24px] p-1 w-[340px] hidden transform -translate-x-1/2 -translate-y-1/2 pointer-events-auto transition-all duration-300 opacity-0 scale-95 origin-center">
             
-            <div class="bg-gradient-to-b from-white/[0.05] to-transparent rounded-[20px] p-5">
+            <div class="bg-gradient-to-b from-white/[0.05] to-transparent rounded-[20px] p-5 max-h-[85vh] overflow-y-auto custom-scrollbar">
                 <div class="flex justify-between items-center mb-3">
                     <div class="flex space-x-2">
-                        <button onclick="returnToWorldView()" class="w-8 h-8 rounded-full bg-white/5 hover:bg-white/10 border border-white/5 hover:border-white/20 flex items-center justify-center text-slate-400 hover:text-white transition duration-200">
+                        <button onclick="returnToWorldView()" class="w-8 h-8 rounded-full bg-white/5 hover:bg-white/10 border border-white/5 hover:border-white/20 flex items-center justify-center text-slate-400 hover:text-white transition duration-200" title="Back to World">
                             <i class="fa-solid fa-earth-americas text-[11px]"></i>
                         </button>
-                        <button onclick="flyToCountry(activeCityForBubble?.country_id)" class="w-8 h-8 rounded-full bg-white/5 hover:bg-white/10 border border-white/5 hover:border-white/20 flex items-center justify-center text-slate-400 hover:text-white transition duration-200">
+                        <button onclick="flyToCountry(activeCityForBubble?.country_id)" class="w-8 h-8 rounded-full bg-white/5 hover:bg-white/10 border border-white/5 hover:border-white/20 flex items-center justify-center text-slate-400 hover:text-white transition duration-200" title="Back to Country">
                             <i class="fa-solid fa-arrow-left text-[11px]"></i>
                         </button>
                     </div>
-                    <button onclick="closeCityPopup()" class="w-8 h-8 rounded-full bg-white/5 hover:bg-brand-pink/20 hover:text-brand-pink border border-white/5 hover:border-brand-pink/30 flex items-center justify-center text-slate-400 transition duration-200">
+                    <button onclick="closeCityPopup()" class="w-8 h-8 rounded-full bg-white/5 hover:bg-brand-pink/20 hover:text-brand-pink border border-white/5 hover:border-brand-pink/30 flex items-center justify-center text-slate-400 transition duration-200" title="Close">
                         <i class="fa-solid fa-xmark text-sm"></i>
                     </button>
                 </div>
 
-                <div class="flex flex-col items-center text-center pb-5 border-b border-white/10">
-                    <div class="text-[9px] text-brand-yellow font-bold uppercase tracking-[0.2em] mb-2 bg-brand-yellow/10 px-2 py-0.5 rounded-sm">
+                <!-- Updated Header: Location Only & Adjusted Size -->
+                <div class="flex flex-col items-center text-center pb-4 border-b border-white/10">
+                    <div class="text-[13px] text-brand-yellow font-black uppercase tracking-[0.2em] mb-1 bg-brand-yellow/10 px-3 py-1.5 rounded-sm">
                         <span id="popupLocation">COUNTRY • CITY</span>
                     </div>
-                    <div id="popupLovePhrase" class="text-4xl font-extrabold text-white glow-text-pink mb-1 tracking-tight">我愛你</div>
-                    <div id="popupRomanization" class="text-xs font-medium text-slate-400 mb-3 tracking-widest uppercase">Wǒ ài nǐ</div>
-                    <div id="popupLanguageTag" class="bg-white/5 border border-white/10 rounded-full px-4 py-1 text-[10px] text-slate-300 font-semibold tracking-wider">Mandarin</div>
                 </div>
 
-                <div id="popupPeopleList" class="flex flex-col gap-2 mt-4 max-h-[180px] overflow-y-auto custom-scrollbar pr-1">
+                <!-- Updated List Container (Removed internal scroll) -->
+                <div id="popupPeopleList" class="flex flex-col gap-2.5 mt-4 pr-1">
                 </div>
             </div>
         </div>
@@ -661,12 +657,8 @@
         function showCityPopup(city, people, isSilent = false) {
             activeCityForBubble = city;
             const country = appData.countries.find(c => c.id === city.country_id);
-            const lang = appData.languages.find(l => l.id === people[0].language_id);
 
             document.getElementById('popupLocation').innerText = `${country ? country.name_en : ''} • ${city.name_en || city.name}`;
-            document.getElementById('popupLovePhrase').innerText = lang ? (lang.love_phrase || lang.native_name) : 'I love you';
-            document.getElementById('popupRomanization').innerText = lang ? lang.romanization || '' : '';
-            document.getElementById('popupLanguageTag').innerText = lang ? (lang.name_en || lang.name) : 'Language';
 
             const listContainer = document.getElementById('popupPeopleList');
             if (!isSilent) listContainer.innerHTML = ''; 
@@ -677,24 +669,41 @@
                 const audioUrl = p.audio_url || (pLang ? pLang.audio_url : '');
                 const hasAudio = !!(audioUrl && audioUrl !== 'undefined' && audioUrl.trim() !== '');
                 
+                const phrase = pLang ? (pLang.love_phrase || pLang.native_name) : 'I love you';
+                const langName = pLang ? (pLang.name_en || pLang.name) : 'Unknown Language';
+
                 if (hasAudio) {
                     newHtml += `
-                        <div class="flex items-center justify-between bg-white/[0.03] p-2.5 rounded-2xl hover:bg-white/[0.08] border border-transparent hover:border-white/10 transition-all cursor-pointer group" onclick="playPersonAudio('${audioUrl}', 'playBtn_${p.id}', 'playIcon_${p.id}')">
+                        <div class="flex items-center justify-between bg-white/[0.04] p-3 rounded-2xl hover:bg-white/[0.08] border border-white/5 hover:border-white/20 transition-all cursor-pointer group" onclick="playPersonAudio('${audioUrl}', 'playBtn_${p.id}', 'playIcon_${p.id}')">
                             <div class="flex items-center space-x-3 overflow-hidden">
-                                <img src="${p.avatar_url}" class="w-9 h-9 rounded-full object-cover border border-white/20 group-hover:border-brand-pink transition-colors shrink-0" onerror="this.src='https://placehold.co/100x100/1e293b/f43f5e?text=U'">
-                                <div class="text-[13px] font-semibold text-slate-200 group-hover:text-white transition-colors truncate">${p.name}</div>
+                                <img src="${p.avatar_url}" class="w-10 h-10 rounded-full object-cover border border-white/20 group-hover:border-brand-pink transition-colors shrink-0" onerror="this.src='https://placehold.co/100x100/1e293b/f43f5e?text=U'">
+                                <div class="flex flex-col overflow-hidden">
+                                    <div class="text-[14px] font-bold text-slate-100 group-hover:text-white transition-colors truncate mb-0.5">${p.name}</div>
+                                    <div class="text-[10px] text-slate-400 font-medium truncate flex items-center gap-1.5">
+                                        <span class="text-brand-yellow font-bold uppercase tracking-wider">${langName}</span>
+                                        <span class="w-1 h-1 rounded-full bg-slate-600"></span>
+                                        <span class="text-slate-300 italic">${phrase}</span>
+                                    </div>
+                                </div>
                             </div>
-                            <button id="playBtn_${p.id}" class="w-8 h-8 rounded-full bg-white/5 group-hover:bg-brand-pink border border-white/10 group-hover:border-brand-pink flex items-center justify-center transition-all shrink-0 ml-2">
+                            <button id="playBtn_${p.id}" class="w-8 h-8 rounded-full bg-white/5 group-hover:bg-brand-pink border border-white/10 group-hover:border-brand-pink flex items-center justify-center transition-all shrink-0 ml-2 shadow-sm">
                                 <i id="playIcon_${p.id}" class="fa-solid fa-play text-slate-300 group-hover:text-white ml-0.5 text-[10px] transition-colors"></i>
                             </button>
                         </div>
                     `;
                 } else {
                     newHtml += `
-                        <div class="flex items-center justify-between p-2.5 rounded-2xl border border-transparent">
+                        <div class="flex items-center justify-between p-3 rounded-2xl border border-transparent">
                             <div class="flex items-center space-x-3 overflow-hidden">
-                                <img src="${p.avatar_url}" class="w-9 h-9 rounded-full object-cover border border-white/10 shrink-0" onerror="this.src='https://placehold.co/100x100/1e293b/f43f5e?text=U'">
-                                <div class="text-[13px] font-medium text-slate-400 truncate">${p.name}</div>
+                                <img src="${p.avatar_url}" class="w-10 h-10 rounded-full object-cover border border-white/10 shrink-0 opacity-70" onerror="this.src='https://placehold.co/100x100/1e293b/f43f5e?text=U'">
+                                <div class="flex flex-col overflow-hidden">
+                                    <div class="text-[14px] font-bold text-slate-100 truncate mb-0.5">${p.name}</div>
+                                    <div class="text-[10px] text-slate-400 font-medium truncate flex items-center gap-1.5">
+                                        <span class="text-brand-yellow font-bold uppercase tracking-wider">${langName}</span>
+                                        <span class="w-1 h-1 rounded-full bg-slate-600"></span>
+                                        <span class="text-slate-300 italic">${phrase}</span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     `;
@@ -710,7 +719,6 @@
                     card.classList.add('opacity-100', 'scale-100');
                 });
             }
-            positionElementOverCity(card, city.latitude, city.longitude);
         }
 
         function closeCityPopup() {
@@ -758,15 +766,11 @@
         }
 
         function positionElementOverCity(element, lat, lng) {
-            if (!map) return;
-            const point = map.latLngToContainerPoint(L.latLng(lat, lng));
-            element.style.left = `${point.x}px`; element.style.top = `${point.y - 16}px`;
+            // 已改為固定置中，不需要計算坐標
         }
 
         function updateBubblePosition() {
-            if (!activeCityForBubble) return;
-            const card = document.getElementById('cityPopupCard');
-            if (!card.classList.contains('hidden')) positionElementOverCity(card, activeCityForBubble.latitude, activeCityForBubble.longitude);
+            // 已改為固定置中，不需要隨著地圖拖曳更新位置
         }
 
         function updateBreadcrumb() {
