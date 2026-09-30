@@ -37,15 +37,25 @@
     </script>
 
     <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #030712; }
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background-color: #030712;
+        }
         
         .butterfly-icon {
-            display: inline-block; width: 1em; height: 1em; background-color: currentColor;
+            display: inline-block;
+            width: 1em;
+            height: 1em;
+            background-color: currentColor;
             -webkit-mask-image: url('https://miniminimaker.github.io/kyriocifer2026/icon.png');
             mask-image: url('https://miniminimaker.github.io/kyriocifer2026/icon.png');
-            -webkit-mask-size: contain; mask-size: contain;
-            -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
-            -webkit-mask-position: center; mask-position: center; vertical-align: middle;
+            -webkit-mask-size: contain;
+            mask-size: contain;
+            -webkit-mask-repeat: no-repeat;
+            mask-repeat: no-repeat;
+            -webkit-mask-position: center;
+            mask-position: center;
+            vertical-align: middle;
         }
         
         .leaflet-container { background: #030712 !important; outline: none; }
@@ -289,7 +299,7 @@
                     </div>
                     <div>
                         <span class="text-white font-bold block mb-1 text-[13px] uppercase tracking-wide">All Kaleidoscopes</span>
-                        <span class="text-xs text-slate-400">Click "Kaleidoscope" on the top right to see the full list and instantly jump to their location.</span>
+                        <span class="text-xs text-slate-400">Open top-right list to browse all participants and click any country name to instantly fly there.</span>
                     </div>
                 </div>
             </div>
@@ -418,11 +428,8 @@
                 const nameA = countryA ? (countryA.name_en || countryA.name) : '';
                 const nameB = countryB ? (countryB.name_en || countryB.name) : '';
                 
-                const isTaiwanA = nameA.toLowerCase().includes('taiwan');
-                const isTaiwanB = nameB.toLowerCase().includes('taiwan');
-                
-                if (isTaiwanA && !isTaiwanB) return -1;
-                if (!isTaiwanA && isTaiwanB) return 1;
+                if (nameA.toLowerCase() === 'taiwan') return -1;
+                if (nameB.toLowerCase() === 'taiwan') return 1;
                 return nameA.localeCompare(nameB, undefined, { sensitivity: 'accent', numeric: true });
             });
 
@@ -442,9 +449,9 @@
 
                 html += `
                     <div class="mb-5">
-                        <div class="flex items-center gap-2 mb-2 px-1">
+                        <div class="flex items-center gap-2 mb-2 px-1 cursor-pointer group/country" onclick="flyToCountryFromSidebar('${countryId}')" title="Fly to ${countryName}">
                             <span class="text-base">${flag}</span>
-                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em]">${countryName}</span>
+                            <span class="text-[10px] font-bold text-slate-400 group-hover/country:text-white transition-colors uppercase tracking-[0.2em]">${countryName}</span>
                             <div class="h-[1px] bg-white/10 flex-1 ml-2"></div>
                         </div>
                         <div class="flex flex-col gap-1.5">
@@ -471,6 +478,11 @@
                 html += `</div></div>`;
             });
             container.innerHTML = html;
+        }
+
+        function flyToCountryFromSidebar(countryId) {
+            if (isPeopleListOpen) togglePeopleList();
+            flyToCountry(countryId);
         }
 
         function flyToPerson(cityId) {
