@@ -116,7 +116,7 @@
 
     <div id="splashScreen" class="fixed inset-0 z-[2000] bg-[#030712] flex flex-col items-center justify-center transition-all pointer-events-auto">
         <div id="splashGifLayer" class="absolute inset-0 bg-[#030712] flex items-center justify-center transition-opacity duration-[1800ms] ease-in-out z-20 p-6">
-            <img src="https://miniminimaker.github.io/kyriocifer2026/open.gif" class="w-full max-w-xl sm:max-w-2xl md:max-w-4xl h-auto max-h-[85vh] object-contain" alt="Opening Animation">
+            <video src="https://sxuwpcvdnbzettdmrclo.supabase.co/storage/v1/object/public/avatars/open.mp4" autoplay muted playsinline class="w-full max-w-xl sm:max-w-2xl md:max-w-4xl h-auto max-h-[85vh] object-contain"></video>
         </div>
 
         <div id="splashTextLayer" class="absolute inset-0 bg-[#030712] flex flex-col items-center justify-center opacity-0 transition-opacity duration-[1800ms] ease-in-out pointer-events-none z-10 p-6">
@@ -377,12 +377,6 @@
         let autoScrollInterval = null;
         let isCarouselHovered = false;
         let isPeopleListOpen = false;
-
-        // Preload GIFs for instant playback without lag
-        const preloadedOpenGif = new Image();
-        preloadedOpenGif.src = 'https://miniminimaker.github.io/kyriocifer2026/open.gif';
-        const preloadedIntroGif = new Image();
-        preloadedIntroGif.src = 'https://miniminimaker.github.io/kyriocifer2026/intro.gif';
 
         function togglePeopleList() {
             const sidebar = document.getElementById('peopleSidebar');
@@ -860,7 +854,7 @@
                     splash.classList.add('splash-exit');
                     setTimeout(() => {
                         splash.remove();
-                        initMap(); // Lazy initialize map after opening animation completes for silky smooth performance
+                        initMap();
                     }, 1800); 
                 }
             }, 8000);
@@ -875,7 +869,7 @@
             modal.style.transform = 'translateZ(0)';
             modal.innerHTML = `
                 <div class="absolute inset-0 bg-[#030712] flex items-center justify-center p-6">
-                    <img src="https://miniminimaker.github.io/kyriocifer2026/intro.gif" class="w-full max-w-xl sm:max-w-2xl md:max-w-4xl h-auto max-h-[85vh] object-contain" alt="Intro Animation">
+                    <video src="https://sxuwpcvdnbzettdmrclo.supabase.co/storage/v1/object/public/avatars/open.mp4" autoplay muted playsinline loop class="w-full max-w-xl sm:max-w-2xl md:max-w-4xl h-auto max-h-[85vh] object-contain"></video>
                 </div>
                 <div class="absolute bottom-8 z-30 text-[11px] text-slate-400 font-semibold tracking-widest bg-slate-900/80 px-4 py-2 rounded-full border border-white/10 backdrop-blur-md pointer-events-none">
                     Click anywhere to return
