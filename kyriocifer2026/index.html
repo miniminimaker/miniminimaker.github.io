@@ -200,7 +200,7 @@
             </div>
         </div>
 
-        <div id="cityPopupCard" class="fixed top-1/2 left-1/2 z-[100] glass-panel shadow-glass rounded-[24px] p-1 w-[340px] hidden transform -translate-x-1/2 -translate-y-1/2 pointer-events-auto transition-all duration-300 opacity-0 scale-95 origin-center">
+        <div id="cityPopupCard" class="fixed top-1/2 left-1/2 z-[100] glass-panel shadow-glass rounded-[24px] p-1 w-[92%] sm:w-[420px] hidden transform -translate-x-1/2 -translate-y-1/2 pointer-events-auto transition-all duration-300 opacity-0 scale-95 origin-center">
             
             <div class="bg-gradient-to-b from-white/[0.05] to-transparent rounded-[20px] p-5 max-h-[85vh] overflow-y-auto custom-scrollbar">
                 <div class="flex justify-between items-center mb-3">
@@ -208,7 +208,7 @@
                         <button onclick="returnToWorldView()" class="w-8 h-8 rounded-full bg-white/5 hover:bg-white/10 border border-white/5 hover:border-white/20 flex items-center justify-center text-slate-400 hover:text-white transition duration-200" title="Back to World">
                             <i class="fa-solid fa-earth-americas text-[11px]"></i>
                         </button>
-                        <button onclick="flyToCountry(activeCityForBubble?.country_id)" class="w-8 h-8 rounded-full bg-white/5 hover:bg-white/10 border border-white/5 hover:border-white/20 flex items-center justify-center text-slate-400 hover:text-white transition duration-200" title="Back to Country">
+                        <button onclick="flyToCountry(activeCountryId)" class="w-8 h-8 rounded-full bg-white/5 hover:bg-white/10 border border-white/5 hover:border-white/20 flex items-center justify-center text-slate-400 hover:text-white transition duration-200" title="Back to Country">
                             <i class="fa-solid fa-arrow-left text-[11px]"></i>
                         </button>
                     </div>
@@ -219,7 +219,7 @@
 
                 <div class="flex flex-col items-center text-center pb-4 border-b border-white/10">
                     <div class="text-[13px] text-brand-yellow font-black uppercase tracking-[0.2em] mb-1 bg-brand-yellow/10 px-3 py-1.5 rounded-sm">
-                        <span id="popupLocation">COUNTRY • CITY</span>
+                        <span id="popupLocation">COUNTRY</span>
                     </div>
                 </div>
 
@@ -516,7 +516,7 @@
             renderCountryCarousel();
             updateBreadcrumb();
             
-            map.on('click', () => { if (activeCityForBubble) closeCityPopup(); });
+            map.on('click', () => { if (activeCityForBubble || activePersonForBubble) closeCityPopup(); });
             
             setInterval(fetchAppDataSilent, 15000);
         }
@@ -568,7 +568,8 @@
                     group[0].computed_lat = city.latitude;
                     group[0].computed_lng = city.longitude;
                 } else {
-                    const radius = 0.05; // Base radius for scattering around the area
+                    // 增大半徑並加入動態計算：基礎距離拉開，且人數越多散佈的圓圈就越大，避免愛心疊加
+                    const radius = 0.25 + (group.length * 0.03); 
                     const latCos = Math.cos(city.latitude * Math.PI / 180);
                     group.forEach((p, i) => {
                         const angle = (Math.PI * 2 * i) / group.length;
@@ -599,11 +600,18 @@
         async function fetchAppDataSilent() {
             await fetchAppData();
             if (currentMapLevel === 'world') { renderWorldView(); }
-            else if (currentMapLevel === 'person' && activePersonForBubble && activeCityForBubble) {
+            else if (currentMapLevel === 'person' && activePersonForBubble) {
                 const updatedPerson = appData.people.find(p => p.id === activePersonForBubble.id);
-                const updatedCity = appData.cities.find(c => c.id === activeCityForBubble.id);
-                if (updatedPerson && updatedPerson.active && updatedCity) {
-                    showCityPopup(updatedCity, [updatedPerson], true);
+                if (updatedPerson && updatedPerson.active) {
+                    const countryPeople = appData.people.filter(p => p.active && p.country_id === updatedPerson.country_id);
+                    countryPeople.sort((a, b) => {
+                        const isMiniA = a.name.toUpperCase().includes('MINI');
+                        const isMiniB = b.name.toUpperCase().includes('MINI');
+                        if (isMiniA && !isMiniB) return -1;
+                        if (!isMiniA && isMiniB) return 1;
+                        return a.name.localeCompare(b.name, undefined, { sensitivity: 'accent', numeric: true });
+                    });
+                    showCountryPopup(updatedPerson.country_id, countryPeople, true);
                 } else {
                     closeCityPopup();
                 }
@@ -675,16 +683,33 @@
             currentMapLevel = 'person'; 
             activeCityForBubble = city;
             activePersonForBubble = person;
+            activeCountryId = person.country_id;
             updateBreadcrumb();
-            map.flyTo([person.computed_lat, person.computed_lng], 10, { duration: 1.2 });
-            setTimeout(() => showCityPopup(city, [person]), 600);
+            
+            const countryPeople = appData.people.filter(p => p.active && p.country_id === person.country_id);
+            
+            if (countryPeople.length > 0) {
+                const bounds = L.latLngBounds(countryPeople.map(p => [p.computed_lat, p.computed_lng]));
+                map.flyToBounds(bounds, { padding: [100, 100], maxZoom: 6, duration: 1.2 });
+            } else {
+                map.flyTo([person.computed_lat, person.computed_lng], 6, { duration: 1.2 });
+            }
+            
+            countryPeople.sort((a, b) => {
+                const isMiniA = a.name.toUpperCase().includes('MINI');
+                const isMiniB = b.name.toUpperCase().includes('MINI');
+                if (isMiniA && !isMiniB) return -1;
+                if (!isMiniA && isMiniB) return 1;
+                return a.name.localeCompare(b.name, undefined, { sensitivity: 'accent', numeric: true });
+            });
+
+            setTimeout(() => showCountryPopup(person.country_id, countryPeople), 600);
         }
 
-        function showCityPopup(city, people, isSilent = false) {
-            activeCityForBubble = city;
-            const country = appData.countries.find(c => c.id === city.country_id);
+        function showCountryPopup(countryId, people, isSilent = false) {
+            const country = appData.countries.find(c => c.id === countryId);
 
-            document.getElementById('popupLocation').innerText = `${country ? country.name_en : ''} • ${city.name_en || city.name}`;
+            document.getElementById('popupLocation').innerText = `${country ? (country.name_en || country.name) : 'COUNTRY'} ${country ? country.flag : ''}`;
 
             const listContainer = document.getElementById('popupPeopleList');
             if (!isSilent) listContainer.innerHTML = ''; 
@@ -692,6 +717,8 @@
             let newHtml = '';
             people.forEach(p => {
                 const pLang = appData.languages.find(l => l.id === p.language_id);
+                const pCity = appData.cities.find(c => c.id === p.city_id);
+                const cityName = pCity ? (pCity.name_en || pCity.name) : 'Unknown City';
                 const audioUrl = p.audio_url || (pLang ? pLang.audio_url : '');
                 const hasAudio = !!(audioUrl && audioUrl !== 'undefined' && audioUrl.trim() !== '');
                 
@@ -701,18 +728,21 @@
                 if (hasAudio) {
                     newHtml += `
                         <div class="flex items-center justify-between bg-white/[0.04] p-3 rounded-2xl hover:bg-white/[0.08] border border-white/5 hover:border-white/20 transition-all cursor-pointer group" onclick="playPersonAudio('${audioUrl}', 'playBtn_${p.id}', 'playIcon_${p.id}')">
-                            <div class="flex items-center space-x-3 overflow-hidden">
+                            <div class="flex items-center space-x-3 overflow-hidden flex-1 min-w-0">
                                 <img src="${p.avatar_url}" class="w-10 h-10 rounded-full object-cover border border-white/20 group-hover:border-brand-pink transition-colors shrink-0" onerror="this.src='https://placehold.co/100x100/1e293b/f43f5e?text=U'">
-                                <div class="flex flex-col overflow-hidden">
+                                <div class="flex flex-col overflow-hidden min-w-0 w-full">
                                     <div class="text-[14px] font-bold text-slate-100 group-hover:text-white transition-colors truncate mb-0.5">${p.name}</div>
-                                    <div class="text-[10px] text-slate-400 font-medium truncate flex items-center gap-1.5">
-                                        <span class="text-brand-yellow font-bold uppercase tracking-wider">${langName}</span>
-                                        <span class="w-1 h-1 rounded-full bg-slate-600"></span>
+                                    <div class="text-[10px] text-slate-400 font-medium flex items-center gap-1.5">
+                                        <span class="text-slate-300 uppercase tracking-wider truncate min-w-0">${cityName}</span>
+                                        <span class="w-1 h-1 rounded-full bg-slate-600 shrink-0"></span>
+                                        <span class="text-brand-yellow font-bold uppercase tracking-wider shrink-0">${langName}</span>
+                                    </div>
+                                    <div class="text-[10px] text-slate-400 font-medium truncate flex items-center gap-1.5 mt-0.5">
                                         <span class="text-slate-300 italic">${phrase}</span>
                                     </div>
                                 </div>
                             </div>
-                            <button id="playBtn_${p.id}" class="w-8 h-8 rounded-full bg-white/5 group-hover:bg-brand-pink border border-white/10 group-hover:border-brand-pink flex items-center justify-center transition-all shrink-0 ml-2 shadow-sm">
+                            <button id="playBtn_${p.id}" class="w-8 h-8 rounded-full bg-white/5 group-hover:bg-brand-pink border border-white/10 group-hover:border-brand-pink flex items-center justify-center transition-all shrink-0 ml-3 shadow-sm">
                                 <i id="playIcon_${p.id}" class="fa-solid fa-play text-slate-300 group-hover:text-white ml-0.5 text-[10px] transition-colors"></i>
                             </button>
                         </div>
@@ -720,13 +750,16 @@
                 } else {
                     newHtml += `
                         <div class="flex items-center justify-between p-3 rounded-2xl border border-transparent">
-                            <div class="flex items-center space-x-3 overflow-hidden">
+                            <div class="flex items-center space-x-3 overflow-hidden flex-1 min-w-0">
                                 <img src="${p.avatar_url}" class="w-10 h-10 rounded-full object-cover border border-white/10 shrink-0 opacity-70" onerror="this.src='https://placehold.co/100x100/1e293b/f43f5e?text=U'">
-                                <div class="flex flex-col overflow-hidden">
+                                <div class="flex flex-col overflow-hidden min-w-0 w-full">
                                     <div class="text-[14px] font-bold text-slate-100 truncate mb-0.5">${p.name}</div>
-                                    <div class="text-[10px] text-slate-400 font-medium truncate flex items-center gap-1.5">
-                                        <span class="text-brand-yellow font-bold uppercase tracking-wider">${langName}</span>
-                                        <span class="w-1 h-1 rounded-full bg-slate-600"></span>
+                                    <div class="text-[10px] text-slate-400 font-medium flex items-center gap-1.5">
+                                        <span class="text-slate-300 uppercase tracking-wider truncate min-w-0">${cityName}</span>
+                                        <span class="w-1 h-1 rounded-full bg-slate-600 shrink-0"></span>
+                                        <span class="text-brand-yellow font-bold uppercase tracking-wider shrink-0">${langName}</span>
+                                    </div>
+                                    <div class="text-[10px] text-slate-400 font-medium truncate flex items-center gap-1.5 mt-0.5">
                                         <span class="text-slate-300 italic">${phrase}</span>
                                     </div>
                                 </div>
@@ -801,7 +834,7 @@
                 container.style.opacity = '0'; container.style.pointerEvents = 'none';
             } else {
                 container.style.opacity = '1'; container.style.pointerEvents = 'auto';
-                const c = appData.countries.find(c => c.id === (currentMapLevel === 'person' || currentMapLevel === 'city' ? activeCityForBubble?.country_id : activeCountryId));
+                const c = appData.countries.find(c => c.id === activeCountryId);
                 trail.innerHTML = `
                     <button onclick="returnToWorldView()" class="text-slate-400 hover:text-white transition-colors flex items-center gap-1.5"><i class="fa-solid fa-earth-americas text-[10px]"></i></button>
                     <span class="text-slate-600">/</span>
