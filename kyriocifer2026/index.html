@@ -37,6 +37,8 @@
     </script>
 
     <style>
+        * { -webkit-tap-highlight-color: transparent; }
+        
         body { 
             font-family: 'Plus Jakarta Sans', sans-serif; 
             background-color: #030712;
@@ -73,6 +75,7 @@
             background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.1); color: white; border-radius: 12px;
             box-shadow: 0 4px 16px rgba(0,0,0,0.4); padding: 8px 12px;
+            pointer-events: none; /* Prevent tooltips from blocking taps on mobile */
         }
         .leaflet-tooltip-top.glass-tooltip:before { border-top-color: rgba(15, 23, 42, 0.75); }
 
@@ -128,65 +131,65 @@
         </div>
 
         <div id="splashTextLayer" class="absolute inset-0 bg-[#030712] flex flex-col items-center justify-center opacity-0 transition-opacity duration-[1500ms] ease-in-out pointer-events-none z-10 p-6">
-            <div class="flex flex-col items-center justify-center space-y-6">
-                <div class="w-24 h-24 rounded-full bg-gradient-to-br from-slate-50 to-slate-200 flex items-center justify-center shadow-[0_0_30px_rgba(244,63,94,0.4)] p-1.5 relative">
+            <div class="flex flex-col items-center justify-center space-y-4 sm:space-y-6">
+                <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gradient-to-br from-slate-50 to-slate-200 flex items-center justify-center shadow-[0_0_30px_rgba(244,63,94,0.4)] p-1.5 relative">
                     <div class="absolute inset-0 rounded-full border border-white/40"></div>
                     <img src="https://miniminimaker.github.io/kyriocifer2026/logo.png" class="w-full h-full object-contain relative z-10 rounded-full">
                 </div>
                 
-                <div class="text-center flex flex-col items-center mt-4">
-                    <p class="text-[10px] text-brand-pink font-bold tracking-[0.4em] uppercase mb-3">
+                <div class="text-center flex flex-col items-center mt-3 sm:mt-4">
+                    <p class="text-[9px] sm:text-[10px] text-brand-pink font-bold tracking-[0.3em] sm:tracking-[0.4em] uppercase mb-2 sm:mb-3">
                         "I love you" in different languages
                     </p>
-                    <h1 class="font-black text-2xl tracking-widest text-white uppercase mb-3">
+                    <h1 class="font-black text-xl sm:text-2xl tracking-widest text-white uppercase mb-2 sm:mb-3">
                         Kyrio Cifer 2nd Anniversary
                     </h1>
-                    <p class="text-xs text-slate-400 font-medium italic tracking-widest">
+                    <p class="text-[10px] sm:text-xs text-slate-400 font-medium italic tracking-widest">
                         We Met Because of You, We Gather Because of Love.
                     </p>
                 </div>
                 
-                <div class="w-12 h-0.5 bg-brand-pink rounded-full mt-6 shadow-[0_0_10px_rgba(244,63,94,0.8)]"></div>
+                <div class="w-10 sm:w-12 h-0.5 bg-brand-pink rounded-full mt-4 sm:mt-6 shadow-[0_0_10px_rgba(244,63,94,0.8)]"></div>
                 
-                <div class="mt-8 text-[10px] text-slate-500/70 font-semibold tracking-[0.25em]">
+                <div class="mt-6 sm:mt-8 text-[9px] sm:text-[10px] text-slate-500/70 font-semibold tracking-[0.25em]">
                     #miniminiproject
                 </div>
             </div>
         </div>
     </div>
 
-    <header class="w-full bg-[#0b101e] border-b border-white/5 z-50 shrink-0 py-5 sm:py-6 px-6 shadow-xl flex items-center justify-between relative shadow-black/50">
-        <div class="flex-1 flex justify-start"></div>
+    <header class="w-full bg-[#0b101e] border-b border-white/5 z-50 shrink-0 py-3 sm:py-6 px-3 sm:px-6 shadow-xl flex items-center justify-between relative shadow-black/50">
+        <div class="flex-1 hidden sm:flex justify-start"></div>
 
-        <div class="flex items-center justify-center cursor-pointer transition-transform hover:scale-[1.01] duration-300" onclick="returnToWorldView()">
-            <div class="w-[64px] h-[64px] rounded-full bg-gradient-to-br from-slate-50 to-slate-200 flex items-center justify-center p-1 relative shadow-[0_0_15px_rgba(244,63,94,0.25)] shrink-0">
+        <div class="flex items-center justify-start sm:justify-center cursor-pointer transition-transform hover:scale-[1.01] duration-300 flex-none sm:flex-1 lg:flex-none" onclick="returnToWorldView()">
+            <div class="w-[44px] h-[44px] sm:w-[64px] sm:h-[64px] rounded-full bg-gradient-to-br from-slate-50 to-slate-200 flex items-center justify-center p-1 relative shadow-[0_0_15px_rgba(244,63,94,0.25)] shrink-0">
                 <img src="https://miniminimaker.github.io/kyriocifer2026/logo.png" alt="Logo" class="w-full h-full object-contain relative z-10 rounded-full">
             </div>
             
-            <div class="flex flex-col text-center items-center ml-5 justify-center w-max">
-                <p class="text-[9.5px] text-brand-pink font-bold tracking-[0.38em] uppercase mb-2 opacity-90 leading-none">
+            <div class="flex flex-col text-left sm:text-center items-start sm:items-center ml-2.5 sm:ml-5 justify-center w-max">
+                <p class="text-[7.5px] sm:text-[9.5px] text-brand-pink font-bold tracking-[0.15em] sm:tracking-[0.38em] uppercase mb-1 sm:mb-2 opacity-90 leading-none">
                     "I love you" in different languages
                 </p>
-                <h1 class="font-black text-[22px] text-white tracking-[0.15em] uppercase leading-none mb-2.5 drop-shadow-sm">
-                    Kyrio Cifer 2nd Anniversary
+                <h1 class="font-black text-[13px] sm:text-[22px] text-white tracking-[0.05em] sm:tracking-[0.15em] uppercase leading-tight sm:leading-none mb-0.5 sm:mb-2.5 drop-shadow-sm">
+                    Kyrio Cifer <br class="block sm:hidden">2nd Anniversary
                 </h1>
-                <p class="text-[12px] text-slate-400 font-medium italic tracking-wide leading-none">
+                <p class="text-[12px] text-slate-400 font-medium italic tracking-wide leading-none hidden sm:block">
                     We Met Because of You, We Gather Because of Love.
                 </p>
             </div>
         </div>
 
-        <div class="flex-1 flex justify-end gap-2.5 sm:gap-3.5">
-            <button onclick="replayIntro()" class="flex items-center justify-center gap-2 px-3 sm:px-4 py-2 bg-white/5 hover:bg-brand-pink/20 border border-white/10 rounded-full text-slate-300 hover:text-white transition-all duration-300 group shadow-glass" title="Replay Intro Video">
-                <i class="fa-solid fa-play text-slate-300 group-hover:text-brand-pink transition-colors text-sm ml-0.5"></i>
+        <div class="flex-1 flex justify-end gap-1.5 sm:gap-3.5">
+            <button onclick="replayIntro()" class="flex items-center justify-center gap-1.5 sm:gap-2 px-2.5 sm:px-4 py-1.5 sm:py-2 bg-white/5 hover:bg-brand-pink/20 border border-white/10 rounded-full text-slate-300 hover:text-white transition-all duration-300 group shadow-glass" title="Replay Intro Video">
+                <i class="fa-solid fa-play text-slate-300 group-hover:text-brand-pink transition-colors text-[11px] sm:text-sm ml-0.5"></i>
                 <span class="text-[10px] font-bold uppercase tracking-wider hidden sm:block">Intro</span>
             </button>
-            <button onclick="openGuide()" class="flex items-center justify-center gap-2 px-3 sm:px-4 py-2 bg-white/5 hover:bg-brand-pink/20 border border-white/10 rounded-full text-slate-300 hover:text-white transition-all duration-300 group shadow-glass">
-                <i class="fa-solid fa-circle-question group-hover:text-brand-pink transition-colors text-sm"></i>
+            <button onclick="openGuide()" class="flex items-center justify-center gap-1.5 sm:gap-2 px-2.5 sm:px-4 py-1.5 sm:py-2 bg-white/5 hover:bg-brand-pink/20 border border-white/10 rounded-full text-slate-300 hover:text-white transition-all duration-300 group shadow-glass">
+                <i class="fa-solid fa-circle-question group-hover:text-brand-pink transition-colors text-[11px] sm:text-sm"></i>
                 <span class="text-[10px] font-bold uppercase tracking-wider hidden sm:block">Guide</span>
             </button>
-            <button onclick="togglePeopleList()" class="flex items-center justify-center gap-2 px-3 sm:px-4 py-2 bg-white/5 hover:bg-brand-pink/20 border border-white/10 rounded-full text-slate-300 hover:text-white transition-all duration-300 group shadow-glass">
-                <span class="butterfly-icon text-slate-300 group-hover:text-brand-pink transition-colors text-sm"></span>
+            <button onclick="togglePeopleList()" class="flex items-center justify-center gap-1.5 sm:gap-2 px-2.5 sm:px-4 py-1.5 sm:py-2 bg-white/5 hover:bg-brand-pink/20 border border-white/10 rounded-full text-slate-300 hover:text-white transition-all duration-300 group shadow-glass">
+                <span class="butterfly-icon text-slate-300 group-hover:text-brand-pink transition-colors text-[11px] sm:text-sm"></span>
                 <span class="text-[10px] font-bold uppercase tracking-wider hidden sm:block">Kaleidoscope</span>
             </button>
         </div>
@@ -196,29 +199,29 @@
         <div id="map" class="w-full h-full absolute inset-0 z-10"></div>
 
         <div id="breadcrumbOverlay" class="absolute top-4 sm:top-6 left-4 sm:left-6 z-20 pointer-events-auto transition-opacity duration-300">
-            <div id="breadcrumbTrail" class="glass-panel shadow-glass rounded-full px-4 py-2 flex items-center space-x-2 text-[11px] font-semibold tracking-wide">
+            <div id="breadcrumbTrail" class="glass-panel shadow-glass rounded-full px-3 sm:px-4 py-1.5 sm:py-2 flex items-center space-x-2 text-[10px] sm:text-[11px] font-semibold tracking-wide">
             </div>
         </div>
 
-        <div id="cityPopupCard" class="fixed top-1/2 left-1/2 z-[100] glass-panel shadow-glass rounded-[24px] p-1 w-[92%] sm:w-[420px] hidden transform -translate-x-1/2 -translate-y-1/2 pointer-events-auto transition-all duration-300 opacity-0 scale-95 origin-center">
+        <div id="cityPopupCard" class="fixed top-1/2 left-1/2 z-[100] glass-panel shadow-glass rounded-[20px] sm:rounded-[24px] p-1 w-[92%] sm:w-[420px] hidden transform -translate-x-1/2 -translate-y-1/2 pointer-events-auto transition-all duration-300 opacity-0 scale-95 origin-center">
             
-            <div class="bg-gradient-to-b from-white/[0.05] to-transparent rounded-[20px] p-5 max-h-[85vh] overflow-y-auto custom-scrollbar">
+            <div class="bg-gradient-to-b from-white/[0.05] to-transparent rounded-[16px] sm:rounded-[20px] p-4 sm:p-5 max-h-[65vh] sm:max-h-[85vh] overflow-y-auto custom-scrollbar">
                 <div class="flex justify-between items-center mb-3">
                     <div class="flex space-x-2">
-                        <button onclick="returnToWorldView()" class="w-8 h-8 rounded-full bg-white/5 hover:bg-white/10 border border-white/5 hover:border-white/20 flex items-center justify-center text-slate-400 hover:text-white transition duration-200" title="Back to World">
-                            <i class="fa-solid fa-earth-americas text-[11px]"></i>
+                        <button onclick="returnToWorldView()" class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/5 hover:bg-white/10 border border-white/5 hover:border-white/20 flex items-center justify-center text-slate-400 hover:text-white transition duration-200" title="Back to World">
+                            <i class="fa-solid fa-earth-americas text-[10px] sm:text-[11px]"></i>
                         </button>
-                        <button onclick="flyToCountry(activeCountryId)" class="w-8 h-8 rounded-full bg-white/5 hover:bg-white/10 border border-white/5 hover:border-white/20 flex items-center justify-center text-slate-400 hover:text-white transition duration-200" title="Back to Country">
-                            <i class="fa-solid fa-arrow-left text-[11px]"></i>
+                        <button onclick="flyToCountry(activeCountryId)" class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/5 hover:bg-white/10 border border-white/5 hover:border-white/20 flex items-center justify-center text-slate-400 hover:text-white transition duration-200" title="Back to Country">
+                            <i class="fa-solid fa-arrow-left text-[10px] sm:text-[11px]"></i>
                         </button>
                     </div>
-                    <button onclick="closeCityPopup()" class="w-8 h-8 rounded-full bg-white/5 hover:bg-brand-pink/20 hover:text-brand-pink border border-white/5 hover:border-brand-pink/30 flex items-center justify-center text-slate-400 transition duration-200" title="Close">
-                        <i class="fa-solid fa-xmark text-sm"></i>
+                    <button onclick="closeCityPopup()" class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/5 hover:bg-brand-pink/20 hover:text-brand-pink border border-white/5 hover:border-brand-pink/30 flex items-center justify-center text-slate-400 transition duration-200" title="Close">
+                        <i class="fa-solid fa-xmark text-xs sm:text-sm"></i>
                     </button>
                 </div>
 
                 <div class="flex flex-col items-center text-center pb-4 border-b border-white/10">
-                    <div class="text-[13px] text-brand-yellow font-black uppercase tracking-[0.2em] mb-1 bg-brand-yellow/10 px-3 py-1.5 rounded-sm">
+                    <div class="text-[12px] sm:text-[13px] text-brand-yellow font-black uppercase tracking-[0.2em] mb-1 bg-brand-yellow/10 px-3 py-1.5 rounded-sm">
                         <span id="popupLocation">COUNTRY</span>
                     </div>
                 </div>
@@ -228,14 +231,14 @@
             </div>
         </div>
 
-        <div class="absolute bottom-6 sm:bottom-8 inset-x-0 z-20 flex flex-col items-center pointer-events-none px-4">
-            <div class="glass-panel shadow-glass rounded-full py-1.5 px-3 overflow-hidden pointer-events-auto max-w-4xl w-full relative mb-3">
+        <div class="absolute bottom-5 sm:bottom-8 inset-x-0 z-20 flex flex-col items-center pointer-events-none px-2 sm:px-4">
+            <div class="glass-panel shadow-glass rounded-full py-1.5 px-3 overflow-hidden pointer-events-auto max-w-4xl w-full relative mb-2 sm:mb-3">
                 <div class="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-[rgba(15,23,42,0.8)] to-transparent z-10 pointer-events-none rounded-l-full"></div>
                 <div class="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-[rgba(15,23,42,0.8)] to-transparent z-10 pointer-events-none rounded-r-full"></div>
                 <div id="countryCarousel" class="flex items-center py-1 overflow-x-auto no-scrollbar cursor-grab active:cursor-grabbing w-full"></div>
             </div>
 
-            <div class="pointer-events-auto text-[10px] text-slate-500/70 tracking-widest font-medium text-center">
+            <div class="pointer-events-auto text-[9px] sm:text-[10px] text-slate-500/70 tracking-widest font-medium text-center">
                 © <a href="https://x.com/miniminimaker" target="_blank" class="text-brand-pink hover:text-brand-pink/80 transition-colors duration-300">miniminimaker</a>
             </div>
         </div>
@@ -244,90 +247,90 @@
     <div id="guideModal" class="fixed inset-0 z-[1000] hidden items-center justify-center pointer-events-auto">
         <div class="absolute inset-0 bg-[#030712]/70 backdrop-blur-sm transition-opacity" onclick="closeGuide()"></div>
         
-        <div id="guideContent" class="glass-panel shadow-2xl rounded-[28px] p-6 sm:p-9 max-w-lg w-[92%] sm:w-[500px] relative transform scale-95 opacity-0 transition-all duration-300 flex flex-col border border-white/10">
-            <div class="flex justify-between items-center mb-6 border-b border-white/10 pb-4">
-                <h2 class="text-white font-black text-sm sm:text-base tracking-widest uppercase flex items-center gap-2">
+        <div id="guideContent" class="glass-panel shadow-2xl rounded-[24px] sm:rounded-[28px] p-5 sm:p-9 max-w-lg w-[92%] sm:w-[500px] relative transform scale-95 opacity-0 transition-all duration-300 flex flex-col border border-white/10">
+            <div class="flex justify-between items-center mb-5 sm:mb-6 border-b border-white/10 pb-3 sm:pb-4">
+                <h2 class="text-white font-black text-xs sm:text-base tracking-widest uppercase flex items-center gap-2">
                     <i class="fa-solid fa-map-location-dot text-brand-yellow"></i> How to Explore
                 </h2>
-                <button onclick="closeGuide()" class="w-8 h-8 rounded-full bg-white/5 hover:bg-brand-pink/20 border border-white/10 hover:border-brand-pink flex items-center justify-center text-slate-400 hover:text-white transition duration-200">
-                    <i class="fa-solid fa-xmark"></i>
+                <button onclick="closeGuide()" class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/5 hover:bg-brand-pink/20 border border-white/10 hover:border-brand-pink flex items-center justify-center text-slate-400 hover:text-white transition duration-200">
+                    <i class="fa-solid fa-xmark text-sm"></i>
                 </button>
             </div>
             
-            <div class="space-y-4 text-sm text-slate-300 font-medium">
-                <div class="flex items-start gap-4 p-3.5 rounded-2xl bg-white/[0.03] border border-white/5 hover:border-white/10 transition-colors">
-                    <div class="w-8 h-8 rounded-full bg-brand-yellow/10 flex items-center justify-center shrink-0 mt-0.5 border border-brand-yellow/20">
-                        <span class="text-brand-yellow font-black text-lg leading-none">♥</span>
+            <div class="space-y-3 sm:space-y-4 text-xs sm:text-sm text-slate-300 font-medium">
+                <div class="flex items-start gap-3 sm:gap-4 p-3 sm:p-3.5 rounded-2xl bg-white/[0.03] border border-white/5 hover:border-white/10 transition-colors">
+                    <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-brand-yellow/10 flex items-center justify-center shrink-0 mt-0.5 border border-brand-yellow/20">
+                        <span class="text-brand-yellow font-black text-base sm:text-lg leading-none">♥</span>
                     </div>
                     <div>
-                        <span class="text-white font-bold block mb-1 text-[13px] uppercase tracking-wide">Click the Hearts</span>
-                        <span class="text-xs text-slate-400">Click on the glowing hearts on the map to discover participants.</span>
+                        <span class="text-white font-bold block mb-1 text-[11px] sm:text-[13px] uppercase tracking-wide">Click the Hearts</span>
+                        <span class="text-[10px] sm:text-xs text-slate-400">Click on the glowing hearts on the map to discover participants.</span>
                     </div>
                 </div>
 
-                <div class="flex items-start gap-4 p-3.5 rounded-2xl bg-white/[0.03] border border-white/5 hover:border-white/10 transition-colors">
-                    <div class="w-8 h-8 rounded-full bg-brand-pink/10 flex items-center justify-center shrink-0 mt-0.5 border border-brand-pink/20">
-                        <i class="fa-solid fa-play text-brand-pink text-xs ml-0.5"></i>
+                <div class="flex items-start gap-3 sm:gap-4 p-3 sm:p-3.5 rounded-2xl bg-white/[0.03] border border-white/5 hover:border-white/10 transition-colors">
+                    <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-brand-pink/10 flex items-center justify-center shrink-0 mt-0.5 border border-brand-pink/20">
+                        <i class="fa-solid fa-play text-brand-pink text-[10px] sm:text-xs ml-0.5"></i>
                     </div>
                     <div>
-                        <span class="text-white font-bold block mb-1 text-[13px] uppercase tracking-wide">Play Audio</span>
-                        <span class="text-xs text-slate-400">Inside the popup, click the play button to hear "I love you" in their language. <span class="italic text-slate-500 opacity-90 inline-block mt-0.5">(Some are shy, so there is no audio.)</span></span>
+                        <span class="text-white font-bold block mb-1 text-[11px] sm:text-[13px] uppercase tracking-wide">Play Audio</span>
+                        <span class="text-[10px] sm:text-xs text-slate-400">Inside the popup, click the play button to hear "I love you" in their language. <span class="italic text-slate-500 opacity-90 inline-block mt-0.5">(Some are shy, so there is no audio.)</span></span>
                     </div>
                 </div>
 
-                <div class="flex items-start gap-4 p-3.5 rounded-2xl bg-white/[0.03] border border-white/5 hover:border-white/10 transition-colors">
-                    <div class="w-8 h-8 rounded-full bg-cyan-400/10 flex items-center justify-center shrink-0 mt-0.5 border border-cyan-400/20">
-                        <i class="fa-solid fa-earth-americas text-cyan-400 text-xs"></i>
+                <div class="flex items-start gap-3 sm:gap-4 p-3 sm:p-3.5 rounded-2xl bg-white/[0.03] border border-white/5 hover:border-white/10 transition-colors">
+                    <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-cyan-400/10 flex items-center justify-center shrink-0 mt-0.5 border border-cyan-400/20">
+                        <i class="fa-solid fa-earth-americas text-cyan-400 text-[10px] sm:text-xs"></i>
                     </div>
                     <div>
-                        <span class="text-white font-bold block mb-1 text-[13px] uppercase tracking-wide">Return to World View</span>
-                        <span class="text-xs text-slate-400">Click the map / globe icon on the top-left to return to the center of the earth.</span>
+                        <span class="text-white font-bold block mb-1 text-[11px] sm:text-[13px] uppercase tracking-wide">Return to World View</span>
+                        <span class="text-[10px] sm:text-xs text-slate-400">Click the map / globe icon on the top-left to return to the center of the earth.</span>
                     </div>
                 </div>
 
-                <div class="flex items-start gap-4 p-3.5 rounded-2xl bg-white/[0.03] border border-white/5 hover:border-white/10 transition-colors">
-                    <div class="w-8 h-8 rounded-full bg-blue-400/10 flex items-center justify-center shrink-0 mt-0.5 border border-blue-400/20">
-                        <i class="fa-solid fa-left-right text-blue-400 text-xs"></i>
+                <div class="flex items-start gap-3 sm:gap-4 p-3 sm:p-3.5 rounded-2xl bg-white/[0.03] border border-white/5 hover:border-white/10 transition-colors">
+                    <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-blue-400/10 flex items-center justify-center shrink-0 mt-0.5 border border-blue-400/20">
+                        <i class="fa-solid fa-left-right text-blue-400 text-[10px] sm:text-xs"></i>
                     </div>
                     <div>
-                        <span class="text-white font-bold block mb-1 text-[13px] uppercase tracking-wide">Explore Countries</span>
-                        <span class="text-xs text-slate-400">Drag or swipe the bottom carousel to quickly browse and fly to different countries.</span>
+                        <span class="text-white font-bold block mb-1 text-[11px] sm:text-[13px] uppercase tracking-wide">Explore Countries</span>
+                        <span class="text-[10px] sm:text-xs text-slate-400">Drag or swipe the bottom carousel to quickly browse and fly to different countries.</span>
                     </div>
                 </div>
 
-                <div class="flex items-start gap-4 p-3.5 rounded-2xl bg-white/[0.03] border border-white/5 hover:border-white/10 transition-colors">
-                    <div class="w-8 h-8 rounded-full bg-brand-lavender/10 flex items-center justify-center shrink-0 mt-0.5 border border-brand-lavender/20">
-                        <span class="butterfly-icon text-brand-lavender text-xs"></span>
+                <div class="flex items-start gap-3 sm:gap-4 p-3 sm:p-3.5 rounded-2xl bg-white/[0.03] border border-white/5 hover:border-white/10 transition-colors">
+                    <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-brand-lavender/10 flex items-center justify-center shrink-0 mt-0.5 border border-brand-lavender/20">
+                        <span class="butterfly-icon text-brand-lavender text-[10px] sm:text-xs"></span>
                     </div>
                     <div>
-                        <span class="text-white font-bold block mb-1 text-[13px] uppercase tracking-wide">All Kaleidoscopes</span>
-                        <span class="text-xs text-slate-400">Open top-right list to browse all participants and click any country name to instantly fly there.</span>
+                        <span class="text-white font-bold block mb-1 text-[11px] sm:text-[13px] uppercase tracking-wide">All Kaleidoscopes</span>
+                        <span class="text-[10px] sm:text-xs text-slate-400">Open top-right list to browse all participants and click any country name to instantly fly there.</span>
                     </div>
                 </div>
             </div>
 
-            <div class="mt-6 pt-4 border-t border-white/10 text-center flex flex-col gap-2">
-                <p class="text-[10px] text-slate-400 italic tracking-[0.15em] leading-relaxed px-2">
+            <div class="mt-5 sm:mt-6 pt-4 border-t border-white/10 text-center flex flex-col gap-1.5 sm:gap-2">
+                <p class="text-[9px] sm:text-[10px] text-slate-400 italic tracking-[0.1em] sm:tracking-[0.15em] leading-relaxed px-2">
                     This pertains to a fan-made project organized by MINIMINI and is not an official event of Kyrio Cifer.
                 </p>
-                <a href="https://x.com/miniminimaker" target="_blank" class="inline-block text-[10px] text-brand-pink hover:text-brand-pink/80 font-bold tracking-[0.25em] transition-colors duration-300 mt-1">
+                <a href="https://x.com/miniminimaker" target="_blank" class="inline-block text-[9px] sm:text-[10px] text-brand-pink hover:text-brand-pink/80 font-bold tracking-[0.25em] transition-colors duration-300 mt-1">
                     #miniminiproject
                 </a>
             </div>
         </div>
     </div>
 
-    <div id="peopleSidebar" class="fixed top-[104px] sm:top-[112px] right-0 h-[calc(100%-104px)] sm:h-[calc(100%-112px)] w-[300px] sm:w-[360px] bg-[#0b101e]/95 backdrop-blur-2xl border-l border-white/10 z-[100] transform translate-x-full transition-transform duration-500 flex flex-col shadow-2xl pointer-events-auto">
-        <div class="flex justify-between items-center px-6 py-6 border-b border-white/10 shrink-0">
+    <div id="peopleSidebar" class="fixed top-[68px] sm:top-[112px] right-0 h-[calc(100%-68px)] sm:h-[calc(100%-112px)] w-[85%] max-w-[320px] sm:w-[360px] sm:max-w-none bg-[#0b101e]/95 backdrop-blur-2xl border-l border-white/10 z-[100] transform translate-x-full transition-transform duration-500 flex flex-col shadow-2xl pointer-events-auto">
+        <div class="flex justify-between items-center px-5 sm:px-6 py-5 sm:py-6 border-b border-white/10 shrink-0">
             <div>
-                <h2 class="text-white font-black text-[16px] tracking-widest uppercase">All Kaleidoscopes</h2>
-                <p class="text-brand-pink text-[9px] font-bold tracking-[0.25em] uppercase mt-1" id="totalVoicesCount">0 Participants</p>
+                <h2 class="text-white font-black text-[14px] sm:text-[16px] tracking-widest uppercase">All Kaleidoscopes</h2>
+                <p class="text-brand-pink text-[8px] sm:text-[9px] font-bold tracking-[0.2em] sm:tracking-[0.25em] uppercase mt-1" id="totalVoicesCount">0 Participants</p>
             </div>
-            <button onclick="togglePeopleList()" class="w-8 h-8 rounded-full bg-white/5 hover:bg-brand-pink/20 border border-white/10 hover:border-brand-pink flex items-center justify-center text-slate-400 hover:text-white transition duration-200">
-                <i class="fa-solid fa-xmark"></i>
+            <button onclick="togglePeopleList()" class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/5 hover:bg-brand-pink/20 border border-white/10 hover:border-brand-pink flex items-center justify-center text-slate-400 hover:text-white transition duration-200">
+                <i class="fa-solid fa-xmark text-sm"></i>
             </button>
         </div>
-        <div id="allPeopleSidebarList" class="flex-1 overflow-y-auto custom-scrollbar p-4 space-y-2 pb-24">
+        <div id="allPeopleSidebarList" class="flex-1 overflow-y-auto custom-scrollbar p-3 sm:p-4 space-y-2 pb-24">
         </div>
     </div>
 
@@ -451,10 +454,10 @@
                 });
 
                 html += `
-                    <div class="mb-5">
+                    <div class="mb-4 sm:mb-5">
                         <div class="flex items-center gap-2 mb-2 px-1 cursor-pointer group/country" onclick="flyToCountryFromSidebar('${countryId}')" title="Fly to ${countryName}">
-                            <span class="text-base">${flag}</span>
-                            <span class="text-[10px] font-bold text-slate-400 group-hover/country:text-white transition-colors uppercase tracking-[0.2em]">${countryName}</span>
+                            <span class="text-sm sm:text-base">${flag}</span>
+                            <span class="text-[9px] sm:text-[10px] font-bold text-slate-400 group-hover/country:text-white transition-colors uppercase tracking-[0.2em]">${countryName}</span>
                             <div class="h-[1px] bg-white/10 flex-1 ml-2"></div>
                         </div>
                         <div class="flex flex-col gap-1.5">
@@ -463,17 +466,17 @@
                     const city = appData.cities.find(c => c.id === p.city_id);
                     const cityName = city ? (city.name_en || city.name) : 'Unknown City';
                     html += `
-                        <div class="flex items-center justify-between p-2.5 rounded-xl bg-white/[0.03] hover:bg-white/[0.08] border border-transparent hover:border-white/10 transition-all cursor-pointer group"
+                        <div class="flex items-center justify-between p-2 sm:p-2.5 rounded-xl bg-white/[0.03] hover:bg-white/[0.08] border border-transparent hover:border-white/10 transition-all cursor-pointer group"
                              onclick="flyToSpecificPerson('${p.id}')">
-                            <div class="flex items-center gap-3">
-                                <img src="${p.avatar_url}" class="w-9 h-9 rounded-full object-cover border border-slate-700 group-hover:border-brand-pink transition-colors shrink-0" onerror="this.src='https://placehold.co/100x100/1e293b/f43f5e?text=U'">
+                            <div class="flex items-center gap-2.5 sm:gap-3">
+                                <img src="${p.avatar_url}" class="w-8 h-8 sm:w-9 sm:h-9 rounded-full object-cover border border-slate-700 group-hover:border-brand-pink transition-colors shrink-0" onerror="this.src='https://placehold.co/100x100/1e293b/f43f5e?text=U'">
                                 <div class="flex flex-col overflow-hidden">
-                                    <span class="text-[13px] font-bold text-slate-200 group-hover:text-white transition-colors truncate">${p.name}</span>
-                                    <span class="text-[9px] text-slate-500 uppercase tracking-wider truncate">${cityName}</span>
+                                    <span class="text-[12px] sm:text-[13px] font-bold text-slate-200 group-hover:text-white transition-colors truncate">${p.name}</span>
+                                    <span class="text-[8px] sm:text-[9px] text-slate-500 uppercase tracking-wider truncate">${cityName}</span>
                                 </div>
                             </div>
-                            <div class="w-6 h-6 rounded-full bg-white/5 group-hover:bg-brand-pink/20 flex items-center justify-center transition-colors shrink-0">
-                                <span class="butterfly-icon text-slate-500 group-hover:text-brand-pink text-[10px] transition-colors"></span>
+                            <div class="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-white/5 group-hover:bg-brand-pink/20 flex items-center justify-center transition-colors shrink-0">
+                                <span class="butterfly-icon text-slate-500 group-hover:text-brand-pink text-[9px] sm:text-[10px] transition-colors"></span>
                             </div>
                         </div>
                     `;
@@ -499,13 +502,13 @@
         async function initMap() {
             if (map) return;
             map = L.map('map', {
-                zoomControl: false, attributionControl: false, minZoom: 3, maxZoom: 16,
+                zoomControl: false, attributionControl: false, minZoom: 2, maxZoom: 16,
                 maxBounds: [[-85, -180], [85, 180]], maxBoundsViscosity: 1.0,
                 zoomAnimation: true, fadeAnimation: true, markerZoomAnimation: true
-            }).setView([20.0, 0.0], 3);
+            }).setView([20.0, 0.0], window.innerWidth < 640 ? 2 : 3); // Adaptive starting zoom
 
             L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}', { 
-                maxZoom: 16, minZoom: 3, noWrap: true 
+                maxZoom: 16, minZoom: 2, noWrap: true 
             }).addTo(map);
 
             L.control.zoom({ position: 'bottomright' }).addTo(map);
@@ -568,7 +571,6 @@
                     group[0].computed_lat = city.latitude;
                     group[0].computed_lng = city.longitude;
                 } else {
-                    // 增大半徑並加入動態計算：基礎距離拉開，且人數越多散佈的圓圈就越大，避免愛心疊加
                     const radius = 0.25 + (group.length * 0.03); 
                     const latCos = Math.cos(city.latitude * Math.PI / 180);
                     group.forEach((p, i) => {
@@ -665,9 +667,9 @@
 
             if (activePeople.length > 0) {
                 const bounds = L.latLngBounds(activePeople.map(p => [p.computed_lat, p.computed_lng]));
-                map.flyToBounds(bounds, { padding: [100, 100], maxZoom: 6, duration: 1.5 });
+                map.flyToBounds(bounds, { padding: [100, 100], maxZoom: window.innerWidth < 640 ? 5 : 6, duration: 1.5 });
             } else if (country.latitude && country.longitude) {
-                map.flyTo([country.latitude, country.longitude], 5, { duration: 1.5 });
+                map.flyTo([country.latitude, country.longitude], window.innerWidth < 640 ? 4 : 5, { duration: 1.5 });
             }
 
             if (markersLayer) markersLayer.clearLayers();
@@ -690,9 +692,11 @@
             
             if (countryPeople.length > 0) {
                 const bounds = L.latLngBounds(countryPeople.map(p => [p.computed_lat, p.computed_lng]));
-                map.flyToBounds(bounds, { padding: [100, 100], maxZoom: 6, duration: 1.2 });
+                // Responsive map zoom limits
+                const zoomLvl = window.innerWidth < 640 ? 5 : 6;
+                map.flyToBounds(bounds, { padding: [100, 100], maxZoom: zoomLvl, duration: 1.2 });
             } else {
-                map.flyTo([person.computed_lat, person.computed_lng], 6, { duration: 1.2 });
+                map.flyTo([person.computed_lat, person.computed_lng], window.innerWidth < 640 ? 5 : 6, { duration: 1.2 });
             }
             
             countryPeople.sort((a, b) => {
@@ -727,39 +731,39 @@
 
                 if (hasAudio) {
                     newHtml += `
-                        <div class="flex items-center justify-between bg-white/[0.04] p-3 rounded-2xl hover:bg-white/[0.08] border border-white/5 hover:border-white/20 transition-all cursor-pointer group" onclick="playPersonAudio('${audioUrl}', 'playBtn_${p.id}', 'playIcon_${p.id}')">
-                            <div class="flex items-center space-x-3 overflow-hidden flex-1 min-w-0">
-                                <img src="${p.avatar_url}" class="w-10 h-10 rounded-full object-cover border border-white/20 group-hover:border-brand-pink transition-colors shrink-0" onerror="this.src='https://placehold.co/100x100/1e293b/f43f5e?text=U'">
+                        <div class="flex items-center justify-between bg-white/[0.04] p-2.5 sm:p-3 rounded-2xl hover:bg-white/[0.08] border border-white/5 hover:border-white/20 transition-all cursor-pointer group" onclick="playPersonAudio('${audioUrl}', 'playBtn_${p.id}', 'playIcon_${p.id}')">
+                            <div class="flex items-center space-x-2.5 sm:space-x-3 overflow-hidden flex-1 min-w-0">
+                                <img src="${p.avatar_url}" class="w-9 h-9 sm:w-10 sm:h-10 rounded-full object-cover border border-white/20 group-hover:border-brand-pink transition-colors shrink-0" onerror="this.src='https://placehold.co/100x100/1e293b/f43f5e?text=U'">
                                 <div class="flex flex-col overflow-hidden min-w-0 w-full">
-                                    <div class="text-[14px] font-bold text-slate-100 group-hover:text-white transition-colors truncate mb-0.5">${p.name}</div>
-                                    <div class="text-[10px] text-slate-400 font-medium flex items-center gap-1.5">
+                                    <div class="text-[13px] sm:text-[14px] font-bold text-slate-100 group-hover:text-white transition-colors truncate mb-0.5">${p.name}</div>
+                                    <div class="text-[9px] sm:text-[10px] text-slate-400 font-medium flex items-center gap-1 sm:gap-1.5">
                                         <span class="text-slate-300 uppercase tracking-wider truncate min-w-0">${cityName}</span>
                                         <span class="w-1 h-1 rounded-full bg-slate-600 shrink-0"></span>
                                         <span class="text-brand-yellow font-bold uppercase tracking-wider shrink-0">${langName}</span>
                                     </div>
-                                    <div class="text-[10px] text-slate-400 font-medium truncate flex items-center gap-1.5 mt-0.5">
+                                    <div class="text-[9px] sm:text-[10px] text-slate-400 font-medium truncate flex items-center gap-1 sm:gap-1.5 mt-0.5">
                                         <span class="text-slate-300 italic">${phrase}</span>
                                     </div>
                                 </div>
                             </div>
-                            <button id="playBtn_${p.id}" class="w-8 h-8 rounded-full bg-white/5 group-hover:bg-brand-pink border border-white/10 group-hover:border-brand-pink flex items-center justify-center transition-all shrink-0 ml-3 shadow-sm">
-                                <i id="playIcon_${p.id}" class="fa-solid fa-play text-slate-300 group-hover:text-white ml-0.5 text-[10px] transition-colors"></i>
+                            <button id="playBtn_${p.id}" class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/5 group-hover:bg-brand-pink border border-white/10 group-hover:border-brand-pink flex items-center justify-center transition-all shrink-0 ml-2 sm:ml-3 shadow-sm">
+                                <i id="playIcon_${p.id}" class="fa-solid fa-play text-slate-300 group-hover:text-white ml-0.5 text-[9px] sm:text-[10px] transition-colors"></i>
                             </button>
                         </div>
                     `;
                 } else {
                     newHtml += `
-                        <div class="flex items-center justify-between p-3 rounded-2xl border border-transparent">
-                            <div class="flex items-center space-x-3 overflow-hidden flex-1 min-w-0">
-                                <img src="${p.avatar_url}" class="w-10 h-10 rounded-full object-cover border border-white/10 shrink-0 opacity-70" onerror="this.src='https://placehold.co/100x100/1e293b/f43f5e?text=U'">
+                        <div class="flex items-center justify-between p-2.5 sm:p-3 rounded-2xl border border-transparent">
+                            <div class="flex items-center space-x-2.5 sm:space-x-3 overflow-hidden flex-1 min-w-0">
+                                <img src="${p.avatar_url}" class="w-9 h-9 sm:w-10 sm:h-10 rounded-full object-cover border border-white/10 shrink-0 opacity-70" onerror="this.src='https://placehold.co/100x100/1e293b/f43f5e?text=U'">
                                 <div class="flex flex-col overflow-hidden min-w-0 w-full">
-                                    <div class="text-[14px] font-bold text-slate-100 truncate mb-0.5">${p.name}</div>
-                                    <div class="text-[10px] text-slate-400 font-medium flex items-center gap-1.5">
+                                    <div class="text-[13px] sm:text-[14px] font-bold text-slate-100 truncate mb-0.5">${p.name}</div>
+                                    <div class="text-[9px] sm:text-[10px] text-slate-400 font-medium flex items-center gap-1 sm:gap-1.5">
                                         <span class="text-slate-300 uppercase tracking-wider truncate min-w-0">${cityName}</span>
                                         <span class="w-1 h-1 rounded-full bg-slate-600 shrink-0"></span>
                                         <span class="text-brand-yellow font-bold uppercase tracking-wider shrink-0">${langName}</span>
                                     </div>
-                                    <div class="text-[10px] text-slate-400 font-medium truncate flex items-center gap-1.5 mt-0.5">
+                                    <div class="text-[9px] sm:text-[10px] text-slate-400 font-medium truncate flex items-center gap-1 sm:gap-1.5 mt-0.5">
                                         <span class="text-slate-300 italic">${phrase}</span>
                                     </div>
                                 </div>
@@ -801,7 +805,7 @@
             const btn = document.getElementById(btnId);
             const icon = document.getElementById(iconId);
             if (btn) btn.classList.add('bg-white', 'animate-pulse', 'shadow-glow-pink');
-            if (icon) icon.className = 'fa-solid fa-pause text-brand-pink text-[10px]';
+            if (icon) icon.className = 'fa-solid fa-pause text-brand-pink text-[9px] sm:text-[10px]';
 
             currentAudioPlayer.play().catch(e => resetAudioState());
             currentAudioPlayer.onended = resetAudioState;
@@ -814,14 +818,14 @@
                 const btn = document.getElementById(currentActiveBtnId);
                 const icon = document.getElementById(currentActiveIconId);
                 if (btn) btn.classList.remove('bg-white', 'animate-pulse', 'shadow-glow-pink');
-                if (icon) icon.className = 'fa-solid fa-play text-slate-300 group-hover:text-white ml-0.5 text-[10px] transition-colors';
+                if (icon) icon.className = 'fa-solid fa-play text-slate-300 group-hover:text-white ml-0.5 text-[9px] sm:text-[10px] transition-colors';
                 currentActiveBtnId = currentActiveIconId = null;
             }
         }
 
         function returnToWorldView() {
             closeCityPopup(); currentMapLevel = 'world'; activeCityForBubble = activeCountryId = activePersonForBubble = null;
-            if (map) map.flyTo([20.0, 0.0], 3, { duration: 1.5 });
+            if (map) map.flyTo([20.0, 0.0], window.innerWidth < 640 ? 2 : 3, { duration: 1.5 });
             renderWorldView();
         }
 
@@ -836,7 +840,7 @@
                 container.style.opacity = '1'; container.style.pointerEvents = 'auto';
                 const c = appData.countries.find(c => c.id === activeCountryId);
                 trail.innerHTML = `
-                    <button onclick="returnToWorldView()" class="text-slate-400 hover:text-white transition-colors flex items-center gap-1.5"><i class="fa-solid fa-earth-americas text-[10px]"></i></button>
+                    <button onclick="returnToWorldView()" class="text-slate-400 hover:text-white transition-colors flex items-center gap-1.5"><i class="fa-solid fa-earth-americas text-[9px] sm:text-[10px]"></i></button>
                     <span class="text-slate-600">/</span>
                     <button onclick="flyToCountry('${c?.id}')" class="text-white font-bold hover:text-brand-pink transition-colors">${c ? c.flag + ' ' + (c.name_en || c.name) : 'Country'}</button>
                 `;
@@ -853,12 +857,12 @@
             }
             
             const group = document.createElement('div');
-            group.className = 'flex items-center space-x-3 pr-3 shrink-0';
+            group.className = 'flex items-center space-x-2 sm:space-x-3 pr-3 shrink-0';
             
             baseCountries.forEach(country => {
                 const btn = document.createElement('button');
-                btn.className = 'flex items-center space-x-2 px-4 py-1.5 bg-white/[0.03] hover:bg-white/10 border border-white/5 hover:border-white/20 rounded-full text-[11px] font-bold text-slate-300 hover:text-white shrink-0 transition-all duration-300 cursor-pointer group';
-                btn.innerHTML = `<span class="text-sm group-hover:scale-110 transition-transform">${country.flag}</span><span class="uppercase tracking-wide">${country.name_en || country.name}</span>`;
+                btn.className = 'flex items-center space-x-1.5 sm:space-x-2 px-3 sm:px-4 py-1.5 bg-white/[0.03] hover:bg-white/10 border border-white/5 hover:border-white/20 rounded-full text-[10px] sm:text-[11px] font-bold text-slate-300 hover:text-white shrink-0 transition-all duration-300 cursor-pointer group';
+                btn.innerHTML = `<span class="text-xs sm:text-sm group-hover:scale-110 transition-transform">${country.flag}</span><span class="uppercase tracking-wide">${country.name_en || country.name}</span>`;
                 
                 let isDraggingBtn = false;
                 btn.addEventListener('mousedown', () => isDraggingBtn = false);
@@ -938,10 +942,10 @@
             modal.style.willChange = 'opacity';
             modal.style.transform = 'translateZ(0)';
             modal.innerHTML = `
-                <div class="absolute inset-0 bg-[#030712] flex items-center justify-center p-6">
+                <div class="absolute inset-0 bg-[#030712] flex items-center justify-center p-4 sm:p-6">
                     <video src="https://sxuwpcvdnbzettdmrclo.supabase.co/storage/v1/object/public/avatars/open.mp4" autoplay muted playsinline loop class="w-full max-w-xl sm:max-w-2xl md:max-w-4xl h-auto max-h-[85vh] object-contain"></video>
                 </div>
-                <div class="absolute bottom-8 z-30 text-[11px] text-slate-400 font-semibold tracking-widest bg-slate-900/80 px-4 py-2 rounded-full border border-white/10 backdrop-blur-md pointer-events-none">
+                <div class="absolute bottom-6 sm:bottom-8 z-30 text-[10px] sm:text-[11px] text-slate-400 font-semibold tracking-widest bg-slate-900/80 px-4 py-2 rounded-full border border-white/10 backdrop-blur-md pointer-events-none">
                     Click anywhere to return
                 </div>
             `;
