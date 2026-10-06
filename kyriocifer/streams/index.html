@@ -154,7 +154,7 @@
         ARCHIVE_API_URL: "https://script.google.com/macros/s/AKfycbySeKbZ2qGgnS3R9NDI7cA367qQwZP109yNb68ydoEYqfYrhTmjB57-HYZD3KPmOdpqnA/exec",
         TIMEZONE: "Asia/Taipei",
         REFRESH_INTERVAL: 5 * 60 * 1000,
-        CACHE_KEY: "kyrio_schedule_cache_v11" 
+        CACHE_KEY: "kyrio_schedule_cache_v12" 
     };
 
     const app = {
@@ -203,37 +203,37 @@
 
             try {
                 const cacheBuster = new Date().getTime();
-                
-                const [mainRes, archiveRes] = await Promise.all([
-                    fetch(`${CONFIG.MAIN_API_URL}?t=${cacheBuster}`).catch(() => null),
-                    fetch(`${CONFIG.ARCHIVE_API_URL}?t=${cacheBuster}`).catch(() => null)
-                ]);
-
                 let allEvents = [];
+                let fetchCount = 0;
 
-                if (mainRes && mainRes.ok) {
-                    const mainResult = await mainRes.json();
-                    if (mainResult.success && Array.isArray(mainResult.events)) {
-                        allEvents = allEvents.concat(mainResult.events);
-                    }
-                }
+                // 獨立處理主 API 請求
+                fetch(`${CONFIG.MAIN_API_URL}?t=${cacheBuster}`)
+                    .then(res => res.ok ? res.json() : null)
+                    .then(data => {
+                        if (data && data.success && Array.isArray(data.events)) {
+                            allEvents = allEvents.concat(data.events);
+                        }
+                    })
+                    .catch(err => console.warn("Main API Failed", err))
+                    .finally(() => {
+                        fetchCount++;
+                        this.checkAndRender(fetchCount, allEvents, cachedDataStr, hasRenderedFromCache);
+                    });
 
-                if (archiveRes && archiveRes.ok) {
-                    const archiveResult = await archiveRes.json();
-                    if (archiveResult.success && Array.isArray(archiveResult.events)) {
-                        allEvents = allEvents.concat(archiveResult.events);
-                    }
-                }
+                // 獨立處理封存 API 請求
+                fetch(`${CONFIG.ARCHIVE_API_URL}?t=${cacheBuster}`)
+                    .then(res => res.ok ? res.json() : null)
+                    .then(data => {
+                        if (data && data.success && Array.isArray(data.events)) {
+                            allEvents = allEvents.concat(data.events);
+                        }
+                    })
+                    .catch(err => console.warn("Archive API Failed", err))
+                    .finally(() => {
+                        fetchCount++;
+                        this.checkAndRender(fetchCount, allEvents, cachedDataStr, hasRenderedFromCache);
+                    });
 
-                if (allEvents.length > 0) {
-                    const newDataStr = JSON.stringify(allEvents);
-                    if (newDataStr !== cachedDataStr) {
-                        localStorage.setItem(CONFIG.CACHE_KEY, newDataStr);
-                        this.processAndRender(allEvents, !hasRenderedFromCache);
-                    }
-                } else if (!hasRenderedFromCache) {
-                    throw new Error("Both APIs returned no data or failed.");
-                }
             } catch (err) {
                 console.error("Schedule Fetch Error:", err);
                 if (this.data.length === 0) {
@@ -242,6 +242,21 @@
             } finally {
                 const syncStatus = document.getElementById('sync-status');
                 if(syncStatus) syncStatus.classList.add('hidden');
+            }
+        },
+
+        checkAndRender: function(fetchCount, allEvents, cachedDataStr, hasRenderedFromCache) {
+            // 當兩個 API (Main & Archive) 都回應（或失敗）後，才執行渲染
+            if (fetchCount === 2) {
+                if (allEvents.length > 0) {
+                    const newDataStr = JSON.stringify(allEvents);
+                    if (newDataStr !== cachedDataStr) {
+                        localStorage.setItem(CONFIG.CACHE_KEY, newDataStr);
+                        this.processAndRender(allEvents, !hasRenderedFromCache);
+                    }
+                } else if (!hasRenderedFromCache) {
+                    this.showState('<i class="fa-solid fa-triangle-exclamation text-rose-600 dark:text-rose-400 text-3xl"></i>', 'Data load failed. Please refresh.｜資料載入失敗，請重新整理。');
+                }
             }
         },
 
@@ -732,7 +747,7 @@
                             </div>
                             <div class="flex flex-col">
                                 <h2 class="text-[20px] md:text-[24px] font-bold vtext dark:dark-mode-text">
-                                    ${this.currentSheetFilter} 訂弱馬拉松
+                                    ${this.currentSheetFilter} 訂閱馬拉松
                                 </h2>
                                 <p class="text-[13px] vmuted dark:dark-mode-muted mt-1">
                                     Tracking subscription counts and milestones throughout the event.<br>
