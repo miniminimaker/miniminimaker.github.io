@@ -1,81 +1,73 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kyrio Cifer's Stream Schedule</title>
-    
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <script>
-        tailwind.config = { 
-            darkMode: 'media', 
-            theme: { 
-                extend: { 
-                    fontFamily: { sans: ['Inter', 'sans-serif'] },
-                    colors: {
-                        vbg: '#F0EBE3',
-                        vcard: '#FAF9F6',
-                        vborder: '#E1DCD2',
-                        vtext: '#4F4538',
-                        vmuted: '#8C8273',
-                        vaccent: '#B45309',
-                        vlink: '#B45309',
-                        vtranslate: '#658C59',
-                    }
-                } 
+<script>
+    tailwind.config = { 
+        darkMode: 'media', 
+        theme: { 
+            extend: { 
+                fontFamily: { sans: ['Inter', 'sans-serif'] },
+                colors: {
+                    vbg: '#F0EBE3',
+                    vcard: '#FAF9F6',
+                    vborder: '#E1DCD2',
+                    vtext: '#4F4538',
+                    vmuted: '#8C8273',
+                    vaccent: '#B45309',
+                    vlink: '#B45309',
+                    vtranslate: '#658C59',
+                }
             } 
-        }
-    </script>
+        } 
+    }
+</script>
 
-    <style>
-        body { 
-            font-family: 'Inter', sans-serif; 
-            background-color: #F0EBE3; 
-            color: #4F4538; 
-            overflow-x: hidden; 
-            scroll-behavior: smooth; 
-        }
-        
-        .glass-panel { 
-            background-color: #F9F8F4; 
-            backdrop-filter: none; 
-        }
-        
-        .cell-wrap-text { 
-            word-break: break-word; 
-            overflow-wrap: break-word; 
-            white-space: normal; 
-            line-height: 1.6; 
-        }
-        
-        @media (prefers-color-scheme: dark) {
-            .dark-mode-bg { background-color: #1C1917 !important; }
-            .dark-mode-card { background-color: #27272A !important; }
-            .dark-mode-text { color: #E7E5E4 !important; }
-            .dark-mode-muted { color: #A1A1AA !important; }
-            .dark-mode-border { border-color: #3F3F46 !important; }
-            .glass-panel { background-color: #1C1917 !important; }
-        }
-        
-        .custom-scrollbar::-webkit-scrollbar { height: 4px; width: 6px; }
-        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: #E1DCD2; border-radius: 10px; }
-        
-        @media (prefers-color-scheme: dark) {
-            .custom-scrollbar::-webkit-scrollbar-thumb { background: #3F3F46; }
-        }
-        
-        .fade-in { animation: fadeIn 0.3s ease-in-out; }
-        @keyframes fadeIn { 
-            from { opacity: 0; transform: translateY(10px); } 
-            to { opacity: 1; transform: translateY(0); } 
-        }
-    </style>
-</head>
-<body>
+<style>
+    body { 
+        font-family: 'Inter', sans-serif; 
+        background-color: #F0EBE3; 
+        color: #4F4538; 
+        overflow-x: hidden; 
+        scroll-behavior: smooth; 
+    }
+    
+    .glass-panel { 
+        background-color: #F9F8F4; 
+        backdrop-filter: none; 
+    }
+    
+    .cell-wrap-text { 
+        word-break: break-word; 
+        overflow-wrap: break-word; 
+        white-space: normal; 
+        line-height: 1.6; 
+    }
+    
+    @media (prefers-color-scheme: dark) {
+        .dark-mode-bg { background-color: #1C1917 !important; }
+        .dark-mode-card { background-color: #27272A !important; }
+        .dark-mode-text { color: #E7E5E4 !important; }
+        .dark-mode-muted { color: #A1A1AA !important; }
+        .dark-mode-border { border-color: #3F3F46 !important; }
+        .glass-panel { background-color: #1C1917 !important; }
+    }
+    
+    .custom-scrollbar::-webkit-scrollbar { height: 4px; width: 6px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #E1DCD2; border-radius: 10px; }
+    
+    @media (prefers-color-scheme: dark) {
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #3F3F46; }
+    }
+    
+    .fade-in { animation: fadeIn 0.3s ease-in-out; }
+    @keyframes fadeIn { 
+        from { opacity: 0; transform: translateY(10px); } 
+        to { opacity: 1; transform: translateY(0); } 
+    }
+</style>
+
 
 <header class="border-b border-vborder/50 dark:dark-mode-border glass-panel sticky top-0 z-30 px-6 py-[18px] flex flex-wrap gap-4 items-center justify-between shadow-sm/5">
     <div class="flex items-center space-x-4">
@@ -131,8 +123,8 @@
 
         <div class="flex flex-wrap items-center justify-between gap-3 text-xs vmuted dark:dark-mode-muted px-1">
             <div id="sheet-filters" class="flex flex-wrap items-center gap-2"></div>
-            <div id="sync-status" class="font-medium hidden text-xs">
-                <i class="fa-solid fa-cloud-arrow-down fa-fade text-vaccent mr-1"></i> Checking for updates...
+            <div id="sync-status" class="font-medium hidden">
+                <i class="fa-solid fa-cloud-arrow-down fa-fade text-vaccent mr-1"></i> Syncing in background...
             </div>
         </div>
     </div>
@@ -155,20 +147,18 @@
         </a>
     </p>
 </footer>
-
+    
 <script>
     const CONFIG = {
         MAIN_API_URL: "https://script.google.com/macros/s/AKfycbyPCf9bam7EYO5aq6ZXh7YfyvYeV5fleJJK63gQ-kRv5mCcus25mpsat9y5zXISo6ciHg/exec",
         ARCHIVE_API_URL: "https://script.google.com/macros/s/AKfycbySeKbZ2qGgnS3R9NDI7cA367qQwZP109yNb68ydoEYqfYrhTmjB57-HYZD3KPmOdpqnA/exec",
         TIMEZONE: "Asia/Taipei",
-        REFRESH_INTERVAL: 1 * 60 * 1000,
-        CACHE_KEY: "kyrio_schedule_cache_v9"
+        REFRESH_INTERVAL: 5 * 60 * 1000,
+        CACHE_KEY: "kyrio_schedule_cache_v7" 
     };
 
     const app = {
         data: [],
-        archiveDataCache: [], 
-        mainDataCache: [],
         sheets: new Set(),
         currentSheetFilter: null,
         searchQuery: "",
@@ -176,7 +166,7 @@
         hasScrolledToToday: false,
 
         init: function() {
-            this.fetchData(false);
+            this.fetchData();
             this.startAutoRefresh();
             
             const searchInput = document.getElementById('input-search');
@@ -188,89 +178,61 @@
             }
         },
 
-        fetchData: async function(isBackgroundSync = false) {
+        fetchData: async function(isManual = false) {
             let hasRenderedFromCache = false;
-            const cachedDataStr = localStorage.getItem(CONFIG.CACHE_KEY);
-            let cachedParsed = null;
 
+            const cachedDataStr = localStorage.getItem(CONFIG.CACHE_KEY);
             if (cachedDataStr) {
                 try {
-                    cachedParsed = JSON.parse(cachedDataStr);
-                    if (cachedParsed && Array.isArray(cachedParsed.main) && Array.isArray(cachedParsed.archive)) {
-                        const combined = [...cachedParsed.main, ...cachedParsed.archive];
-                        if (!isBackgroundSync && combined.length > 0) {
-                            this.processAndRender(combined, true);
-                            hasRenderedFromCache = true;
-                        }
-                        this.archiveDataCache = cachedParsed.archive;
-                        this.mainDataCache = cachedParsed.main;
+                    const cachedEvents = JSON.parse(cachedDataStr);
+                    if (cachedEvents && cachedEvents.length > 0) {
+                        this.processAndRender(cachedEvents, true);
+                        hasRenderedFromCache = true;
                     }
                 } catch (e) {
-                    console.warn("Cache parsing error:", e);
+                    console.warn("Failed to parse cached data:", e);
                 }
             }
 
-            if (!hasRenderedFromCache && !isBackgroundSync && this.data.length === 0) {
+            if (!hasRenderedFromCache && this.data.length === 0) {
                 this.showState('<i class="fa-solid fa-circle-notch fa-spin text-2xl text-vaccent"></i>', 'Loading data, please wait...｜讀取資料中...');
-            } else if (isBackgroundSync) {
+            } else if (hasRenderedFromCache) {
                 const syncStatus = document.getElementById('sync-status');
                 if(syncStatus) syncStatus.classList.remove('hidden');
             }
 
             try {
-                let mainEvents = [];
-                let archiveEvents = this.archiveDataCache || [];
+                const cacheBuster = new Date().getTime();
+                
+                const [mainRes, archiveRes] = await Promise.all([
+                    fetch(`${CONFIG.MAIN_API_URL}?t=${cacheBuster}`).catch(() => null),
+                    fetch(`${CONFIG.ARCHIVE_API_URL}?t=${cacheBuster}`).catch(() => null)
+                ]);
 
-                if (isBackgroundSync && archiveEvents.length > 0) {
-                    const mainRes = await fetch(CONFIG.MAIN_API_URL).catch(() => null);
-                    if (mainRes && mainRes.ok) {
-                        const mainResult = await mainRes.json();
-                        if (mainResult.success && Array.isArray(mainResult.events)) {
-                            mainEvents = mainResult.events;
-                            this.mainDataCache = mainEvents;
-                        } else {
-                            mainEvents = this.mainDataCache;
-                        }
-                    } else {
-                        mainEvents = this.mainDataCache;
-                    }
-                } else {
-                    const [mainRes, archiveRes] = await Promise.all([
-                        fetch(CONFIG.MAIN_API_URL).catch(() => null),
-                        fetch(CONFIG.ARCHIVE_API_URL).catch(() => null)
-                    ]);
+                let allEvents = [];
 
-                    if (mainRes && mainRes.ok) {
-                        const mainResult = await mainRes.json();
-                        if (mainResult.success && Array.isArray(mainResult.events)) {
-                            mainEvents = mainResult.events;
-                            this.mainDataCache = mainEvents;
-                        }
-                    }
-
-                    if (archiveRes && archiveRes.ok) {
-                        const archiveResult = await archiveRes.json();
-                        if (archiveResult.success && Array.isArray(archiveResult.events)) {
-                            archiveEvents = archiveResult.events;
-                            this.archiveDataCache = archiveEvents;
-                        }
+                if (mainRes && mainRes.ok) {
+                    const mainResult = await mainRes.json();
+                    if (mainResult.success && Array.isArray(mainResult.events)) {
+                        allEvents = allEvents.concat(mainResult.events);
                     }
                 }
 
-                const combinedEvents = [...mainEvents, ...archiveEvents];
+                if (archiveRes && archiveRes.ok) {
+                    const archiveResult = await archiveRes.json();
+                    if (archiveResult.success && Array.isArray(archiveResult.events)) {
+                        allEvents = allEvents.concat(archiveResult.events);
+                    }
+                }
 
-                if (combinedEvents.length > 0) {
-                    const newCacheObj = { main: mainEvents, archive: archiveEvents };
-                    const newDataStr = JSON.stringify(newCacheObj);
-                    
+                if (allEvents.length > 0) {
+                    const newDataStr = JSON.stringify(allEvents);
                     if (newDataStr !== cachedDataStr) {
                         localStorage.setItem(CONFIG.CACHE_KEY, newDataStr);
-                        this.processAndRender(combinedEvents, !hasRenderedFromCache && !isBackgroundSync);
-                    } else if (!hasRenderedFromCache) {
-                        this.processAndRender(combinedEvents, !isBackgroundSync);
+                        this.processAndRender(allEvents, !hasRenderedFromCache);
                     }
-                } else if (!hasRenderedFromCache && !isBackgroundSync) {
-                    throw new Error("Data fetch failed.");
+                } else if (!hasRenderedFromCache) {
+                    throw new Error("Both APIs returned no data or failed.");
                 }
             } catch (err) {
                 console.error("Schedule Fetch Error:", err);
@@ -695,16 +657,11 @@
 
                 const titleClass = event.isOffDay ? "text-vmuted dark:text-[#A1A1AA]" : "vtext dark:dark-mode-text";
 
-                let displayTitleEn = event.contentEn;
-                if (!displayTitleEn) {
-                    displayTitleEn = event.streamTitle ? 'TBA (To Be Announced)' : 'No Stream Scheduled';
-                }
-
                 let mainTitleHtml = '';
                 if (event.isOffDay) {
                     mainTitleHtml = `
                         <div class="flex flex-col gap-1 justify-center">
-                            <h3 class="text-[13px] md:text-[14px] font-bold ${titleClass} leading-snug">${displayTitleEn}</h3>
+                            <h3 class="text-[13px] md:text-[14px] font-bold ${titleClass} leading-snug">${event.contentEn || 'No Stream Scheduled'}</h3>
                             ${event.contentZh ? `<h4 class="text-[13px] md:text-[14px] font-medium ${titleClass} leading-snug mt-1">${event.contentZh}</h4>` : ''}
                         </div>
                     `;
@@ -716,7 +673,7 @@
                             </div>
                             <div class="flex flex-col justify-center gap-0.5">
                                 <div class="flex items-center gap-2 flex-wrap">
-                                    <h3 class="text-[14px] md:text-[15px] font-bold ${titleClass} leading-tight">${displayTitleEn}</h3>
+                                    <h3 class="text-[14px] md:text-[15px] font-bold ${titleClass} leading-tight">${event.contentEn || 'No Stream Scheduled'}</h3>
                                     ${event.partTag ? `<span class="bg-vaccent dark:bg-orange-500 text-white px-1.5 py-[2px] rounded text-[10px] font-bold tracking-wide shadow-sm whitespace-nowrap transform -translate-y-[0.5px]">${event.partTag}</span>` : ''}
                                 </div>
                                 ${event.contentZh ? `<h4 class="text-[12px] md:text-[13px] font-medium vmuted dark:text-[#A1A1AA] leading-tight">${event.contentZh}</h4>` : ''}
@@ -775,7 +732,7 @@
                             </div>
                             <div class="flex flex-col">
                                 <h2 class="text-[20px] md:text-[24px] font-bold vtext dark:dark-mode-text">
-                                    ${this.currentSheetFilter} 訂閱馬拉松
+                                    ${this.currentSheetFilter} 訂弱馬拉松
                                 </h2>
                                 <p class="text-[13px] vmuted dark:dark-mode-muted mt-1">
                                     Tracking subscription counts and milestones throughout the event.<br>
@@ -956,7 +913,7 @@
         startAutoRefresh: function() {
             if (this.refreshTimer) clearInterval(this.refreshTimer);
             this.refreshTimer = setInterval(() => {
-                this.fetchData(true);
+                this.fetchData();
             }, CONFIG.REFRESH_INTERVAL);
         }
     };
@@ -965,5 +922,3 @@
         app.init();
     });
 </script>
-</body>
-</html>
