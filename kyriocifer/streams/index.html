@@ -155,11 +155,12 @@
         
     <script>
         const CONFIG = {
-            MAIN_API_URL: "https://script.google.com/macros/s/AKfycbyPCf9bam7EYO5aq6ZXh7YfyvYeV5fleJJK63gQ-kRv5mCcus25mpsat9y5zXISo6ciHg/exec",
-            ARCHIVE_API_URL: "https://script.google.com/macros/s/AKfycbySeKbZ2qGgnS3R9NDI7cA367qQwZP109yNb68ydoEYqfYrhTmjB57-HYZD3KPmOdpqnA/exec",
+            SUPABASE_URL: "https://sywhtbxenxankujybihe.supabase.co",
+            SUPABASE_KEY: "sb_publishable_NRTN9c0wetDs-N0fi-wFKw_U5_L1DxI",
+            
             TIMEZONE: "Asia/Taipei",
-            REFRESH_INTERVAL: 5 * 60 * 1000,
-            CACHE_KEY: "kyrio_schedule_cache_v13" 
+            REFRESH_INTERVAL: 60 * 1000, 
+            CACHE_KEY: "kyrio_schedule_supa_v4" 
         };
 
         const app = {
@@ -183,90 +184,95 @@
                 }
             },
 
-            fetchData: async function(isManual = false) {
-                let hasRenderedFromCache = false;
-
+            fetchData: async function() {
                 const cachedDataStr = localStorage.getItem(CONFIG.CACHE_KEY);
-                if (cachedDataStr) {
+                if (cachedDataStr && this.data.length === 0) {
                     try {
                         const cachedEvents = JSON.parse(cachedDataStr);
                         if (cachedEvents && cachedEvents.length > 0) {
                             this.processAndRender(cachedEvents, true);
-                            hasRenderedFromCache = true;
                         }
                     } catch (e) {
-                        console.warn("Failed to parse cached data:", e);
+                        console.warn("Cache parse error", e);
                     }
                 }
 
-                if (!hasRenderedFromCache && this.data.length === 0) {
-                    this.showState('<i class="fa-solid fa-circle-notch fa-spin text-2xl text-vaccent"></i>', 'Loading data, please wait...｜讀取資料中...');
-                } else if (hasRenderedFromCache) {
-                    const syncStatus = document.getElementById('sync-status');
-                    if(syncStatus) syncStatus.classList.remove('hidden');
+                if (this.data.length === 0) {
+                    this.showState('<i class="fa-solid fa-circle-notch fa-spin text-2xl text-vaccent"></i>', 'Loading data, please wait...｜極速讀取中...');
                 }
 
                 try {
-                    const cacheBuster = new Date().getTime();
+                    const response = await fetch(`${CONFIG.SUPABASE_URL}/rest/v1/api_cache?select=*`, {
+                        method: 'GET',
+                        headers: {
+                            'apikey': CONFIG.SUPABASE_KEY,
+                            'Authorization': 'Bearer ' + CONFIG.SUPABASE_KEY,
+                            'Content-Type': 'application/json'
+                        }
+                    });
+
+                    if (!response.ok) throw new Error('Network response was not ok');
+                    
+                    const rows = await response.json();
                     let allEvents = [];
-                    let fetchCount = 0;
+                    
+                    rows.forEach(row => {
+                        if (row.data && Array.isArray(row.data)) {
+                            allEvents = allEvents.concat(row.data);
+                        }
+                    });
 
-                    fetch(`${CONFIG.MAIN_API_URL}?t=${cacheBuster}`)
-                        .then(res => res.ok ? res.json() : null)
-                        .then(data => {
-                            if (data && data.success && Array.isArray(data.events)) {
-                                allEvents = allEvents.concat(data.events);
-                            }
-                        })
-                        .catch(err => console.warn("Main API Failed", err))
-                        .finally(() => {
-                            fetchCount++;
-                            this.checkAndRender(fetchCount, allEvents, cachedDataStr, hasRenderedFromCache);
-                        });
-
-                    fetch(`${CONFIG.ARCHIVE_API_URL}?t=${cacheBuster}`)
-                        .then(res => res.ok ? res.json() : null)
-                        .then(data => {
-                            if (data && data.success && Array.isArray(data.events)) {
-                                allEvents = allEvents.concat(data.events);
-                            }
-                        })
-                        .catch(err => console.warn("Archive API Failed", err))
-                        .finally(() => {
-                            fetchCount++;
-                            this.checkAndRender(fetchCount, allEvents, cachedDataStr, hasRenderedFromCache);
-                        });
+                    if (allEvents.length > 0) {
+                        localStorage.setItem(CONFIG.CACHE_KEY, JSON.stringify(allEvents));
+                        this.processAndRender(allEvents, !this.hasScrolledToToday);
+                    } else {
+                        this.showState('<i class="fa-regular fa-folder-open text-vmuted/50 text-4xl mb-2"></i>', 'No schedule data found.｜目前沒有行程資料。');
+                    }
 
                 } catch (err) {
-                    console.error("Schedule Fetch Error:", err);
+                    console.error("Fetch Error:", err);
                     if (this.data.length === 0) {
-                        this.showState('<i class="fa-solid fa-triangle-exclamation text-rose-600 dark:text-rose-400 text-3xl"></i>', 'Data load failed. Please refresh.｜資料載入失敗，請重新整理。');
+                        this.showState('<i class="fa-solid fa-triangle-exclamation text-rose-600 dark:text-rose-400 text-3xl"></i>', 'Data load failed. Please refresh.｜讀取失敗，請重新整理。');
                     }
-                } finally {
-                    const syncStatus = document.getElementById('sync-status');
-                    if(syncStatus) syncStatus.classList.add('hidden');
                 }
             },
 
-            checkAndRender: function(fetchCount, allEvents, cachedDataStr, hasRenderedFromCache) {
-                if (fetchCount === 2) {
-                    if (allEvents.length > 0) {
-                        const newDataStr = JSON.stringify(allEvents);
-                        if (newDataStr !== cachedDataStr) {
-                            localStorage.setItem(CONFIG.CACHE_KEY, newDataStr);
-                            this.processAndRender(allEvents, !hasRenderedFromCache);
-                        }
-                    } else if (!hasRenderedFromCache) {
-                        this.showState('<i class="fa-solid fa-triangle-exclamation text-rose-600 dark:text-rose-400 text-3xl"></i>', 'Data load failed. Please refresh.｜資料載入失敗，請重新整理。');
+            getSortedSheets: function() {
+                let sheetsArray = Array.from(this.sheets); 
+                sheetsArray.sort((a, b) => {
+                    const isSubA = this.isSubathonTab(a);
+                    const isSubB = this.isSubathonTab(b);
+
+                    if (isSubA !== isSubB) {
+                        return isSubA ? 1 : -1;
                     }
-                }
+
+                    const getWeight = (name) => {
+                        const lower = name.toLowerCase();
+                        if (/jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec|\d{1,2}月/.test(lower) || lower.includes('current')) return 300;
+                        if (lower.includes('2026')) return 200;
+                        if (lower.includes('2025')) return 150;
+                        if (lower.includes('2024')) return 100;
+                        return 50;
+                    };
+
+                    const weightA = getWeight(a);
+                    const weightB = getWeight(b);
+
+                    if (weightA !== weightB) {
+                        return weightB - weightA;
+                    }
+
+                    return b.localeCompare(a);
+                });
+                return sheetsArray;
             },
 
             processAndRender: function(eventsRaw, shouldScroll = false) {
                 this.processData(eventsRaw);
                 
                 if (!this.currentSheetFilter && this.sheets.size > 0) {
-                    this.currentSheetFilter = Array.from(this.sheets)[0];
+                    this.currentSheetFilter = this.getSortedSheets()[0];
                 }
                 
                 this.renderSheetFilters();
@@ -420,11 +426,13 @@
                         isOffDay = true;
                     }
                     
-                    const note1 = event['Notes *1\n備註*1'] || event['Notes *1 備註*1'] || '';
-                    const note2 = event['Notes *2\n備註*2'] || event['Notes *2 備註*2'] || '';
+                    const note1 = event['Notes *1\n備註*1'] || event['Notes *1 備註*1'] || event['備註*1'] || '';
+                    const note2 = event['Notes *2\n備註*2'] || event['Notes *2 備註*2'] || event['備註*2'] || '';
                     const note = [note1, note2].filter(Boolean).join(' / ');
 
                     const linkifiedNote = this.linkifyText(note);
+
+                    const isCancelled = note.includes('取消') || note.includes('網路不穩');
 
                     const vodLink = event['VODs'] || '';
                     const tlLink = event['Translation\n翻譯記錄'] || event['Translation 翻譯記錄'] || '';
@@ -497,6 +505,7 @@
                         game,
                         note,
                         linkifiedNote,
+                        isCancelled,
                         vodLink: isValidUrl(vodLink) ? vodLink : '',
                         tlLink: isValidUrl(tlLink) ? tlLink : '',
                         isToday,
@@ -512,38 +521,11 @@
                 const container = document.getElementById('sheet-filters');
                 if (!container) return;
 
-                let sheetsArray = Array.from(this.sheets); 
+                let sheetsArray = this.getSortedSheets(); 
                 if (sheetsArray.length === 0) {
                     container.innerHTML = '';
                     return;
                 }
-
-                sheetsArray.sort((a, b) => {
-                    const isSubA = this.isSubathonTab(a);
-                    const isSubB = this.isSubathonTab(b);
-
-                    if (isSubA !== isSubB) {
-                        return isSubA ? 1 : -1;
-                    }
-
-                    const getWeight = (name) => {
-                        const lower = name.toLowerCase();
-                        if (/jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec|\d{1,2}月/.test(lower) || lower.includes('current')) return 300;
-                        if (lower.includes('2026')) return 200;
-                        if (lower.includes('2025')) return 150;
-                        if (lower.includes('2024')) return 100;
-                        return 50;
-                    };
-
-                    const weightA = getWeight(a);
-                    const weightB = getWeight(b);
-
-                    if (weightA !== weightB) {
-                        return weightB - weightA;
-                    }
-
-                    return b.localeCompare(a);
-                });
 
                 let html = '';
                 sheetsArray.forEach(sheet => {
@@ -673,13 +655,15 @@
                     }
 
                     const titleClass = event.isOffDay ? "text-vmuted dark:text-[#A1A1AA]" : "vtext dark:dark-mode-text";
+                    
+                    const strikethroughClass = event.isCancelled ? "line-through decoration-2" : "";
 
                     let mainTitleHtml = '';
                     if (event.isOffDay) {
                         mainTitleHtml = `
                             <div class="flex flex-col gap-1 justify-center">
-                                <h3 class="text-[13px] md:text-[14px] font-bold ${titleClass} leading-snug">${event.contentEn || 'No Stream Scheduled'}</h3>
-                                ${event.contentZh ? `<h4 class="text-[13px] md:text-[14px] font-medium ${titleClass} leading-snug mt-1">${event.contentZh}</h4>` : ''}
+                                <h3 class="text-[13px] md:text-[14px] font-bold ${titleClass} ${strikethroughClass} leading-snug">${event.contentEn || 'No Stream Scheduled'}</h3>
+                                ${event.contentZh ? `<h4 class="text-[13px] md:text-[14px] font-medium ${titleClass}${strikethroughClass} leading-snug mt-1">${event.contentZh}</h4>` : ''}
                             </div>
                         `;
                     } else {
@@ -690,10 +674,10 @@
                                 </div>
                                 <div class="flex flex-col justify-center gap-0.5">
                                     <div class="flex items-center gap-2 flex-wrap">
-                                        <h3 class="text-[14px] md:text-[15px] font-bold ${titleClass} leading-tight">${event.contentEn || 'No Stream Scheduled'}</h3>
+                                        <h3 class="text-[14px] md:text-[15px] font-bold ${titleClass} ${strikethroughClass} leading-tight">${event.contentEn || 'No Stream Scheduled'}</h3>
                                         ${event.partTag ? `<span class="bg-vaccent dark:bg-orange-500 text-white px-1.5 py-[2px] rounded text-[10px] font-bold tracking-wide shadow-sm whitespace-nowrap transform -translate-y-[0.5px]">${event.partTag}</span>` : ''}
                                     </div>
-                                    ${event.contentZh ? `<h4 class="text-[12px] md:text-[13px] font-medium vmuted dark:text-[#A1A1AA] leading-tight">${event.contentZh}</h4>` : ''}
+                                    ${event.contentZh ? `<h4 class="text-[12px] md:text-[13px] font-medium vmuted dark:text-[#A1A1AA] ${strikethroughClass} leading-tight">${event.contentZh}</h4>` : ''}
                                 </div>
                             </div>
                         `;
