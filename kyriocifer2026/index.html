@@ -40,7 +40,7 @@
         body { 
             font-family: 'Plus Jakarta Sans', sans-serif; 
             background-color: #030712;
-            -webkit-tap-highlight-color: transparent; /* Remove tap highlight on mobile */
+            -webkit-tap-highlight-color: transparent;
         }
         
         .butterfly-icon {
@@ -67,7 +67,7 @@
         .leaflet-control-zoom a {
             background-color: rgba(15, 23, 42, 0.8) !important; color: #fff !important;
             border-color: rgba(255,255,255,0.1) !important; backdrop-filter: blur(8px);
-            width: 36px !important; height: 36px !important; line-height: 36px !important; /* Larger touch targets for mobile */
+            width: 36px !important; height: 36px !important; line-height: 36px !important;
         }
         .leaflet-control-zoom a:hover { background-color: rgba(30, 41, 59, 0.9) !important; }
         
@@ -75,7 +75,7 @@
             background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.1); color: white; border-radius: 12px;
             box-shadow: 0 4px 16px rgba(0,0,0,0.4); padding: 8px 12px;
-            pointer-events: none; /* Prevent tooltip from interfering with touch */
+            pointer-events: none;
         }
         .leaflet-tooltip-top.glass-tooltip:before { border-top-color: rgba(15, 23, 42, 0.75); }
 
@@ -87,7 +87,7 @@
         .city-heart-marker {
             animation: heart-gentle-pulse 2.5s infinite ease-in-out;
             cursor: pointer; display: flex; align-items: center; justify-content: center;
-            color: #FBBF24; font-size: 28px; /* Increased size for mobile tap targets */
+            color: #FBBF24; font-size: 28px;
             user-select: none; font-weight: 800;
             transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.3s ease;
         }
@@ -103,7 +103,6 @@
         .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
 
-        .glow-text-pink { text-shadow: 0 0 24px rgba(244, 63, 94, 0.7); }
         .glass-panel {
             background: var(--tw-colors-brand-glass); backdrop-filter: blur(16px);
             border: 1px solid rgba(255, 255, 255, 0.08);
@@ -115,18 +114,12 @@
         }
         .splash-exit { animation: splashFadeOut 1500ms cubic-bezier(0.4, 0, 0.2, 1) forwards; will-change: opacity, transform; }
 
-        header, main {
-            opacity: 0;
-            transition: opacity 1500ms cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        body.loaded header, body.loaded main {
-            opacity: 1;
-        }
+        header, main { opacity: 0; transition: opacity 1500ms cubic-bezier(0.4, 0, 0.2, 1); }
+        body.loaded header, body.loaded main { opacity: 1; }
     </style>
 </head>
 <body class="h-full bg-slate-950 flex flex-col overflow-hidden text-slate-100">
 
-    <!-- Splash Screen -->
     <div id="splashScreen" class="fixed inset-0 z-[4000] bg-[#030712] flex flex-col items-center justify-center transition-all pointer-events-auto">
         <div id="splashTransitionLayer" class="absolute inset-0 bg-[#030712] z-40 opacity-0 pointer-events-none transition-opacity duration-1000"></div>
         
@@ -145,8 +138,6 @@
     </div>
 
     <header class="w-full bg-[#0b101e] border-b border-white/5 z-[2000] shrink-0 py-3 sm:py-5 px-3 sm:px-6 shadow-[0_4px_20px_rgba(0,0,0,0.5)] flex flex-row items-center justify-between relative gap-2">
-        
-        <!-- Logo & Titles (Left Aligned on mobile for better fit) -->
         <div class="flex items-center justify-start cursor-pointer transition-transform hover:scale-[1.01] active:scale-[0.98] duration-300 flex-1 min-w-0" onclick="returnToWorldView()">
             <div class="w-[46px] h-[46px] sm:w-[64px] sm:h-[64px] rounded-full bg-gradient-to-br from-slate-50 to-slate-200 flex items-center justify-center p-0.5 sm:p-1 relative shadow-[0_0_15px_rgba(244,63,94,0.25)] shrink-0">
                 <img src="https://miniminimaker.github.io/kyriocifer2026/logo.png" alt="Logo" class="w-full h-full object-contain relative z-10 rounded-full">
@@ -165,7 +156,6 @@
             </div>
         </div>
 
-        <!-- Action Buttons (Right) -->
         <div class="flex items-center justify-end gap-1.5 sm:gap-3 shrink-0">
             <button onclick="replayIntro()" class="flex items-center justify-center gap-2 w-9 h-9 sm:w-auto sm:h-auto sm:px-4 sm:py-2.5 bg-white/5 hover:bg-brand-pink/20 border border-white/10 rounded-full text-slate-300 hover:text-white transition-all duration-300 group shadow-glass" title="Replay Intro Video">
                 <i class="fa-solid fa-play text-slate-300 group-hover:text-brand-pink transition-colors text-xs sm:text-sm ml-0.5 sm:ml-0"></i>
@@ -185,17 +175,14 @@
     <main class="flex-1 relative overflow-hidden flex flex-col w-full bg-[#030712]">
         <div id="map" class="w-full h-full absolute inset-0 z-10"></div>
 
-        <!-- Breadcrumbs Overlay -->
         <div id="breadcrumbOverlay" class="absolute top-4 sm:top-6 left-4 sm:left-6 z-20 pointer-events-auto transition-opacity duration-300">
             <div id="breadcrumbTrail" class="glass-panel shadow-glass rounded-full px-3 py-1.5 sm:px-4 sm:py-2 flex items-center space-x-1.5 sm:space-x-2 text-[10px] sm:text-[11px] font-semibold tracking-wide">
             </div>
         </div>
 
-        <!-- City/Country Popup Card -->
         <div id="cityPopupCard" class="fixed top-1/2 left-1/2 z-[100] glass-panel shadow-glass rounded-[24px] p-1 w-[92%] max-w-[420px] hidden transform -translate-x-1/2 -translate-y-1/2 pointer-events-auto transition-all duration-300 opacity-0 scale-95 origin-center">
             <div class="bg-gradient-to-b from-white/[0.05] to-transparent rounded-[20px] p-4 sm:p-5 max-h-[65vh] sm:max-h-[85vh] overflow-y-auto custom-scrollbar">
                 
-                <!-- Popup Header Controls -->
                 <div class="flex justify-between items-center mb-3 sticky top-0 bg-[#0b101e]/80 backdrop-blur-md pb-2 z-10 -mx-2 px-2 rounded-t-[16px]">
                     <div class="flex space-x-2">
                         <button onclick="returnToWorldView()" class="w-8 h-8 rounded-full bg-white/5 hover:bg-white/10 border border-white/5 hover:border-white/20 flex items-center justify-center text-slate-400 hover:text-white transition duration-200" title="Back to World">
@@ -210,19 +197,16 @@
                     </button>
                 </div>
 
-                <!-- Popup Title -->
                 <div class="flex flex-col items-center text-center pb-3 border-b border-white/10">
                     <div class="text-[12px] sm:text-[13px] text-brand-yellow font-black uppercase tracking-[0.2em] mb-1 bg-brand-yellow/10 px-3 py-1.5 rounded-sm">
                         <span id="popupLocation">COUNTRY</span>
                     </div>
                 </div>
 
-                <!-- Participant List -->
                 <div id="popupPeopleList" class="flex flex-col gap-2.5 mt-4 pr-1"></div>
             </div>
         </div>
 
-        <!-- Footer Copyright -->
         <div class="absolute bottom-6 sm:bottom-8 inset-x-0 z-20 flex flex-col items-center pointer-events-none px-4">
             <div class="pointer-events-auto text-[9px] sm:text-[10px] text-slate-500/70 tracking-widest font-medium text-center glass-panel px-4 py-2 rounded-full border border-white/10">
                 © <a href="https://x.com/miniminimaker" target="_blank" class="text-brand-pink hover:text-brand-pink/80 transition-colors duration-300">miniminimaker</a>
@@ -230,7 +214,6 @@
         </div>
     </main>
 
-    <!-- Guide Modal -->
     <div id="guideModal" class="fixed inset-0 z-[3000] hidden items-center justify-center pointer-events-auto px-4">
         <div class="absolute inset-0 bg-[#030712]/70 backdrop-blur-sm transition-opacity" onclick="closeGuide()"></div>
         
@@ -250,8 +233,8 @@
                         <span class="text-brand-yellow font-black text-lg leading-none">♥</span>
                     </div>
                     <div>
-                        <span class="text-white font-bold block mb-1 text-[12px] sm:text-[13px] uppercase tracking-wide">Tap the Hearts</span>
-                        <span class="text-[11px] sm:text-xs text-slate-400 leading-relaxed">Tap on the glowing hearts on the map to discover participants in that region.</span>
+                        <span class="text-white font-bold block mb-1 text-[12px] sm:text-[13px] uppercase tracking-wide">Click the Hearts</span>
+                        <span class="text-[11px] sm:text-xs text-slate-400 leading-relaxed">Click on the glowing hearts on the map to discover participants.</span>
                     </div>
                 </div>
 
@@ -261,7 +244,7 @@
                     </div>
                     <div>
                         <span class="text-white font-bold block mb-1 text-[12px] sm:text-[13px] uppercase tracking-wide">Play Audio</span>
-                        <span class="text-[11px] sm:text-xs text-slate-400 leading-relaxed">Inside the popup, tap the play button to hear "I love you" in their language. <span class="italic text-slate-500 opacity-90 inline-block mt-0.5">(Some are shy, so there is no audio.)</span></span>
+                        <span class="text-[11px] sm:text-xs text-slate-400 leading-relaxed">Inside the popup, click the play button to hear "I love you" in their language. <span class="italic text-slate-500 opacity-90 inline-block mt-0.5">(Some are shy, so there is no audio.)</span></span>
                     </div>
                 </div>
 
@@ -271,7 +254,17 @@
                     </div>
                     <div>
                         <span class="text-white font-bold block mb-1 text-[12px] sm:text-[13px] uppercase tracking-wide">Return to World View</span>
-                        <span class="text-[11px] sm:text-xs text-slate-400 leading-relaxed">Tap the globe icon on the top-left breadcrumbs to zoom back out.</span>
+                        <span class="text-[11px] sm:text-xs text-slate-400 leading-relaxed">Click the map / globe icon on the top-left to return to the center of the earth.</span>
+                    </div>
+                </div>
+
+                <div class="flex items-start gap-3 sm:gap-4 p-3 sm:p-3.5 rounded-2xl bg-white/[0.03] border border-white/5 hover:border-white/10 transition-colors">
+                    <div class="w-8 h-8 rounded-full bg-brand-lavender/10 flex items-center justify-center shrink-0 mt-0.5 border border-brand-lavender/20">
+                        <span class="butterfly-icon text-brand-lavender text-xs"></span>
+                    </div>
+                    <div>
+                        <span class="text-white font-bold block mb-1 text-[12px] sm:text-[13px] uppercase tracking-wide">All Kaleidoscopes</span>
+                        <span class="text-[11px] sm:text-xs text-slate-400 leading-relaxed">Open top-right list to browse all participants and click any country name to instantly fly there.</span>
                     </div>
                 </div>
             </div>
@@ -287,7 +280,6 @@
         </div>
     </div>
 
-    <!-- People Sidebar (Full screen on mobile, 380px on Desktop) -->
     <div id="peopleSidebar" class="fixed top-0 right-0 h-full w-full sm:w-[380px] bg-[#0b101e]/95 backdrop-blur-2xl sm:border-l border-white/10 z-[3000] transform translate-x-full transition-transform duration-500 ease-in-out flex flex-col shadow-2xl pointer-events-auto">
         <div class="flex justify-between items-center px-5 sm:px-6 py-5 sm:py-6 border-b border-white/10 shrink-0 bg-[#0b101e]">
             <div>
@@ -300,12 +292,10 @@
                 <i class="fa-solid fa-xmark text-sm"></i>
             </button>
         </div>
-        <!-- Safe padding at the bottom for mobile home bars -->
         <div id="allPeopleSidebarList" class="flex-1 overflow-y-auto custom-scrollbar p-4 space-y-2 pb-24 sm:pb-12"></div>
     </div>
 
     <script>
-        // Supabase configuration
         const YOUR_SUPABASE_URL = 'https://sxuwpcvdnbzettdmrclo.supabase.co';
         const YOUR_SUPABASE_ANON_KEY = 'sb_publishable_YIg5VkT5PG3vZ6zIwTWZhA_Vf9v3Zq6';
         let supabaseClient = null;
@@ -316,7 +306,6 @@
             }
         } catch (e) { console.warn('Supabase init failed:', e); }
 
-        // Fallback demo data
         const demoData = {
             countries: [
                 { id: 'c_tw', name: 'Taiwan', name_en: 'Taiwan', flag: '🇹🇼' },
@@ -353,7 +342,6 @@
         let isPeopleListOpen = false;
 
         function getDynamicMinZoom() {
-            // Recalculate zoom based on viewport size for responsive bounds
             const zoomX = Math.log2(window.innerWidth / 256);
             const zoomY = Math.log2(window.innerHeight / 256);
             return Math.max(zoomX, zoomY) + 0.1; 
@@ -460,7 +448,7 @@
         }
 
         function flyToCountryFromSidebar(countryId) {
-            if (isPeopleListOpen) togglePeopleList(); // Close drawer on mobile immediately for better UX
+            if (isPeopleListOpen) togglePeopleList(); 
             flyToCountry(countryId);
         }
 
@@ -480,7 +468,7 @@
                 minZoom: minZ, maxZoom: 16, zoomSnap: 0.1,
                 maxBounds: [[-85, -180], [85, 180]], maxBoundsViscosity: 1.0,
                 zoomAnimation: true, fadeAnimation: true, markerZoomAnimation: true,
-                tap: true // Ensure touch events are optimized
+                tap: true 
             }).setView([20.0, 0.0], minZ);
 
             L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}', { 
@@ -497,7 +485,6 @@
             map.on('click', () => { if (activeCountryId || activePersonForBubble) closeCityPopup(); });
             setInterval(fetchAppDataSilent, 15000);
 
-            // Responsive map handling on orientation change / resize
             window.addEventListener('resize', () => {
                 if (map) {
                     const newMin = getDynamicMinZoom();
@@ -559,7 +546,6 @@
                         p.offsetX = 0;
                         p.offsetY = 0;
                     } else {
-                        // Increase radius slightly for mobile touch spacing
                         const radius = 28 + (group.length * 4.0); 
                         const angle = (Math.PI * 2 * i) / group.length;
                         p.offsetX = radius * Math.cos(angle);
@@ -614,7 +600,6 @@
                     <div class="city-heart-marker" title="${person.name}">♥</div>
                 </div>
             `;
-            // Increased icon size for better mobile tap targets
             const icon = L.divIcon({ className: 'bg-transparent border-0', html: html, iconSize: [44, 44], iconAnchor: [22, 22] });
             const marker = L.marker([person.lat, person.lng], { icon });
 
@@ -659,7 +644,6 @@
 
             if (activePeople.length > 0) {
                 const bounds = L.latLngBounds(activePeople.map(p => [p.lat, p.lng]));
-                // Responsive padding based on screen width
                 const paddingAmount = window.innerWidth < 640 ? 40 : 100;
                 map.flyToBounds(bounds, { padding: [paddingAmount, paddingAmount], maxZoom: 6, duration: 1.5 });
             } else if (country.latitude && country.longitude) {
@@ -855,7 +839,6 @@
             const splash = document.getElementById('splashScreen');
             const video = document.getElementById('introVideo');
             
-            // Allow initial interaction requirement for mobile video play
             if (video) {
                 video.play().catch(e => {});
                 video.pause();
