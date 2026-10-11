@@ -137,27 +137,29 @@
         </div>
     </div>
 
-    <header class="w-full bg-[#0b101e] border-b border-white/5 z-[2000] shrink-0 py-3 sm:py-5 px-3 sm:px-6 shadow-[0_4px_20px_rgba(0,0,0,0.5)] flex items-center relative">
+    <header class="w-full bg-[#0b101e] border-b border-white/5 z-[2000] shrink-0 py-3 sm:py-5 px-3 sm:px-6 shadow-[0_4px_20px_rgba(0,0,0,0.5)] flex items-center relative justify-between lg:justify-center">
         
-        <div class="flex-shrink-0 cursor-pointer transition-transform hover:scale-[1.01] active:scale-[0.98] duration-300 z-10" onclick="returnToWorldView()">
-            <div class="w-[46px] h-[46px] sm:w-[64px] sm:h-[64px] rounded-full bg-gradient-to-br from-slate-50 to-slate-200 flex items-center justify-center p-0.5 sm:p-1 relative shadow-[0_0_15px_rgba(244,63,94,0.25)]">
+        <!-- LOGO AND TITLE GROUP (Centered on Desktop, Left aligned on Mobile) -->
+        <div class="flex items-center cursor-pointer transition-transform hover:scale-[1.01] active:scale-[0.98] duration-300 z-10 lg:absolute lg:left-1/2 lg:top-1/2 lg:-translate-x-1/2 lg:-translate-y-1/2 max-w-[70%] lg:max-w-none mr-auto lg:mr-0" onclick="returnToWorldView()">
+            
+            <div class="w-[46px] h-[46px] sm:w-[64px] sm:h-[64px] rounded-full bg-gradient-to-br from-slate-50 to-slate-200 flex items-center justify-center p-0.5 sm:p-1 relative shadow-[0_0_15px_rgba(244,63,94,0.25)] shrink-0">
                 <img src="https://miniminimaker.github.io/kyriocifer2026/logo.png" alt="Logo" class="w-full h-full object-contain relative z-10 rounded-full">
             </div>
-        </div>
-        
-        <div class="flex flex-col items-start lg:items-center text-left lg:text-center ml-2.5 sm:ml-4 lg:ml-0 lg:absolute lg:left-1/2 lg:top-1/2 lg:-translate-x-1/2 lg:-translate-y-1/2 min-w-0 flex-1 lg:flex-none cursor-pointer z-0 transition-transform hover:scale-[1.01] active:scale-[0.98] duration-300" onclick="returnToWorldView()">
-            <p class="text-[7.5px] sm:text-[9.5px] text-brand-pink font-bold tracking-[0.2em] sm:tracking-[0.38em] uppercase mb-1 sm:mb-2 opacity-90 leading-none truncate lg:overflow-visible w-full lg:w-auto">
-                "I love you" around the world
-            </p>
-            <h1 class="font-black text-[13px] sm:text-[22px] text-white tracking-[0.1em] sm:tracking-[0.15em] uppercase leading-none mb-1 sm:mb-2.5 drop-shadow-sm truncate lg:overflow-visible w-full lg:w-auto">
-                Kyrio Cifer 2nd Anniversary
-            </h1>
-            <p class="text-[8.5px] sm:text-[12px] text-slate-400 font-medium italic tracking-wide leading-none hidden sm:block truncate lg:overflow-visible w-full lg:w-auto">
-                We Met Because of You, We Gather Because of Love.
-            </p>
+            
+            <div class="flex flex-col items-start lg:items-center text-left lg:text-center ml-2.5 sm:ml-4 min-w-0 flex-1 lg:flex-none">
+                <p class="text-[7.5px] sm:text-[9.5px] text-brand-pink font-bold tracking-[0.2em] sm:tracking-[0.38em] uppercase mb-1 sm:mb-2 opacity-90 leading-none truncate lg:overflow-visible w-full lg:w-auto">
+                    "I love you" around the world
+                </p>
+                <h1 class="font-black text-[13px] sm:text-[22px] text-white tracking-[0.1em] sm:tracking-[0.15em] uppercase leading-none mb-1 sm:mb-2.5 drop-shadow-sm truncate lg:overflow-visible w-full lg:w-auto">
+                    Kyrio Cifer 2nd Anniversary
+                </h1>
+                <p class="text-[8.5px] sm:text-[12px] text-slate-400 font-medium italic tracking-wide leading-none hidden sm:block truncate lg:overflow-visible w-full lg:w-auto">
+                    We Met Because of You, We Gather Because of Love.
+                </p>
+            </div>
         </div>
 
-        <div class="flex items-center justify-end gap-1.5 sm:gap-3 shrink-0 z-10 ml-auto">
+        <div class="flex items-center justify-end gap-1.5 sm:gap-3 shrink-0 z-10 ml-auto lg:absolute lg:right-6 lg:top-1/2 lg:-translate-y-1/2">
             <button onclick="replayIntro()" class="flex items-center justify-center gap-2 w-9 h-9 sm:w-auto sm:h-auto sm:px-4 sm:py-2.5 bg-white/5 hover:bg-brand-pink/20 border border-white/10 rounded-full text-slate-300 hover:text-white transition-all duration-300 group shadow-glass" title="Replay Intro Video">
                 <i class="fa-solid fa-play text-slate-300 group-hover:text-brand-pink transition-colors text-xs sm:text-sm ml-0.5 sm:ml-0"></i>
                 <span class="text-[10px] font-bold uppercase tracking-wider hidden sm:block">Intro</span>
