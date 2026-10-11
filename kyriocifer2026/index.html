@@ -123,35 +123,19 @@
 <body class="h-full bg-slate-950 flex flex-col overflow-hidden text-slate-100">
 
     <div id="splashScreen" class="fixed inset-0 z-[2000] bg-[#030712] flex flex-col items-center justify-center transition-all pointer-events-auto">
-        <div id="splashGifLayer" class="absolute inset-0 bg-[#030712] flex items-center justify-center transition-opacity duration-[1500ms] ease-in-out z-20 p-6">
-            <video src="https://sxuwpcvdnbzettdmrclo.supabase.co/storage/v1/object/public/avatars/open.mp4" autoplay muted playsinline class="w-full max-w-xl sm:max-w-2xl md:max-w-4xl h-auto max-h-[85vh] object-contain"></video>
+        <div id="splashTransitionLayer" class="absolute inset-0 bg-[#030712] z-40 opacity-0 pointer-events-none transition-opacity duration-1000"></div>
+        
+        <div id="splashStartLayer" class="absolute inset-0 bg-[#030712] flex items-center justify-center z-30 transition-opacity duration-700">
+            <button onclick="startIntro()" class="group flex flex-col items-center justify-center space-y-5 cursor-pointer outline-none">
+                <div class="w-24 h-24 rounded-full bg-brand-pink/10 flex items-center justify-center border border-brand-pink/40 shadow-glow-pink group-hover:scale-110 transition-transform duration-500 animate-[heart-gentle-pulse_2.5s_infinite_ease-in-out]">
+                    <span class="butterfly-icon text-brand-pink text-5xl opacity-90 group-hover:opacity-100 transition-opacity"></span>
+                </div>
+                <span class="text-brand-pink font-bold tracking-[0.4em] uppercase text-xs opacity-70 group-hover:opacity-100 transition-opacity">Tap to Ignite</span>
+            </button>
         </div>
 
-        <div id="splashTextLayer" class="absolute inset-0 bg-[#030712] flex flex-col items-center justify-center opacity-0 transition-opacity duration-[1500ms] ease-in-out pointer-events-none z-10 p-6">
-            <div class="flex flex-col items-center justify-center space-y-6">
-                <div class="w-24 h-24 rounded-full bg-gradient-to-br from-slate-50 to-slate-200 flex items-center justify-center shadow-[0_0_30px_rgba(244,63,94,0.4)] p-1.5 relative">
-                    <div class="absolute inset-0 rounded-full border border-white/40"></div>
-                    <img src="https://miniminimaker.github.io/kyriocifer2026/logo.png" class="w-full h-full object-contain relative z-10 rounded-full">
-                </div>
-                
-                <div class="text-center flex flex-col items-center mt-4">
-                    <p class="text-[10px] text-brand-pink font-bold tracking-[0.4em] uppercase mb-3">
-                        "I love you" in different languages
-                    </p>
-                    <h1 class="font-black text-2xl tracking-widest text-white uppercase mb-3">
-                        Kyrio Cifer 2nd Anniversary
-                    </h1>
-                    <p class="text-xs text-slate-400 font-medium italic tracking-widest">
-                        We Met Because of You, We Gather Because of Love.
-                    </p>
-                </div>
-                
-                <div class="w-12 h-0.5 bg-brand-pink rounded-full mt-6 shadow-[0_0_10px_rgba(244,63,94,0.8)]"></div>
-                
-                <div class="mt-8 text-[10px] text-slate-500/70 font-semibold tracking-[0.25em]">
-                    #miniminiproject
-                </div>
-            </div>
+        <div id="splashGifLayer" class="absolute inset-0 bg-[#030712] flex items-center justify-center opacity-0 transition-opacity duration-[1500ms] ease-in-out z-20 p-6">
+            <video id="introVideo" src="https://sxuwpcvdnbzettdmrclo.supabase.co/storage/v1/object/public/avatars/open.mp4" playsinline class="w-full max-w-xl sm:max-w-2xl md:max-w-4xl h-auto max-h-[85vh] object-contain"></video>
         </div>
     </div>
 
@@ -845,20 +829,34 @@
             }
         }
 
-        function runIntroSequence() {
+        function startIntro() {
+            const transitionLayer = document.getElementById('splashTransitionLayer');
+            const startLayer = document.getElementById('splashStartLayer');
+            const gifLayer = document.getElementById('splashGifLayer');
+            const splash = document.getElementById('splashScreen');
+            const video = document.getElementById('introVideo');
+            
+            if (video) {
+                video.play().catch(e => {});
+                video.pause();
+            }
+
+            transitionLayer.style.opacity = '1';
+            
             setTimeout(() => {
-                const gifLayer = document.getElementById('splashGifLayer');
-                const textLayer = document.getElementById('splashTextLayer');
-                if (gifLayer && textLayer) {
-                    gifLayer.style.opacity = '0';
-                    gifLayer.style.pointerEvents = 'none';
-                    textLayer.style.opacity = '1';
-                    textLayer.style.pointerEvents = 'auto';
-                }
-            }, 5700);
+                startLayer.style.opacity = '0';
+                startLayer.style.pointerEvents = 'none';
+                gifLayer.classList.remove('opacity-0');
+                gifLayer.style.opacity = '1';
+                
+                transitionLayer.style.opacity = '0';
+                
+                setTimeout(() => {
+                    if (video) video.play().catch(e => {});
+                }, 1000);
+            }, 1000);
 
             setTimeout(() => {
-                const splash = document.getElementById('splashScreen');
                 if (splash) {
                     splash.classList.add('splash-exit');
                     document.body.classList.add('loaded'); 
@@ -867,7 +865,7 @@
                         initMap();
                     }, 1500); 
                 }
-            }, 8000);
+            }, 13000);
         }
 
         function replayIntro() {
@@ -877,9 +875,10 @@
             modal.className = 'fixed inset-0 z-[2000] bg-[#030712] flex flex-col items-center justify-center transition-opacity duration-700 opacity-0 pointer-events-auto cursor-pointer';
             modal.style.willChange = 'opacity';
             modal.style.transform = 'translateZ(0)';
+            
             modal.innerHTML = `
                 <div class="absolute inset-0 bg-[#030712] flex items-center justify-center p-6">
-                    <video src="https://sxuwpcvdnbzettdmrclo.supabase.co/storage/v1/object/public/avatars/open.mp4" autoplay muted playsinline loop class="w-full max-w-xl sm:max-w-2xl md:max-w-4xl h-auto max-h-[85vh] object-contain"></video>
+                    <video src="https://sxuwpcvdnbzettdmrclo.supabase.co/storage/v1/object/public/avatars/open.mp4" autoplay playsinline loop class="w-full max-w-xl sm:max-w-2xl md:max-w-4xl h-auto max-h-[85vh] object-contain"></video>
                 </div>
                 <div class="absolute bottom-8 z-30 text-[11px] text-slate-400 font-semibold tracking-widest bg-slate-900/80 px-4 py-2 rounded-full border border-white/10 backdrop-blur-md pointer-events-none">
                     Click anywhere to return
@@ -892,10 +891,6 @@
             document.body.appendChild(modal);
             requestAnimationFrame(() => modal.style.opacity = '1');
         }
-
-        window.onload = () => {
-            runIntroSequence();
-        };
     </script>
 </body>
 </html>
